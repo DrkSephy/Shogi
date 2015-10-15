@@ -11,6 +11,17 @@ def board():
 	return "Hello World!"
 
 ####################
+# HELPER CONSTANTS #
+####################
+N, S, W, E, NW, NE, SW, SE = 1, 1, 1, 1, 1, 1, 1, 1
+pieces = {
+	'C' : N, 
+	'E' : NW, NE, SW, SE,
+	'G' : N, S, W, E,
+	'L' : N, S, W, E, NW, NE, SW, SE
+}
+
+####################
 # HELPER FUNCTIONS #
 ####################
 
