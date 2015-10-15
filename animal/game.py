@@ -6,7 +6,7 @@ app = Flask(__name__)
 def board():
 	board = []
 	for i in range(0, 4):
-		board.append([-1, -1, -1, -1])
+		board.append([-1, -1, -1])
 	print_board(board)	
 	return "Hello World!"
 
