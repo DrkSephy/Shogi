@@ -8,14 +8,13 @@ def generateBoard(min, max):
 		board.append([-1, -1, -1])
 	return board
 
-
 def printBoard(board):
 	for row in board:
 		print row
 	return
 
-def placePiece(board, name, x, y):
-	board[x][y] = name
+def placePiece(board, name, row, col):
+	board[row][col] = name
 	return
 
 def generatePieces(board):
@@ -23,10 +22,10 @@ def generatePieces(board):
 	placePiece(board, 'L', 0, 1)
 	placePiece(board, 'E', 0, 2)
 	placePiece(board, 'C', 1, 1)
-	placePiece(board, 'C', 2, 1)
-	placePiece(board, 'E', 3, 0)
-	placePiece(board, 'L', 3, 1)
-	placePiece(board, 'G', 3, 2)
+	placePiece(board, 'c', 2, 1)
+	placePiece(board, 'e', 3, 0)
+	placePiece(board, 'l', 3, 1)
+	placePiece(board, 'g', 3, 2)
 	return
 
 def validMove(piece, x, y):
