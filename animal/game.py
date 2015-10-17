@@ -5,7 +5,7 @@ app = Flask(__name__)
 @app.route("/")
 def board():
 	board = generateBoard(0, 4)
-	print board	
+	printBoard(board)
 	return "Hello World!"
 
 ####################
@@ -34,7 +34,7 @@ def generateBoard(min, max):
 	return board
 
 
-def print_board(board):
+def printBoard(board):
 	for row in board:
 		print row
 
