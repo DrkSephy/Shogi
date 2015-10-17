@@ -3,8 +3,8 @@ import helpers
 
 app = Flask(__name__)
 
-@app.route("/")
-def board():
+@app.route("/game")
+def game():
 	board = helpers.generateBoard(0, 4)
 	helpers.generatePieces(board)
 	helpers.printBoard(board)
