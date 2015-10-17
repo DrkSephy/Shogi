@@ -1,4 +1,4 @@
-js/bootstrap
-js/jquery
+static/bootstrap
+static/jquery
 *.pyc
 *.DS_Store
