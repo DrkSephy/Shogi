@@ -18,3 +18,13 @@ def placePiece(board, name, x, y):
 	board[x][y] = name
 	return
 
+def generatePieces(board):
+	placePiece(board, 'G', 0, 0)
+	placePiece(board, 'L', 0, 1)
+	placePiece(board, 'E', 0, 2)
+	placePiece(board, 'C', 1, 1)
+	placePiece(board, 'C', 2, 1)
+	placePiece(board, 'E', 3, 0)
+	placePiece(board, 'L', 3, 1)
+	placePiece(board, 'G', 3, 2)
+	return

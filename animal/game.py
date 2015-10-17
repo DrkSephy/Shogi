@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route("/")
 def board():
 	board = helpers.generateBoard(0, 4)
-	helpers.placePiece(board, 'L', 0, 1)
+	helpers.generatePieces(board)
 	helpers.printBoard(board)
 	return "Hello World!"
 
