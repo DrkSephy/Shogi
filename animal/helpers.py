@@ -12,3 +12,9 @@ def generateBoard(min, max):
 def printBoard(board):
 	for row in board:
 		print row
+	return
+
+def placePiece(board, name, x, y):
+	board[x][y] = name
+	return
+
