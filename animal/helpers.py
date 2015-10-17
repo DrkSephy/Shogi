@@ -30,5 +30,5 @@ def generatePieces(board):
 	return
 
 def validMove(piece, x, y):
-	if(x > 3 || y > 3):
+	if(x > 3 and y > 3):
 		return False
