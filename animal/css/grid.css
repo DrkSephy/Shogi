@@ -7,6 +7,7 @@
     background-repeat:no-repeat;
     border: 2px dashed gray;
     background-size:cover;
+    cursor: pointer;
 }
 
 .game {

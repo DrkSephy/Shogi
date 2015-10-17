@@ -3,41 +3,78 @@
 	<head>
 		<title> Dōbutsu shōgi </title>
 		<link rel="stylesheet" href="{{url_for('static',filename='css/grid.css') }}">
+		<script src="{{url_for('static',filename='jquery/dist/jquery.min.js') }}"></script>
 	</head>
 	<body>
 
 	<div class="game">
-			
-		<div class="square img1">
-		</div>
-		<div class="square img2">
-		</div>
-		<div class="square img3">
-		</div>
-
-		<div class="square img4">
-		</div>
-		<div class="square img5">
-		</div>
-		<div class="square img6">
+		<div class="row">
+			<div class="square img1" id='1'>
+			</div>
+			<div class="square img2" id='2'>
+			</div>
+			<div class="square img3" id='3'>
+			</div>
 		</div>
 
-		<div class="square img7">
-		</div>
-		<div class="square img8">
-		</div>
-		<div class="square img9">
+		<div class="row">
+			<div class="square img4" id='4'>
+			</div>
+			<div class="square img5" id='5'>
+			</div>
+			<div class="square img6" id='6'>
+			</div>
 		</div>
 
-		<div class="square img10">
+		<div class="row">
+			<div class="square img7" id='7'>
+			</div>
+			<div class="square img8" id='8'>
+			</div>
+			<div class="square img9" id='9'>
+			</div>
 		</div>
-		<div class="square img11">
-		</div>
-		<div class="square img12">
+
+		<div class="row">
+			<div class="square img10" id='10'>
+			</div>
+			<div class="square img11" id='11'>
+			</div>
+			<div class="square img12" id='12'>
+			</div>
 		</div>
 
 	</div> <!-- game -->
 
+	<script>
+	var row = 0;
+	var col = 0;
+	$('.square').each(function() {
+		$(this).data('row', row);
+		$(this).data('col', col);
+		col++;
+		if(col > 2) {
+			row++;
+			col = 0;
+		}
+	});
+
+	$('.square').click(function() {
+		console.log($(this).data('row'));
+		console.log($(this).data('col'));
+	})
+
+
+	/*
+	$('#12').data('row', 3);
+	$('#12').data('col', 2);
+	$('#12').click(function(){
+		console.log($('#12').data('row'));
+	});
+	// console.log($('#12').data('row'));
+	*/
+		
+	</script>
 
 	</body>
 </html>
