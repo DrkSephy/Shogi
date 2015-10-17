@@ -1,3 +1,4 @@
 js/bootstrap
 js/jquery
 *.pyc
+*.DS_Store
