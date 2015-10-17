@@ -21,18 +21,18 @@
     margin:auto;
 }
 
-.img1{background-image:url('../img/tile1.png');}
-.img2{background-image:url('../img/tile2.png');}
-.img3{background-image:url('../img/tile3.png');}
+.img1{background-image:url('../img/tiles/tile1.png');}
+.img2{background-image:url('../img/tiles/tile2.png');}
+.img3{background-image:url('../img/tiles/tile3.png');}
 
-.img4{background-image:url('../img/tile4.png');}
-.img5{background-image:url('../img/tile5.png');}
-.img6{background-image:url('../img/tile6.png');}
+.img4{background-image:url('../img/tiles/tile4.png');}
+.img5{background-image:url('../img/tiles/tile5.png');}
+.img6{background-image:url('../img/tiles/tile6.png');}
 
-.img7{background-image:url('../img/tile7.png');}
-.img8{background-image:url('../img/tile8.png');}
-.img9{background-image:url('../img/tile9.png');}
+.img7{background-image:url('../img/tiles/tile7.png');}
+.img8{background-image:url('../img/tiles/tile8.png');}
+.img9{background-image:url('../img/tiles/tile9.png');}
 
-.img10{background-image:url('../img/tile10.png');}
-.img11{background-image:url('../img/tile11.png');}
-.img12{background-image:url('../img/tile12.png');}
+.img10{background-image:url('../img/tiles/tile10.png');}
+.img11{background-image:url('../img/tiles/tile11.png');}
+.img12{background-image:url('../img/tiles/tile12.png');}
