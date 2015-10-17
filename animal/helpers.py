@@ -28,3 +28,7 @@ def generatePieces(board):
 	placePiece(board, 'L', 3, 1)
 	placePiece(board, 'G', 3, 2)
 	return
+
+def validMove(piece, x, y):
+	if(x > 3 || y > 3):
+		return False
