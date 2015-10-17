@@ -4,10 +4,8 @@ app = Flask(__name__)
 
 @app.route("/")
 def board():
-	board = []
-	for i in range(0, 4):
-		board.append([-1, -1, -1])
-	print_board(board)	
+	board = generateBoard(0, 4)
+	print board	
 	return "Hello World!"
 
 ####################
@@ -16,17 +14,25 @@ def board():
 
 # Pieces can move one tile in these directions
 N, S, W, E, NW, NE, SW, SE = 1, 1, 1, 1, 1, 1, 1, 1
+
 pieces = {
-	'C' : N, 
-	'H' : N, S, W, E, NW, NE,
-	'E' : NW, NE, SW, SE,
-	'G' : N, S, W, E,
-	'L' : N, S, W, E, NW, NE, SW, SE
+    'C' : (N),
+    'H' : (N, S, W, E, NW, NE),
+	'E' : (NW, NE, SW, SE),
+	'G' : (N, S, W, E),
+	'L' : (N, S, W, E, NW, NE, SW, SE)
 }
 
 ####################
 # HELPER FUNCTIONS #
 ####################
+
+def generateBoard(min, max):
+	board = []
+	for i in range(min, max):
+		board.append([-1, -1, -1])
+	return board
+
 
 def print_board(board):
 	for row in board:
