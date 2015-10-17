@@ -3,7 +3,6 @@
 	<head>
 		<title> Dobutsu shogi </title>
 		<link rel="stylesheet" href="css/grid.css">
-		<script src="lib/jquery/dist/jquery.min.js"></script>
 	</head>
 	<body>
 
@@ -46,35 +45,7 @@
 
 	</div> <!-- game -->
 
-	<script>
-	var row = 0;
-	var col = 0;
-	$('.square').each(function() {
-		$(this).data('row', row);
-		$(this).data('col', col);
-		col++;
-		if(col > 2) {
-			row++;
-			col = 0;
-		}
-	});
-
-	$('.square').click(function() {
-		console.log($(this).data('row'));
-		console.log($(this).data('col'));
-	})
-
-
-	/*
-	$('#12').data('row', 3);
-	$('#12').data('col', 2);
-	$('#12').click(function(){
-		console.log($('#12').data('row'));
-	});
-	// console.log($('#12').data('row'));
-	*/
-		
-	</script>
-
+	<script src="lib/jquery/dist/jquery.min.js"></script>
+	<script src="js/main.js"></script>
 	</body>
 </html>
