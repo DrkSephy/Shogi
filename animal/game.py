@@ -1,11 +1,12 @@
 from flask import Flask 
+import helpers
 
 app = Flask(__name__)
 
 @app.route("/")
 def board():
-	board = generateBoard(0, 4)
-	printBoard(board)
+	board = helpers.generateBoard(0, 4)
+	helpers.printBoard(board)
 	return "Hello World!"
 
 ####################
@@ -23,20 +24,5 @@ pieces = {
 	'L' : (N, S, W, E, NW, NE, SW, SE)
 }
 
-####################
-# HELPER FUNCTIONS #
-####################
-
-def generateBoard(min, max):
-	board = []
-	for i in range(min, max):
-		board.append([-1, -1, -1])
-	return board
-
-
-def printBoard(board):
-	for row in board:
-		print row
-
 if __name__ == "__main__":
-	app.run()
+	app.run(debug=True)
