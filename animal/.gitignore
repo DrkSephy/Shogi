@@ -1,4 +1,2 @@
-static/bootstrap
-static/jquery
-*.pyc
 *.DS_Store
+lib/
