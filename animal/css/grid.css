@@ -75,15 +75,39 @@
 }
 
 .playerElephant { 
-    background-image:url('../img/pieces/player/elephant.png') 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/player/elephant.png');
+    position: absolute;
 }
 
 .playerChick { 
-    background-image:url('../img/pieces/player/chick.png') 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/player/chick.png');
+    position: absolute; 
 }
 
 .playerGiraffe { 
-    background-image:url('../img/pieces/player/giraffe.png') 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/player/giraffe.png');
+    position: absolute;
 }
 
 .playerHen { 
@@ -91,19 +115,51 @@
 }
 
 .playerLion { 
-    background-image:url('../img/pieces/player/lion.png') 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/player/lion.png');
+    position: absolute;
 }
 
 .enemyElephant { 
-    background-image:url('../img/pieces/enemy/elephant.png') 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/enemy/elephant.png');
+    position: absolute;
 }
 
 .enemyChick { 
-    background-image:url('../img/pieces/enemy/chick.png') 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/enemy/chick.png');
+    position: absolute; 
 }
 
 .enemyGiraffe { 
-    background-image:url('../img/pieces/enemy/giraffe.png') 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/enemy/giraffe.png');
+    position: absolute; 
 }
 
 .enemyHen { 
@@ -111,5 +167,13 @@
 }
 
 .enemyLion { 
-    background-image:url('../img/pieces/enemy/lion.png') 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/enemy/lion.png');
+    position: absolute;
 }
