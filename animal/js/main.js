@@ -3,25 +3,15 @@ $(document).ready(function() {
 	// Internal state of board
 	var _board = [];
 
-	// Generate rows/column numbers
-	generateBoard(0, 0);
-
-	/**
-	 * Attaches row/column data to existing DOM elements.
-	 * @param {number} row The number of rows to create.
-	 * @param {number} col The number of columns to create.
-	*/ 
-	function generateBoard(row, col) {
-		$('.square').each(function() {
-			$(this).data('row', row);
-			$(this).data('col', col);
-			col++;
-			if(col > 2) {
-				row++;
-				col = 0;
-			}
+	// Attach row, column values to dom elements
+	// TODO: Initialize _board to contain board positions
+	$('.row').each(function(rowIndex, row){
+		_board.push([]);
+		$(this).find('.cell').each(function(cellIndex, cell) {
+			$(cell).attr({'data-x': rowIndex, 'data-y': cellIndex});
+			console.log($(cell));
 		});
-	}
+	});
 
 	// NOTE: Grid attributes will be used for handling movement of pieces
 
