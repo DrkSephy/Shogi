@@ -8,10 +8,30 @@ $(document).ready(function() {
 	$('.row').each(function(rowIndex, row){
 		_board.push([]);
 		$(this).find('.cell').each(function(cellIndex, cell) {
+			if($(cell).hasClass('enemyGiraffe')) {
+				_board[rowIndex][cellIndex] = 'enemyGiraffe';
+			} else if ($(cell).hasClass('enemyLion')) {
+				_board[rowIndex][cellIndex] = 'enemyLion';
+			} else if ($(cell).hasClass('enemyElephant')) {
+				_board[rowIndex][cellIndex] = 'enemyElephant'; 
+			} else if ($(cell).hasClass('enemyChick')) {
+				_board[rowIndex][cellIndex] = 'enemyChick';
+			} else if ($(cell).hasClass('playerChick')) {
+				_board[rowIndex][cellIndex] = 'playerChick';
+			} else if ($(cell).hasClass('playerElephant')) {
+				_board[rowIndex][cellIndex] = 'playerElephant';
+			} else if ($(cell).hasClass('playerLion')) {
+				_board[rowIndex][cellIndex] = 'playerLion';
+			} else if ($(cell).hasClass('playerGiraffe')) {
+				_board[rowIndex][cellIndex] = 'playerGiraffe';
+			} else {
+				_board[rowIndex][cellIndex] = -1;
+			}
 			$(cell).attr({'data-x': rowIndex, 'data-y': cellIndex});
-			console.log($(cell));
 		});
 	});
+
+	console.log(_board);
 
 	// NOTE: Grid attributes will be used for handling movement of pieces
 
@@ -34,11 +54,13 @@ $(document).ready(function() {
 	var selectedPiece = false; 
 
 	$('.square').click(function() {
-		console.log('Row: ' + $(this).data('row') + ' , ' + 'Col: ' + $(this).data('col'));
+		/*
+		console.log('Row: ' + $(this).data('data-x') + ' , ' + 'Col: ' + $(this).data('data-y'));
 		selectedPosition.row = $(this).data('row');
 		selectedPosition.col = $(this).data('col');
 		console.log(selectedPosition);
 		console.log($(this).children()[0].className);
+		*/
 	})
 
 	
