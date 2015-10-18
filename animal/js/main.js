@@ -60,14 +60,20 @@ $(document).ready(function() {
 	var attackPosition = {row: 0, col: 0};
 	var selectedPiece = false; 
 
-	$('.square').click(function() {
-		/*
+	$('.cell').click(function() {
+		console.log($(this))
+		//var $cell = $('.cell[data-x=' + rowIndex + '][data-y=' + cellIndex + ']');
+		//console.log($cell);
+		// console.log($(this).data('data-x'));
+		//var $cell = $('.cell[data-x=' + $(this).data('data-x') + '][data-y=' + $(this).data('data-y') + ']');
+		//console.log($cell);
+		
 		console.log('Row: ' + $(this).data('data-x') + ' , ' + 'Col: ' + $(this).data('data-y'));
-		selectedPosition.row = $(this).data('row');
-		selectedPosition.col = $(this).data('col');
-		console.log(selectedPosition);
-		console.log($(this).children()[0].className);
-		*/
+		//selectedPosition.row = $(this).data('row');
+		//selectedPosition.col = $(this).data('col');
+		//console.log(selectedPosition);
+		//console.log($(this).children()[0].className);
+		
 	})
 
 	
