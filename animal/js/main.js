@@ -23,4 +23,14 @@ $(document).ready(function() {
 	$('.square').click(function() {
 		console.log('Row: ' + $(this).data('row') + ' , ' + 'Col: ' + $(this).data('col'));
 	})
+
+	$('div.square').mouseenter(function () {
+    $(this).fadeTo('slow', 0.25);
+    $(this).css('cursor', 'pointer');
+  });
+
+  $('div.square').mouseleave(function () {
+    $(this).fadeTo('slow', 1);
+    $(this).css('cursor', 'default');
+  });
 });
