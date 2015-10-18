@@ -1,8 +1,10 @@
 $(document).ready(function() {
 
+	// Internal state of board
+	var _board = [];
+
 	// Generate rows/column numbers
 	generateBoard(0, 0);
-	getBoardContents();
 
 	/**
 	 * Attaches row/column data to existing DOM elements.
@@ -21,6 +23,8 @@ $(document).ready(function() {
 		});
 	}
 
+	// NOTE: Grid attributes will be used for handling movement of pieces
+
 	function getBoardContents() {
 		$('div.square').each(function(){
 			if($(this).children()[0] !== undefined){
@@ -28,11 +32,25 @@ $(document).ready(function() {
 			}
 		});
 	}
+
+	function getCellContents(cell) {
+		if($(this).children()) {
+			return $(this).children()[0].className;
+		}
+	}
 	
+	var selectedPosition = {row: 0, col: 0};
+	var attackPosition = {row: 0, col: 0};
+	var selectedPiece = false; 
+
 	$('.square').click(function() {
 		console.log('Row: ' + $(this).data('row') + ' , ' + 'Col: ' + $(this).data('col'));
-		console.log($(this));
+		selectedPosition.row = $(this).data('row');
+		selectedPosition.col = $(this).data('col');
+		console.log(selectedPosition);
+		console.log($(this).children()[0].className);
 	})
+
 	
 	$('div.square').mouseenter(function () {
     $(this).fadeTo('slow', 0.25);
