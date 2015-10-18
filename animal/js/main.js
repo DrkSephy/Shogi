@@ -31,9 +31,16 @@ $(document).ready(function() {
 		});
 	});
 
-	console.log(_board);
+	//console.log(_board);
+	printBoard();
 
 	// NOTE: Grid attributes will be used for handling movement of pieces
+
+	function printBoard() {
+		for(var i = 0; i < 4; i++) {
+			console.log(_board[i]);
+		}
+	}
 
 	function getBoardContents() {
 		$('div.square').each(function(){
