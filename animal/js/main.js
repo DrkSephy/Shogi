@@ -29,7 +29,6 @@ $(document).ready(function() {
 			}
 	
 			$(square).attr({'data-x': rowIndex, 'data-y': cellIndex});
-
 		});
 	});
 
@@ -41,27 +40,12 @@ $(document).ready(function() {
 		}
 	}
 
-	function getBoardContents() {
-		$('div.square').each(function(){
-			if($(this).children()[0] !== undefined){
-				console.log($(this).children()[0].className);	
-			}
-		});
-	}
-
-	function getCellContents(cell) {
-		if($(this).children()) {
-			return $(this).children()[0].className;
-		}
-	}
-
 	$('.square').click(function() {
 		var x = $(this).data('x');
 		var y = $(this).data('y');
 		console.log(_board[x][y]);
 	})
 
-	
 	$('div.square').mouseenter(function () {
     $(this).fadeTo('slow', 0.25);
     $(this).css('cursor', 'pointer');
