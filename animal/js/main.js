@@ -40,8 +40,24 @@ $(document).ready(function() {
 		}
 	}
 
-	function getCellContents(x, y) {
-		return _board[x][y] === -1 ? false : _board[x][y];
+	/** 
+	 * Returns cell contents.
+	 * @param {number} row The row to search.
+	 * @param {number} col The column to search.
+	 * @return {number, string} The value at [row][column]
+	*/
+	function getCellContents(row, col) {
+		return _board[row][col];
+	}
+
+	/**
+	 * Determines if a cell is occupied. 
+	 * @param {row} row The row to search.
+	 * @parem {col} col The column to search.
+	 * @return {boolean} Whether a cell is occupied.
+	*/
+	function isOccupied(row, col) {
+		return _board[row][col] === -1 ? false : true;
 	}
 
 	$('.square').click(function() {
