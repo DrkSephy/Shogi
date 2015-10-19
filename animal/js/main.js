@@ -40,10 +40,15 @@ $(document).ready(function() {
 		}
 	}
 
+	function getCellContents(x, y) {
+		return _board[x][y] === -1 ? false : _board[x][y];
+	}
+
 	$('.square').click(function() {
 		var x = $(this).data('x');
 		var y = $(this).data('y');
-		console.log(_board[x][y]);
+		var occupied = getCellContents(x, y);
+		console.log(occupied);
 	})
 
 	$('div.square').mouseenter(function () {
