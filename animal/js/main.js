@@ -3,11 +3,11 @@ $(document).ready(function() {
 	// Internal state of board
 	var _board = [];
 
-	// Attach row, column values to dom elements
-	// TODO: Initialize _board to contain board positions
 	$('.row').each(function(rowIndex, row){
 		_board.push([]);
-		$(this).find('.cell').each(function(cellIndex, cell) {
+		$(this).find('.square').each(function(cellIndex, square) {
+			var cell = $(square).children()[0];
+			
 			if($(cell).hasClass('enemyGiraffe')) {
 				_board[rowIndex][cellIndex] = 'enemyGiraffe';
 			} else if ($(cell).hasClass('enemyLion')) {
@@ -27,14 +27,13 @@ $(document).ready(function() {
 			} else {
 				_board[rowIndex][cellIndex] = -1;
 			}
-			$(cell).attr({'data-x': rowIndex, 'data-y': cellIndex});
+	
+			$(square).attr({'data-x': rowIndex, 'data-y': cellIndex});
+
 		});
 	});
 
-	//console.log(_board);
 	printBoard();
-
-	// NOTE: Grid attributes will be used for handling movement of pieces
 
 	function printBoard() {
 		for(var i = 0; i < 4; i++) {
@@ -55,25 +54,11 @@ $(document).ready(function() {
 			return $(this).children()[0].className;
 		}
 	}
-	
-	var selectedPosition = {row: 0, col: 0};
-	var attackPosition = {row: 0, col: 0};
-	var selectedPiece = false; 
 
-	$('.cell').click(function() {
-		console.log($(this))
-		//var $cell = $('.cell[data-x=' + rowIndex + '][data-y=' + cellIndex + ']');
-		//console.log($cell);
-		// console.log($(this).data('data-x'));
-		//var $cell = $('.cell[data-x=' + $(this).data('data-x') + '][data-y=' + $(this).data('data-y') + ']');
-		//console.log($cell);
-		
-		console.log('Row: ' + $(this).data('data-x') + ' , ' + 'Col: ' + $(this).data('data-y'));
-		//selectedPosition.row = $(this).data('row');
-		//selectedPosition.col = $(this).data('col');
-		//console.log(selectedPosition);
-		//console.log($(this).children()[0].className);
-		
+	$('.square').click(function() {
+		var x = $(this).data('x');
+		var y = $(this).data('y');
+		console.log(_board[x][y]);
 	})
 
 	
@@ -86,4 +71,5 @@ $(document).ready(function() {
     $(this).fadeTo('slow', 1);
     $(this).css('cursor', 'default');
   });
+
 });
