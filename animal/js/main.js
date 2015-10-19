@@ -52,14 +52,26 @@ $(document).ready(function() {
 
 	/**
 	 * Determines if a cell is occupied. 
-	 * @param {row} row The row to search.
-	 * @parem {col} col The column to search.
+	 * @param {number} row The row to search.
+	 * @param {number} col The column to search.
 	 * @return {boolean} Whether a cell is occupied.
 	*/
 	function isOccupied(row, col) {
 		return _board[row][col] === -1 ? false : true;
 	}
 
+	/**
+		* Empties the contents of a cell.
+		* @param {number} row The row component to clear.
+		* @param {number} column The column component to clear.
+		* @returns {undefined}
+	*/
+	function clearCell(row, col) {
+		_board[row][col] = -1;
+		return;
+	}
+
+	// Check the contents of a clicked cell
 	$('.square').click(function() {
 		var x = $(this).data('x');
 		var y = $(this).data('y');
