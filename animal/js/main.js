@@ -34,6 +34,10 @@ $(document).ready(function() {
 
 	printBoard();
 
+	/**
+	 * Prints state of the board.
+	 * @return {undefined}
+	*/
 	function printBoard() {
 		for(var i = 0; i < 4; i++) {
 			console.log(_board[i]);
@@ -92,7 +96,6 @@ $(document).ready(function() {
 			return false;
 		}
 	}
-
 
 	// Check the contents of a clicked cell
 	$('.square').click(function() {
