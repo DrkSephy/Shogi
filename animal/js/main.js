@@ -71,6 +71,29 @@ $(document).ready(function() {
 		return;
 	}
 
+	/**
+		* Checks if a move is valid.
+		* @param {number} row The starting row value.
+		* @param {number} col The starting column value.
+		* @param {number} newRow The new row value.
+		* @param {number} newCol The new column value.
+		* @returns {boolean} Whether a move is valid. 
+	*/
+	function validMove(row, col, newRow, newCol) {
+		/*
+		 * This method will need to:
+		 *	Check if the new bounds are valid
+		 *  Check if the piece selected can make the move
+		 *  Check if we aren't trying to attack our own piece
+		*/
+
+		// Check if the new bounds are valid
+		if(newRow > 3 || newCol > 2) {
+			return false;
+		}
+	}
+
+
 	// Check the contents of a clicked cell
 	$('.square').click(function() {
 		var x = $(this).data('x');
@@ -79,11 +102,13 @@ $(document).ready(function() {
 		console.log(occupied);
 	})
 
+	// Mouse hover effect
 	$('div.square').mouseenter(function () {
     $(this).fadeTo('slow', 0.25);
     $(this).css('cursor', 'pointer');
   });
 
+	// Mouse hover effect
   $('div.square').mouseleave(function () {
     $(this).fadeTo('slow', 1);
     $(this).css('cursor', 'default');
