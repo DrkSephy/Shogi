@@ -121,13 +121,14 @@ $(document).ready(function() {
 
 		// Now to attack
 		else if(selectedCell) {
-			console.log("Waiting to attack");
 			var x = $(this).data('x');
 			var y = $(this).data('y');
 			var occupied = isOccupied(x, y);
 			if(occupied) {
 				var attackedName = _board[x][y];
 				var attackerName = _board[selectedPosition.row][selectedPosition.col];
+				console.log("The piece that is getting attacked is: " + attackedName);
+				console.log("The piece that is attacking is: " + attackerName);
 				attackPosition.row = x;
 				attackPosition.col = y;
 				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
@@ -135,6 +136,9 @@ $(document).ready(function() {
 				$p.removeClass(attackerName);
 				$a.removeClass(attackedName);
 				$a.addClass(attackerName);
+				// Update new internal board positions
+				_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
+				_board[selectedPosition.row][selectedPosition.col] = -1;
 				selectedCell = false;
 				attackedCell = false;
 
