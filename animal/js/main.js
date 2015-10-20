@@ -33,7 +33,6 @@ $(document).ready(function() {
 	});
 
 	printBoard();
-
 	/**
 	 * Prints state of the board.
 	 * @return {undefined}
@@ -97,12 +96,36 @@ $(document).ready(function() {
 		}
 	}
 
+	var selectedPosition = {row: 0, col: 0};
+	var attackPosition = {row: 0, col: 0};
+	var selectedCell = false;
+	var attackedCell = false;
+
+	
 	// Check the contents of a clicked cell
 	$('.square').click(function() {
-		var x = $(this).data('x');
-		var y = $(this).data('y');
-		var occupied = getCellContents(x, y);
-		console.log(occupied);
+		// We are selecting a piece to attack with
+		if(!selectedCell) {
+			// Get x, y data
+			var x = $(this).data('x');
+			var y = $(this).data('y');
+			// Check if the cell is occupied and return the contents
+			var occupied = isOccupied(x, y);
+			if(occupied) {
+				selectedCell = true;
+				selectedPosition.row = x;
+				selectedPosition.col = y;
+				// Grab the cell's children
+				// After attacking, we will remove the class of this child
+				// and assign it to the new square
+				var cell = $(this).children()[0];
+				console.log("Selected a piece to attack with!");
+			}
+		}
+
+		else if(selectedCell) {
+			console.log("Waiting to attack");
+		}
 	})
 
 	// Mouse hover effect
