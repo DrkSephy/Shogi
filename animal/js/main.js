@@ -102,17 +102,16 @@ $(document).ready(function() {
 	var attackedCell = false;
 
 	
-	// Check the contents of a clicked cell
+	// TODO: Refactor all of this code
+
 	$('.square').click(function() {
-		// We are selecting a piece to attack with
 		if(!selectedCell) {
-			// Get x, y data
 			var x = $(this).data('x');
 			var y = $(this).data('y');
-			// Check if the cell is occupied and return the contents
-			var occupied = isOccupied(x, y);
-			if(occupied) {
+			if(isOccupied(x, y)) {
+				// We've selected a piece to move
 				selectedCell = true;
+				// Update the position of our selected piece
 				selectedPosition.row = x;
 				selectedPosition.col = y;
 			}
@@ -120,10 +119,11 @@ $(document).ready(function() {
 
 		// Now to attack
 		else if(selectedCell) {
+			// Grab the x, y coordinates of the attacked square
 			var x = $(this).data('x');
 			var y = $(this).data('y');
-			var occupied = isOccupied(x, y);
-			if(occupied) {
+			// If the square is occupied, we attack!
+			if(isOccupied(x, y)) {
 				var attackedName = _board[x][y];
 				var attackerName = _board[selectedPosition.row][selectedPosition.col];
 				attackPosition.row = x;
@@ -132,6 +132,20 @@ $(document).ready(function() {
 				var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
 				$p.removeClass(attackerName);
 				$a.removeClass(attackedName);
+				$a.addClass(attackerName);
+				// Update new internal board positions
+				_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
+				_board[selectedPosition.row][selectedPosition.col] = -1;
+				selectedCell = false;
+				attackedCell = false;
+			} else {
+				// Square selected is not occupied, we simply move our piece
+				attackPosition.row = x;
+				attackPosition.col = y;
+				var attackerName = _board[selectedPosition.row][selectedPosition.col];
+				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
+				var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
+				$p.removeClass(attackerName);
 				$a.addClass(attackerName);
 				// Update new internal board positions
 				_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
