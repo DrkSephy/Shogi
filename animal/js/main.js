@@ -106,6 +106,7 @@ $(document).ready(function() {
 	$('.square').click(function() {
 		// We are selecting a piece to attack with
 		if(!selectedCell) {
+			console.log('Selected a piece to attack with');
 			// Get x, y data
 			var x = $(this).data('x');
 			var y = $(this).data('y');
@@ -125,11 +126,18 @@ $(document).ready(function() {
 			var y = $(this).data('y');
 			var occupied = isOccupied(x, y);
 			if(occupied) {
-				var name = _board[x][y];
+				var attackedName = _board[x][y];
+				var attackerName = _board[selectedPosition.row][selectedPosition.col];
 				attackPosition.row = x;
 				attackPosition.col = y;
-				var $cell = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
-				console.log($cell.removeClass(name));
+				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
+				var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
+				$p.removeClass(attackerName);
+				$a.removeClass(attackedName);
+				$a.addClass(attackerName);
+				selectedCell = false;
+				attackedCell = false;
+
 			}
 		}
 	})
