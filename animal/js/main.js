@@ -106,7 +106,6 @@ $(document).ready(function() {
 	$('.square').click(function() {
 		// We are selecting a piece to attack with
 		if(!selectedCell) {
-			console.log('Selected a piece to attack with');
 			// Get x, y data
 			var x = $(this).data('x');
 			var y = $(this).data('y');
@@ -127,8 +126,6 @@ $(document).ready(function() {
 			if(occupied) {
 				var attackedName = _board[x][y];
 				var attackerName = _board[selectedPosition.row][selectedPosition.col];
-				console.log("The piece that is getting attacked is: " + attackedName);
-				console.log("The piece that is attacking is: " + attackerName);
 				attackPosition.row = x;
 				attackPosition.col = y;
 				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
