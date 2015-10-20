@@ -115,16 +115,22 @@ $(document).ready(function() {
 				selectedCell = true;
 				selectedPosition.row = x;
 				selectedPosition.col = y;
-				// Grab the cell's children
-				// After attacking, we will remove the class of this child
-				// and assign it to the new square
-				var cell = $(this).children()[0];
-				console.log("Selected a piece to attack with!");
 			}
 		}
 
+		// Now to attack
 		else if(selectedCell) {
 			console.log("Waiting to attack");
+			var x = $(this).data('x');
+			var y = $(this).data('y');
+			var occupied = isOccupied(x, y);
+			if(occupied) {
+				var name = _board[x][y];
+				attackPosition.row = x;
+				attackPosition.col = y;
+				var $cell = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
+				console.log($cell.removeClass(name));
+			}
 		}
 	})
 
