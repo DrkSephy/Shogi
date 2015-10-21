@@ -22,6 +22,7 @@ $(document).ready(function() {
 	// Whose turn is it?
 	var playerTurn = true;
 	var enemyTurn = false;
+	var turnCount = 1;
 	// Has either player moved?
 	var playerMoved = false;
 	var enemyMoved = false;
@@ -118,6 +119,24 @@ $(document).ready(function() {
 		for(var i = 0; i < 4; i++) {
 			console.log(_board[i]);
 		}
+		
+		return;
+	}
+
+	/**
+	 * Switches the active turn player.
+	 * @returns {undefined}
+	*/
+	function toggleTurn() {
+		if(playerTurn) {
+			playerTurn = false;
+			enemyTurn = true;
+		} else if (enemyTurn) {
+			enemyTurn = false;
+			playerTurn = true;
+		}
+
+		return;
 	}
 
 	/** 
