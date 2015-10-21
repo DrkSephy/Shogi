@@ -15,8 +15,10 @@ $(document).ready(function() {
 	// Did we select a cell to attack?
 	var attackedCell = false;
 	// Is the game over?
-	var lionCaptured = false;
-
+	var playerLionCaptured = false;
+	var enemyLionCaptured = false;
+	var seenPlayerLion = false;
+	var seenEnemyLion = false;
 
 	var _pieces = {
 		'enemyChick' : [
@@ -100,7 +102,7 @@ $(document).ready(function() {
 		});
 	});
 
-	// printBoard();
+	printBoard();
 
 	/**
 	 * Prints state of the board.
@@ -120,6 +122,42 @@ $(document).ready(function() {
 	*/
 	function getCellContents(row, col) {
 		return _board[row][col];
+	}
+
+	/**
+	 * Determines if the game is over.
+	 * @return {boolean} Is the game over?
+	*/
+	function isGameOver() {
+		seenPlayerLion = false;
+		seenEnemyLion = false;
+		for(var row = 0; row < 4; row++) {
+			for(var col = 0; col < 3; col++) {
+				// If the current entry is not the player lion
+				// And we haven't seen it yet
+				if(_board[row][col] !== 'playerLion' && !seenPlayerLion) {
+					playerLionCaptured = true;
+				} else {
+					playerLionCaptured = false;
+					seenPlayerLion = true;
+				}
+
+				if(_board[row][col] !== 'enemyLion' && !seenEnemyLion) {
+					enemyLionCaptured = true;
+				} else {
+					enemyLionCaptured = false;
+					seenEnemyLion = true;
+				}
+			}
+		}
+
+		if(playerLionCaptured) {
+			console.log('Enemy has won :/')
+		} else if (enemyLionCaptured) {
+			console.log('Player has defeated the enemy!!!!');
+		} else {
+			console.log('Game is still ongoing');
+		}
 	}
 
 	/**
@@ -209,6 +247,8 @@ $(document).ready(function() {
 					_board[selectedPosition.row][selectedPosition.col] = -1;
 					selectedCell = false;
 					attackedCell = false;
+					// Check if the game is over 
+					isGameOver();
 				} 
 			} else {
 				// Square selected is not occupied, we simply move our piece
