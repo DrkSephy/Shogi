@@ -1,0 +1,189 @@
+.square {
+    float:left;
+    position: relative;
+    width: 30%;
+    padding-bottom : 30%; 
+    background-position:center center;
+    background-repeat:no-repeat;
+    border: 2px dashed gray;
+    background-size:cover;
+    cursor: pointer;
+}
+
+.game {
+	height: 600px;
+	width: 600px;
+	padding-top: 10px;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+}
+
+#one {
+    float: left;
+    padding-left: 150px;
+}
+
+#two {
+    float: right;
+    padding-right: 150px;
+    padding-top: 10px;
+}
+
+.img1 { 
+    background-image:url('../img/tiles/tile1.png'); 
+    
+}
+
+.img2 { 
+    background-image:url('../img/tiles/tile2.png'); 
+    
+}
+
+.img3 { 
+    background-image:url('../img/tiles/tile3.png');  
+}
+
+.img4 { 
+    background-image:url('../img/tiles/tile4.png'); 
+    
+}
+
+.img5 { 
+    background-image:url('../img/tiles/tile5.png'); 
+    
+}
+
+.img6 { 
+    background-image:url('../img/tiles/tile6.png'); 
+}
+
+.img7 { 
+    background-image:url('../img/tiles/tile7.png'); 
+} 
+
+.img8 { 
+    background-image:url('../img/tiles/tile8.png'); 
+}
+
+.img9 { 
+    background-image:url('../img/tiles/tile9.png'); 
+}
+
+.img10 { 
+    background-image:url('../img/tiles/tile10.png'); 
+}
+
+.img11 { 
+    background-image:url('../img/tiles/tile11.png'); 
+}
+
+.img12 { 
+    background-image:url('../img/tiles/tile12.png'); 
+}
+
+.playerElephant { 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/player/elephant.png');
+    position: absolute;
+}
+
+.playerChick { 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/player/chick.png');
+    position: absolute; 
+}
+
+.playerGiraffe { 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/player/giraffe.png');
+    position: absolute;
+}
+
+.playerHen { 
+    background-image:url('../img/pieces/player/hen.png') 
+}
+
+.playerLion { 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/player/lion.png');
+    position: absolute;
+}
+
+.enemyElephant { 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/enemy/elephant.png');
+    position: absolute;
+}
+
+.enemyChick { 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/enemy/chick.png');
+    position: absolute; 
+}
+
+.enemyGiraffe { 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/enemy/giraffe.png');
+    position: absolute; 
+}
+
+.enemyHen { 
+    background-image:url('../img/pieces/enemy/hen.png') 
+}
+
+.enemyLion { 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/enemy/lion.png');
+    position: absolute;
+}
