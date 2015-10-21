@@ -14,6 +14,8 @@ $(document).ready(function() {
 	var selectedCell = false;
 	// Did we select a cell to attack?
 	var attackedCell = false;
+	// Is the game over?
+	var lionCaptured = false;
 
 
 	var _pieces = {
@@ -147,13 +149,6 @@ $(document).ready(function() {
 		* @returns {boolean} Whether a move is valid. 
 	*/
 	function validMove(attacker) {
-		/*
-		 * This method will need to:
-		 *	Check if the new bounds are valid
-		 *  Check if the piece selected can make the move
-		 *  Check if we aren't trying to attack our own piece
-		*/
-
 		// Check if the new bounds are valid
 		if(attackPosition.row > 3 || attackPosition.col > 2) {
 			return false;
@@ -167,7 +162,7 @@ $(document).ready(function() {
 				return true;
 			} 
 		}
-		
+
 		console.log('Invalid move for: ' + attacker);
 		// Made an invalid move, reset our selections
 		selectedCell = false;
