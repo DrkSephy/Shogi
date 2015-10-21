@@ -152,21 +152,8 @@ $(document).ready(function() {
 				_board[selectedPosition.row][selectedPosition.col] = -1;
 				selectedCell = false;
 				attackedCell = false;
-
 			}
 		}
+		
 	})
-
-	// Mouse hover effect
-	$('div.square').mouseenter(function () {
-    $(this).fadeTo('slow', 0.25);
-    $(this).css('cursor', 'pointer');
-  });
-
-	// Mouse hover effect
-  $('div.square').mouseleave(function () {
-    $(this).fadeTo('slow', 1);
-    $(this).css('cursor', 'default');
-  });
-
 });
