@@ -143,10 +143,7 @@ $(document).ready(function() {
 
 	/**
 		* Checks if a move is valid.
-		* @param {number} row The starting row value.
-		* @param {number} col The starting column value.
-		* @param {number} newRow The new row value.
-		* @param {number} newCol The new column value.
+		* @param {string} attacker The piece attempting to move.
 		* @returns {boolean} Whether a move is valid. 
 	*/
 	function validMove(attacker) {
