@@ -119,7 +119,7 @@ $(document).ready(function() {
 		for(var i = 0; i < 4; i++) {
 			console.log(_board[i]);
 		}
-		
+
 		return;
 	}
 
@@ -135,7 +135,19 @@ $(document).ready(function() {
 			enemyTurn = false;
 			playerTurn = true;
 		}
+		return;
+	}
 
+	/**
+	 * Increments turn counter and resets move states.
+	 * @returns {undefined}
+	*/
+	function incrementTurn() {
+		if(playerMoved && enemyMoved) {
+			turnCount++;
+			playerMoved = false;
+			enemyMoved = false;
+		}
 		return;
 	}
 
