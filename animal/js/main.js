@@ -19,6 +19,7 @@ $(document).ready(function() {
 	var enemyLionCaptured = false;
 	var seenPlayerLion = false;
 	var seenEnemyLion = false;
+	
 
 	var _pieces = {
 		'enemyChick' : [
@@ -125,6 +126,16 @@ $(document).ready(function() {
 	}
 
 	/**
+	 * Appends text to the debug panel.
+	 * @param {string} message The message to add to debug panel.
+	 * @returns {undefined}
+	*/
+	function debugPanel(message) {
+		$('#debug').append(message);
+		return;
+	}
+
+	/**
 	 * Determines if the game is over.
 	 * @return {boolean} Is the game over?
 	*/
@@ -150,7 +161,8 @@ $(document).ready(function() {
 				}
 			}
 		}
-
+		console.log('Enemy Lion has been captured: ' + enemyLionCaptured);
+		console.log('Player Lion has been captured: ' + playerLionCaptured);
 		if(playerLionCaptured) {
 			console.log('Enemy has won :/')
 		} else if (enemyLionCaptured) {

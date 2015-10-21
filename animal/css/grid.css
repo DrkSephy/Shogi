@@ -21,6 +21,17 @@
     margin:auto;
 }
 
+#one {
+    float: left;
+    padding-left: 150px;
+}
+
+#two {
+    float: right;
+    padding-right: 150px;
+    padding-top: 10px;
+}
+
 .img1 { 
     background-image:url('../img/tiles/tile1.png'); 
     
@@ -32,8 +43,7 @@
 }
 
 .img3 { 
-    background-image:url('../img/tiles/tile3.png'); 
-    
+    background-image:url('../img/tiles/tile3.png');  
 }
 
 .img4 { 
