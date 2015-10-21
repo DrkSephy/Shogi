@@ -61,7 +61,7 @@ $(document).ready(function() {
 			{ row: 1,  col: 1  }, // Southeast
 			{ row: -1, col: 1  }, // Northeast
 		],
-		'enemyGiraffe' : [
+		'playerGiraffe' : [
 			{ row: -1, col: 0  }, // North
 			{ row: 1,  col: 0  }, // South
 			{ row: 0,  col: -1 }, // West
@@ -161,11 +161,19 @@ $(document).ready(function() {
 		if(attackPosition.row > 3 || attackPosition.col > 2) {
 			return false;
 		}
+
+		console.log(attacker);
 		// Check if this piece performed a legal move
 		for(var i = 0; i < _pieces[attacker].length; i++) {
 			if(_pieces[attacker][i].row == differencePosition.row && 
 				 _pieces[attacker][i].col == differencePosition.col) {
+				console.log('Valid move for: ' + attacker);
 				return true;
+			} else {
+				console.log('Invalid move for: ' + attacker);
+				// Made an invalid move, reset our selections
+				selectedCell = false;
+				attackedCell = false;
 			}
 		}
 	}
@@ -216,16 +224,20 @@ $(document).ready(function() {
 				// Square selected is not occupied, we simply move our piece
 				attackPosition.row = x;
 				attackPosition.col = y;
+				differencePosition.row = attackPosition.row - selectedPosition.row;
+				differencePosition.col = attackPosition.col - selectedPosition.col;
 				var attackerName = _board[selectedPosition.row][selectedPosition.col];
-				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
-				var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
-				$p.removeClass(attackerName);
-				$a.addClass(attackerName);
-				// Update new internal board positions
-				_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
-				_board[selectedPosition.row][selectedPosition.col] = -1;
-				selectedCell = false;
-				attackedCell = false;
+				if(validMove(attackerName)) {
+					var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
+					var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
+					$p.removeClass(attackerName);
+					$a.addClass(attackerName);
+					// Update new internal board positions
+					_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
+					_board[selectedPosition.row][selectedPosition.col] = -1;
+					selectedCell = false;
+					attackedCell = false;
+				}
 			}
 		}
 
