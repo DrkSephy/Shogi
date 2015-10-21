@@ -3,6 +3,16 @@ $(document).ready(function() {
 	// Internal state of board
 	var _board = [];
 
+	// Internal Game state variables
+	// The position of the selected piece
+	var selectedPosition = {row: 0, col: 0};
+	// The position of the attacked cell
+	var attackPosition = {row: 0, col: 0};
+	// Did we select a cell that is occupied?
+	var selectedCell = false;
+	// Did we select a cell to attack?
+	var attackedCell = false;
+
 	$('.row').each(function(rowIndex, row){
 		_board.push([]);
 		$(this).find('.square').each(function(cellIndex, square) {
@@ -96,12 +106,6 @@ $(document).ready(function() {
 		}
 	}
 
-	var selectedPosition = {row: 0, col: 0};
-	var attackPosition = {row: 0, col: 0};
-	var selectedCell = false;
-	var attackedCell = false;
-
-	
 	// TODO: Refactor all of this code
 
 	$('.square').click(function() {
@@ -154,6 +158,6 @@ $(document).ready(function() {
 				attackedCell = false;
 			}
 		}
-		
+
 	})
 });
