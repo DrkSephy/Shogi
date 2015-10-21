@@ -98,7 +98,7 @@ $(document).ready(function() {
 		});
 	});
 
-	printBoard();
+	// printBoard();
 
 	/**
 	 * Prints state of the board.
@@ -159,20 +159,20 @@ $(document).ready(function() {
 			return false;
 		}
 
-		console.log(attacker);
 		// Check if this piece performed a legal move
 		for(var i = 0; i < _pieces[attacker].length; i++) {
 			if(_pieces[attacker][i].row == differencePosition.row && 
 				 _pieces[attacker][i].col == differencePosition.col) {
 				console.log('Valid move for: ' + attacker);
 				return true;
-			} else {
-				console.log('Invalid move for: ' + attacker);
-				// Made an invalid move, reset our selections
-				selectedCell = false;
-				attackedCell = false;
-			}
+			} 
 		}
+		
+		console.log('Invalid move for: ' + attacker);
+		// Made an invalid move, reset our selections
+		selectedCell = false;
+		attackedCell = false;
+		return false;	
 	}
 
 	// TODO: Refactor all of this code
@@ -202,7 +202,7 @@ $(document).ready(function() {
 				attackPosition.row = x, attackPosition.col = y;
 				differencePosition.row = attackPosition.row - selectedPosition.row;
 				differencePosition.col = attackPosition.col - selectedPosition.col;
-				console.log('Difference in row is: ' + differencePosition.row + ' , ' + 'Difference in Col is: ' + differencePosition.col);
+				// console.log('Difference in row is: ' + differencePosition.row + ' , ' + 'Difference in Col is: ' + differencePosition.col);
 				if(validMove(attackerName)) {
 					var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 					var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
@@ -214,9 +214,7 @@ $(document).ready(function() {
 					_board[selectedPosition.row][selectedPosition.col] = -1;
 					selectedCell = false;
 					attackedCell = false;
-				} else {
-					console.log('Invalid move!')
-				}
+				} 
 			} else {
 				// Square selected is not occupied, we simply move our piece
 				attackPosition.row = x;
