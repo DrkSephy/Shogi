@@ -230,6 +230,5 @@ $(document).ready(function() {
 				}
 			}
 		}
-
 	})
 });
