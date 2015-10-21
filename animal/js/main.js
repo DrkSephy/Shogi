@@ -19,7 +19,12 @@ $(document).ready(function() {
 	var enemyLionCaptured = false;
 	var seenPlayerLion = false;
 	var seenEnemyLion = false;
-	
+	// Whose turn is it?
+	var playerTurn = true;
+	var enemyTurn = false;
+	// Has either player moved?
+	var playerMoved = false;
+	var enemyMoved = false;
 
 	var _pieces = {
 		'enemyChick' : [
