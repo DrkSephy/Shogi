@@ -109,7 +109,7 @@ $(document).ready(function() {
 		});
 	});
 
-	// printBoard();
+	printBoard();
 
 	/**
 	 * Prints state of the board.
@@ -241,6 +241,28 @@ $(document).ready(function() {
 		// Check if the new bounds are valid
 		if(attackPosition.row > 3 || attackPosition.col > 2) {
 			return false;
+		}
+
+		// It is the player's turn, we cannot:
+		// 	Attack other player pieces
+		if(playerTurn) {
+			if(_board[attackPosition.row][attackPosition.col] !== -1 && 
+				(_board[attackPosition.row][attackPosition.col]).indexOf('player') !== -1) {
+				console.log('Attempted to attack our own piece, invalid move!');
+				selectedCell = false;
+				attackedCell = false;
+				return false;
+			}
+		}
+
+		if(enemyTurn) {
+			if(_board[attackPosition.row][attackPosition.col] !== -1 && 
+				(_board[attackPosition.row][attackPosition.col]).indexOf('enemy') !== -1) {
+				console.log('Attempted to attack our own piece, invalid move!');
+				selectedCell = false;
+				attackedCell = false;
+				return false;
+			}
 		}
 
 		// Check if this piece performed a legal move
