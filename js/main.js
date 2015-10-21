@@ -109,7 +109,7 @@ $(document).ready(function() {
 		});
 	});
 
-	printBoard();
+	// printBoard();
 
 	/**
 	 * Prints state of the board.
@@ -130,13 +130,14 @@ $(document).ready(function() {
 	function toggleTurn() {
 		if(playerTurn) {
 			playerTurn = false;
+			playerMoved = true;
 			enemyTurn = true;
 		} else if (enemyTurn) {
 			enemyTurn = false;
+			enemyMoved = true;
 			playerTurn = true;
 		}
-		console.log('The players turn is: ' + playerTurn);
-		console.log('The enemies turn is: ' + enemyTurn);
+
 		return;
 	}
 
@@ -149,6 +150,7 @@ $(document).ready(function() {
 			turnCount++;
 			playerMoved = false;
 			enemyMoved = false;
+			console.log('The current turn is: ' + turnCount);	
 		}
 		return;
 	}
@@ -205,7 +207,7 @@ $(document).ready(function() {
 		} else if (enemyLionCaptured) {
 			console.log('Player has defeated the enemy!!!!');
 		} else {
-			console.log('Game is still ongoing');
+			//console.log('Game is still ongoing');
 		}
 	}
 
@@ -245,7 +247,6 @@ $(document).ready(function() {
 		for(var i = 0; i < _pieces[attacker].length; i++) {
 			if(_pieces[attacker][i].row == differencePosition.row && 
 				 _pieces[attacker][i].col == differencePosition.col) {
-				console.log('Valid move for: ' + attacker);
 				return true;
 			} 
 		}
@@ -284,7 +285,6 @@ $(document).ready(function() {
 				attackPosition.row = x, attackPosition.col = y;
 				differencePosition.row = attackPosition.row - selectedPosition.row;
 				differencePosition.col = attackPosition.col - selectedPosition.col;
-				// console.log('Difference in row is: ' + differencePosition.row + ' , ' + 'Difference in Col is: ' + differencePosition.col);
 				if(validMove(attackerName)) {
 					var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 					var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
@@ -299,6 +299,7 @@ $(document).ready(function() {
 					attackedCell = false;
 					// Toggle the turn
 					toggleTurn();
+					incrementTurn();
 					// Check if the game is over 
 					isGameOver();
 				} 
@@ -321,6 +322,7 @@ $(document).ready(function() {
 					attackedCell = false;
 					// Toggle the turn
 					toggleTurn();
+					incrementTurn();
 				}
 			}
 		}
