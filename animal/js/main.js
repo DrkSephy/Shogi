@@ -1,17 +1,73 @@
 $(document).ready(function() {
-
+	"use strict";
 	// Internal state of board
 	var _board = [];
 
 	// Internal Game state variables
 	// The position of the selected piece
-	var selectedPosition = {row: 0, col: 0};
+	var selectedPosition = { row: 0, col: 0 };
 	// The position of the attacked cell
-	var attackPosition = {row: 0, col: 0};
+	var attackPosition = { row: 0, col: 0 };
+	// Difference between selected and attack cells
+	var differencePosition = { row: 0, col: 0 };
 	// Did we select a cell that is occupied?
 	var selectedCell = false;
 	// Did we select a cell to attack?
 	var attackedCell = false;
+
+
+	var _pieces = {
+		'enemyChick' : [
+			{	row: 1, col: 0 }  // South
+		],
+		'enemyLion' : [
+			{ row: 1,  col: 0  }, // South
+			{ row: -1, col: 0  }, // North
+			{ row: 0,  col: -1 }, // East
+			{ row: 0,  col: 1  }, // West
+			{ row: 1,  col: -1 }, // Southwest
+			{ row: -1, col: -1 }, // Northwest
+			{ row: 1,  col: 1  }, // Southeast
+			{ row: -1, col: 1  }, // Northeast
+		],
+		'enemyElephant' : [
+			{ row: 1,  col: -1 }, // Southwest
+			{ row: -1, col: -1 }, // Northwest
+			{ row: 1,  col: 1  }, // Southeast
+			{ row: -1, col: 1  }, // Northeast
+		],
+		'enemyGiraffe' : [
+			{ row: 1,  col: 0  }, // South
+			{ row: -1, col: 0  }, // North
+			{ row: 0,  col: -1 }, // West
+			{ row: 0,  col: 1  }, // East
+		],
+		'playerChick' : [
+			{	row: -1, col: 0 }   // North
+		],
+		'playerLion' : [
+			{ row: -1, col: 0  }, // North
+			{ row: 1,  col: 0  }, // South
+			{ row: 0,  col: -1 }, // West
+			{ row: 0,  col: 1  }, // East
+			{ row: -1, col: -1 }, // Northwest
+			{ row: 1,  col: -1 }, // Southwest
+			{ row: -1, col: 1  }, // Northeast
+			{ row: 1,  col: 1  }, // Southeast
+		],
+		'playerElephant' : [
+			{ row: -1, col: -1 }, // Northwest
+			{ row: 1,  col: -1 }, // Southwest
+			{ row: 1,  col: 1  }, // Southeast
+			{ row: -1, col: 1  }, // Northeast
+		],
+		'enemyGiraffe' : [
+			{ row: -1, col: 0  }, // North
+			{ row: 1,  col: 0  }, // South
+			{ row: 0,  col: -1 }, // West
+			{ row: 0,  col: 1  }, // East
+		],
+	}
 
 	$('.row').each(function(rowIndex, row){
 		_board.push([]);
