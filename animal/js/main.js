@@ -99,6 +99,7 @@ $(document).ready(function() {
 	});
 
 	printBoard();
+
 	/**
 	 * Prints state of the board.
 	 * @return {undefined}
@@ -148,7 +149,7 @@ $(document).ready(function() {
 		* @param {number} newCol The new column value.
 		* @returns {boolean} Whether a move is valid. 
 	*/
-	function validMove(row, col, newRow, newCol) {
+	function validMove(attacker) {
 		/*
 		 * This method will need to:
 		 *	Check if the new bounds are valid
@@ -157,8 +158,15 @@ $(document).ready(function() {
 		*/
 
 		// Check if the new bounds are valid
-		if(newRow > 3 || newCol > 2) {
+		if(attackPosition.row > 3 || attackPosition.col > 2) {
 			return false;
+		}
+		// Check if this piece performed a legal move
+		for(var i = 0; i < _pieces[attacker].length; i++) {
+			if(_pieces[attacker][i].row == differencePosition.row && 
+				 _pieces[attacker][i].col == differencePosition.col) {
+				return true;
+			}
 		}
 	}
 
@@ -186,18 +194,24 @@ $(document).ready(function() {
 			if(isOccupied(x, y)) {
 				var attackedName = _board[x][y];
 				var attackerName = _board[selectedPosition.row][selectedPosition.col];
-				attackPosition.row = x;
-				attackPosition.col = y;
-				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
-				var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
-				$p.removeClass(attackerName);
-				$a.removeClass(attackedName);
-				$a.addClass(attackerName);
-				// Update new internal board positions
-				_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
-				_board[selectedPosition.row][selectedPosition.col] = -1;
-				selectedCell = false;
-				attackedCell = false;
+				attackPosition.row = x, attackPosition.col = y;
+				differencePosition.row = attackPosition.row - selectedPosition.row;
+				differencePosition.col = attackPosition.col - selectedPosition.col;
+				console.log('Difference in row is: ' + differencePosition.row + ' , ' + 'Difference in Col is: ' + differencePosition.col);
+				if(validMove(attackerName)) {
+					var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
+					var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
+					$p.removeClass(attackerName);
+					$a.removeClass(attackedName);
+					$a.addClass(attackerName);
+					// Update new internal board positions
+					_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
+					_board[selectedPosition.row][selectedPosition.col] = -1;
+					selectedCell = false;
+					attackedCell = false;
+				} else {
+					console.log('Invalid move!')
+				}
 			} else {
 				// Square selected is not occupied, we simply move our piece
 				attackPosition.row = x;
