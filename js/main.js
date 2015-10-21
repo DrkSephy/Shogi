@@ -135,6 +135,8 @@ $(document).ready(function() {
 			enemyTurn = false;
 			playerTurn = true;
 		}
+		console.log('The players turn is: ' + playerTurn);
+		console.log('The enemies turn is: ' + enemyTurn);
 		return;
 	}
 
@@ -197,8 +199,7 @@ $(document).ready(function() {
 				}
 			}
 		}
-		console.log('Enemy Lion has been captured: ' + enemyLionCaptured);
-		console.log('Player Lion has been captured: ' + playerLionCaptured);
+
 		if(playerLionCaptured) {
 			console.log('Enemy has won :/')
 		} else if (enemyLionCaptured) {
@@ -293,8 +294,11 @@ $(document).ready(function() {
 					// Update new internal board positions
 					_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
 					_board[selectedPosition.row][selectedPosition.col] = -1;
+					// Reset selected cells
 					selectedCell = false;
 					attackedCell = false;
+					// Toggle the turn
+					toggleTurn();
 					// Check if the game is over 
 					isGameOver();
 				} 
@@ -315,6 +319,8 @@ $(document).ready(function() {
 					_board[selectedPosition.row][selectedPosition.col] = -1;
 					selectedCell = false;
 					attackedCell = false;
+					// Toggle the turn
+					toggleTurn();
 				}
 			}
 		}
