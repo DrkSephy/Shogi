@@ -23,13 +23,10 @@
 
 #one {
     float: left;
-    padding-left: 125px;
 }
 
 #two {
     float: right;
-    padding-right: 125px;
-    padding-top: 10px;
 }
 
 .img1 { 
