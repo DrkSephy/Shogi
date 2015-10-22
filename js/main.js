@@ -189,6 +189,7 @@ $(document).ready(function() {
 	*/
 	function debugPanel(message) {
 		$('#debug').append(message);
+		$('#debug').scrollTop($('#debug')[0].scrollHeight);
 		return;
 	}
 
