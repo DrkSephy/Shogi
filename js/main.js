@@ -19,6 +19,7 @@ $(document).ready(function() {
 	var enemyLionCaptured = false;
 	var seenPlayerLion = false;
 	var seenEnemyLion = false;
+	var gameOver = false;
 	// Whose turn is it?
 	var playerTurn = true;
 	var enemyTurn = false;
@@ -110,6 +111,10 @@ $(document).ready(function() {
 	});
 
 	printBoard();
+	// Set the first debug message
+	debugPanel('=================TURN ' + turnCount + '=================');
+	debugPanel('\n\n')
+	debugPanel('	Player move for turn: ' + turnCount);
 
 	/**
 	 * Prints state of the board.
@@ -150,7 +155,19 @@ $(document).ready(function() {
 			turnCount++;
 			playerMoved = false;
 			enemyMoved = false;
-			console.log('The current turn is: ' + turnCount);	
+			debugPanel('\n\n');
+			debugPanel('		        =================TURN ' + turnCount + '=================');
+		}
+
+		// Debug
+		if(playerTurn) {
+			debugPanel('\n\n');
+			debugPanel('	Player move for turn: ' + turnCount);
+		}
+
+		if(enemyTurn) {
+			debugPanel('\n\n');
+			debugPanel('	Enemy move for turn: ' + turnCount);
 		}
 		return;
 	}
@@ -203,11 +220,15 @@ $(document).ready(function() {
 		}
 
 		if(playerLionCaptured) {
-			console.log('Enemy has won :/')
+			debugPanel('\n');
+			debugPanel('	Enemy has won :/');
+			gameOver = true;
 		} else if (enemyLionCaptured) {
-			console.log('Player has defeated the enemy!!!!');
+			debugPanel('\n');
+			debugPanel('	Player has defeated the enemy :)');
+			gameOver = true;
 		} else {
-			//console.log('Game is still ongoing');
+			gameOver = false;
 		}
 	}
 
@@ -248,7 +269,8 @@ $(document).ready(function() {
 		if(playerTurn) {
 			if(_board[attackPosition.row][attackPosition.col] !== -1 && 
 				(_board[attackPosition.row][attackPosition.col]).indexOf('player') !== -1) {
-				console.log('Attempted to attack our own piece, invalid move!');
+				debugPanel('\n');
+				debugPanel('	Player attempted to attack one of their own pieces, invalid move!');
 				selectedCell = false;
 				attackedCell = false;
 				return false;
@@ -258,7 +280,8 @@ $(document).ready(function() {
 		if(enemyTurn) {
 			if(_board[attackPosition.row][attackPosition.col] !== -1 && 
 				(_board[attackPosition.row][attackPosition.col]).indexOf('enemy') !== -1) {
-				console.log('Attempted to attack our own piece, invalid move!');
+				debugPanel('\n');
+				debugPanel('	Enemy attempted to attack one of their own pieces, invalid move!');
 				selectedCell = false;
 				attackedCell = false;
 				return false;
@@ -273,7 +296,17 @@ $(document).ready(function() {
 			} 
 		}
 
-		console.log('Invalid move for: ' + attacker);
+
+		if(playerTurn) {
+			debugPanel('\n');
+			debugPanel('	Player performed an illegal move for: ' + attacker);
+		}
+
+		if(enemyTurn) {
+			debugPanel('\n');
+			debugPanel('	Enemy performed an illegal move for: ' + attacker);
+		}
+				
 		// Made an invalid move, reset our selections
 		selectedCell = false;
 		attackedCell = false;
@@ -292,7 +325,8 @@ $(document).ready(function() {
 		if(playerTurn) {
 			// Attempting to select an enemy piece...
 			if((_board[x][y]).indexOf('enemy') !== -1) {
-				console.log('It is the Players turn, but attempting to select the enemy pieces');
+				debugPanel('\n');
+				debugPanel('	Player tried to move an enemy piece: ' + _board[x][y] + ' at position: ' + x + ', ' + y);
 				selectedCell = false;
 				return false;
 			}
@@ -303,19 +337,30 @@ $(document).ready(function() {
 		if(enemyTurn) {
 			// Attempting to select an enemy piece...
 			if((_board[x][y]).indexOf('player') !== -1) {
-				console.log('It is the enemies turn, but attempting to select the players pieces');
+				debugPanel('\n');
+				debugPanel('	Enemy tried to move a player piece ' + _board[x][y] + ' at position: ' + x + ', ' + y);
 				selectedCell = false;
 				return false;
 			}
 		}
 
+		// Debug 
+		if(playerTurn) {
+			debugPanel('\n')
+			debugPanel('	Player has selected the piece ' + _board[x][y] + ' at position: ' + x + ', ' + y);
+		}
+
+		if(enemyTurn) {
+			debugPanel('\n')
+			debugPanel('	Enemy has selected the piece ' + _board[x][y] + ' at position: ' + x + ', ' + y);
+		}
 		return true;
 	}
 
 	// TODO: Refactor all of this code
 
 	$('.square').click(function() {
-		if(!selectedCell) {
+		if(!selectedCell && !gameOver) {
 			var x = $(this).data('x');
 			var y = $(this).data('y');
 			if(isOccupied(x, y) && validSelection(x, y)) {
@@ -345,17 +390,29 @@ $(document).ready(function() {
 					$p.removeClass(attackerName);
 					$a.removeClass(attackedName);
 					$a.addClass(attackerName);
+					if(playerTurn) {
+						debugPanel('\n');
+						debugPanel('	The player attacked the piece: ' + _board[attackPosition.row][attackPosition.col] + ' at position: ' + attackPosition.row + ', ' + attackPosition.col);
+					}
+
+					if(enemyTurn) {
+						debugPanel('\n');
+						debugPanel('	The enemy attacked the piece: ' + _board[attackPosition.row][attackPosition.col] + ' at position: ' + attackPosition.row + ', ' + attackPosition.col);
+					}
 					// Update new internal board positions
 					_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
 					_board[selectedPosition.row][selectedPosition.col] = -1;
 					// Reset selected cells
 					selectedCell = false;
 					attackedCell = false;
-					// Toggle the turn
-					toggleTurn();
-					incrementTurn();
 					// Check if the game is over 
 					isGameOver();
+					if(!gameOver) {
+						// Toggle the turn
+						toggleTurn();
+						// Increment turn
+						incrementTurn();
+					}
 				} 
 			} else {
 				// Square selected is not occupied, we simply move our piece
@@ -369,6 +426,15 @@ $(document).ready(function() {
 					var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
 					$p.removeClass(attackerName);
 					$a.addClass(attackerName);
+					if(playerTurn) {
+						debugPanel('\n');
+						debugPanel('	The player moved the piece: ' + _board[selectedPosition.row][selectedPosition.col] + ' to position: ' + attackPosition.row + ', ' + attackPosition.col);
+					}
+
+					if(enemyTurn) {
+						debugPanel('\n');
+						debugPanel('	The enemy moved the piece: ' + _board[selectedPosition.row][selectedPosition.col] + ' to position: ' + attackPosition.row + ', ' + attackPosition.col);
+					}
 					// Update new internal board positions
 					_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
 					_board[selectedPosition.row][selectedPosition.col] = -1;
