@@ -280,13 +280,45 @@ $(document).ready(function() {
 		return false;	
 	}
 
+	/**
+	 * Determines if we selected a valid piece.
+	 * @param {number} x The row to search.
+	 * @param {number} y The column to search.
+	 * @returns {boolean} If a valid selection occured
+	*/
+	function validSelection(x, y) {
+		// It is the player's turn. We cannot:
+		// 	Try to move the opponents pieces!
+		if(playerTurn) {
+			// Attempting to select an enemy piece...
+			if((_board[x][y]).indexOf('enemy') !== -1) {
+				console.log('It is the Players turn, but attempting to select the enemy pieces');
+				selectedCell = false;
+				return false;
+			}
+		}
+
+		// It is the enemy turn. We cannot:
+		// Try to move the Player's pieces!
+		if(enemyTurn) {
+			// Attempting to select an enemy piece...
+			if((_board[x][y]).indexOf('player') !== -1) {
+				console.log('It is the enemies turn, but attempting to select the players pieces');
+				selectedCell = false;
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	// TODO: Refactor all of this code
 
 	$('.square').click(function() {
 		if(!selectedCell) {
 			var x = $(this).data('x');
 			var y = $(this).data('y');
-			if(isOccupied(x, y)) {
+			if(isOccupied(x, y) && validSelection(x, y)) {
 				// We've selected a piece to move
 				selectedCell = true;
 				// Update the position of our selected piece
