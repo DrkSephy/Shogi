@@ -388,6 +388,8 @@ $(document).ready(function() {
 				differencePosition.row = attackPosition.row - selectedPosition.row;
 				differencePosition.col = attackPosition.col - selectedPosition.col;
 				if(validMove(attackerName)) {
+					var cell = $('#' + attackedName);
+					cell.addClass(attackedName);
 					var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 					var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
 					$p.removeClass(attackerName);
