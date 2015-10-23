@@ -2,6 +2,10 @@ $(document).ready(function() {
 	"use strict";
 	// Internal state of board
 	var _board = [];
+	// Internal state of player bench
+	var _playerBench = [];
+	// Internal state of enemy bench
+	var _enemyBench = [];
 
 	// Internal Game state variables
 	// The position of the selected piece
@@ -110,7 +114,23 @@ $(document).ready(function() {
 		});
 	});
 
+	$('.enemyRow').each(function(rowIndex, row) {
+		$(this).find('.square').each(function(cellIndex, square) {
+			_enemyBench[rowIndex] = -1;
+			$(square).attr({'data-x': rowIndex});
+		});
+	});
+
+	$('.playerRow').each(function(rowIndex, row) {
+		$(this).find('.square').each(function(cellIndex, square) {
+			_playerBench[rowIndex] = -1;
+			$(square).attr({'data-x': rowIndex});
+		});
+	});
+
 	printBoard();
+	printEnemyBench();
+	printPlayerBench();
 	// Set the first debug message
 	debugPanel('=================TURN ' + turnCount + '=================');
 	debugPanel('\n\n')
@@ -126,6 +146,22 @@ $(document).ready(function() {
 		}
 
 		return;
+	}
+
+	/**
+	 * Prints state of the enemy bench.
+	 * @return {undefined}
+	*/
+	function printEnemyBench() {
+		console.log('Enemy bench: ' + _enemyBench);
+	}
+
+	/**
+	 * Prints state of the player bench.
+	 * @return {undefined}
+	*/
+	function printPlayerBench() {
+		console.log('Player bench: ' + _playerBench);
 	}
 
 	/**
@@ -363,6 +399,7 @@ $(document).ready(function() {
 	// TODO: Refactor all of this code
 
 	$('.square').click(function() {
+		console.log($(this));
 		if(!selectedCell && !gameOver) {
 			var x = $(this).data('x');
 			var y = $(this).data('y');
