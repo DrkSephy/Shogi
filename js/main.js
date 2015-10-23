@@ -402,7 +402,7 @@ $(document).ready(function() {
 	 * @param {string} piece The name of the piece to place.
 	 * @returns {undefined}
 	*/
-	function benchPiece(piece) {
+	function _benchPiece(piece) {
 		if(piece == 'playerChick') {
 			_enemyBench[0] = piece;
 		} else if(piece == 'playerGiraffe') {
@@ -426,6 +426,34 @@ $(document).ready(function() {
 	*/
 	function isBenchOccupied(bench, position) {
 		return bench[position] == -1 ? false : true;
+	}
+
+	/**
+	 * Adds piece to respective bench. 
+	 * @param {string} piece The piece to add to the bench.
+	 * @returns {undefined} 
+	*/
+	function addToBench(piece) {
+		if(piece == 'playerChick') {
+			var cell = $('#playerChick');
+			cell.addClass('enemyChick');
+			_enemyBench[0] = piece;
+		} else if(piece == 'playerGiraffe') {
+			var cell = $('#playerGiraffe');
+			cell.addClass('enemyGiraffe');
+		} else if (piece == 'playerElephant') {
+			var cell = $('#playerElephant');
+			cell.addClass('enemyElephant');
+		} else if (piece == 'enemyChick') {
+			var cell = $('#enemyChick');
+			cell.addClass('playerChick');
+		} else if (piece == 'enemyGiraffe') {
+			var cell = $('#enemyGiraffe');
+			cell.addClass('playerGiraffe');
+		} else if (piece == 'enemyElephant') {
+			var cell = $('#enemyElephant');
+			cell.addClass('playerElephant');
+		}
 	}
 
 	// Detect clicks on enemy bench
@@ -477,8 +505,8 @@ $(document).ready(function() {
 				differencePosition.row = attackPosition.row - selectedPosition.row;
 				differencePosition.col = attackPosition.col - selectedPosition.col;
 				if(validMove(attackerName)) {
-					var cell = $('#' + attackedName);
-					cell.addClass(attackedName);
+					// Add attacked piece to respective bench
+					addToBench(attackedName);
 					var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 					var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
 					$p.removeClass(attackerName);
@@ -494,7 +522,7 @@ $(document).ready(function() {
 						debugPanel('	The enemy attacked the piece: ' + _board[attackPosition.row][attackPosition.col] + ' at position: ' + attackPosition.row + ', ' + attackPosition.col);
 					}
 					// Update respective bench
-					benchPiece(attackedName);
+					_benchPiece(attackedName);
 					// Update new internal board positions
 					_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
 					_board[selectedPosition.row][selectedPosition.col] = -1;
