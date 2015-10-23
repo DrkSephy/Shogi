@@ -7,7 +7,6 @@ $(document).ready(function() {
 	// Internal state of enemy bench
 	var _enemyBench = [];
 
-	// Internal Game state variables
 	// The position of the selected piece
 	var selectedPosition = { row: 0, col: 0 };
 	// The position of the attacked cell
@@ -396,6 +395,11 @@ $(document).ready(function() {
 		return true;
 	}
 
+	/**
+	 * Updates internal bench states.
+	 * @param {string} piece The name of the piece to place.
+	 * @returns {undefined}
+	*/
 	function benchPiece(piece) {
 		if(piece == 'playerChick') {
 			_enemyBench[0] = piece;
@@ -412,16 +416,26 @@ $(document).ready(function() {
 		}
 	}
 
+	/**
+	 * Checks if bench is occupied at a position.
+	 * @param {number} position The position of bench to check.
+	 * @param {string} bench The bench to check.
+	 * @returns {boolean} Whether a position is occupied.
+	*/
+	function isBenchOccupied(bench, position) {
+		return bench[position] == -1 ? false : true;
+	}
+
 	// Detect clicks on enemy bench
 	$('.enemyRow > .square').click(function() {
 		var x = $(this).data('x');
-		console.log(_enemyBench[x]);
+		console.log(isBenchOccupied(_enemyBench, x));
 	});
 
 	// Detect clicks on player bench
 	$('.playerRow > .square').click(function() {
 		var x = $(this).data('x');
-		console.log(_playerBench[x]);
+		console.log(isBenchOccupied(_playerBench, x));
 	});
 
 	// TODO: Refactor all of this code
