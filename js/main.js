@@ -142,7 +142,6 @@ $(document).ready(function() {
 			enemyMoved = true;
 			playerTurn = true;
 		}
-
 		return;
 	}
 
@@ -188,8 +187,8 @@ $(document).ready(function() {
 	 * @returns {undefined}
 	*/
 	function debugPanel(message) {
-		$('#debug').append(message);
-		$('#debug').scrollTop($('#debug')[0].scrollHeight);
+		// $('#debug').append(message);
+		// $('#debug').scrollTop($('#debug')[0].scrollHeight);
 
 		return;
 	}
@@ -199,6 +198,8 @@ $(document).ready(function() {
 	 * @return {boolean} Is the game over?
 	*/
 	function isGameOver() {
+		// First winning condition: lion captured
+		// Check if either lion is captured
 		seenPlayerLion = false;
 		seenEnemyLion = false;
 		for(var row = 0; row < 4; row++) {
