@@ -17,6 +17,8 @@ $(document).ready(function() {
 	var selectedCell = false;
 	// Did we select a cell to attack?
 	var attackedCell = false;
+	// Did we select a bench piece? 
+	var selectedBenchPiece = false;
 	// Is the game over?
 	var playerLionCaptured = false;
 	var enemyLionCaptured = false;
@@ -428,8 +430,18 @@ $(document).ready(function() {
 
 	// Detect clicks on enemy bench
 	$('.enemyRow > .square').click(function() {
-		var x = $(this).data('x');
-		console.log(isBenchOccupied(_enemyBench, x));
+		// If we had a piece selected and then clicked the bench,
+		// We cancel the previous selection
+		selectedCell = false;
+		// We select a piece from our bench
+		if(!selectedBenchPiece) {
+			// Grab position of bench
+			var x = $(this).data('x');
+			// If the bench has a piece
+			if(isBenchOccupied(_enemyBench, x)) {
+				selectedBenchPiece = true; 
+			}
+		} 
 	});
 
 	// Detect clicks on player bench
