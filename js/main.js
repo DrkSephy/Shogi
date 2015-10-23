@@ -396,6 +396,22 @@ $(document).ready(function() {
 		return true;
 	}
 
+	function benchPiece(piece) {
+		if(piece == 'playerChick') {
+			_enemyBench[0] = piece;
+		} else if(piece == 'playerGiraffe') {
+			_enemyBench[1] = piece;
+		} else if (piece == 'playerElephant') {
+			_enemyBench[2] = piece;
+		} else if (piece == 'enemyChick') {
+			_playerBench[0] = piece;
+		} else if (piece == 'enemyGiraffe') {
+			_playerBench[1] = piece;
+		} else if (piece == 'enemyElephant') {
+			_playerBench[2] = piece;
+		}
+	}
+
 	// Detect clicks on enemy bench
 	$('.enemyRow > .square').click(function() {
 		var x = $(this).data('x');
@@ -451,6 +467,8 @@ $(document).ready(function() {
 						debugPanel('\n');
 						debugPanel('	The enemy attacked the piece: ' + _board[attackPosition.row][attackPosition.col] + ' at position: ' + attackPosition.row + ', ' + attackPosition.col);
 					}
+					// Update respective bench
+					benchPiece(attackedName);
 					// Update new internal board positions
 					_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
 					_board[selectedPosition.row][selectedPosition.col] = -1;
