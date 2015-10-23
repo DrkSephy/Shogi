@@ -129,8 +129,8 @@ $(document).ready(function() {
 	});
 
 	printBoard();
-	printEnemyBench();
-	printPlayerBench();
+	// printEnemyBench();
+	// printPlayerBench();
 	// Set the first debug message
 	debugPanel('=================TURN ' + turnCount + '=================');
 	debugPanel('\n\n')
@@ -396,10 +396,20 @@ $(document).ready(function() {
 		return true;
 	}
 
-	// TODO: Refactor all of this code
+	// Detect clicks on enemy bench
+	$('.enemyRow > .square').click(function() {
+		var x = $(this).data('x');
+		console.log(_enemyBench[x]);
+	});
 
-	$('.square').click(function() {
-		console.log($(this));
+	// Detect clicks on player bench
+	$('.playerRow > .square').click(function() {
+		var x = $(this).data('x');
+		console.log(_playerBench[x]);
+	});
+
+	// TODO: Refactor all of this code
+	$('.row > .square').click(function() {
 		if(!selectedCell && !gameOver) {
 			var x = $(this).data('x');
 			var y = $(this).data('y');
