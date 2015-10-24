@@ -35,6 +35,11 @@ $(document).ready(function() {
 	// Has either player moved?
 	var playerMoved = false;
 	var enemyMoved = false;
+	// Chick promotion variables
+	var playerChickPromotion = false;
+	var playerChickPosition = { row: 0, col: 0 };
+	var enemyChickPromotion = false;
+	var enemyChickPosition = { row: 0, col: 0 };
 
 	var _pieces = {
 		'enemyChick' : [
@@ -412,6 +417,33 @@ $(document).ready(function() {
 			debugPanel('	Enemy has selected the piece ' + _board[x][y] + ' at position: ' + x + ', ' + y);
 		}
 		return true;
+	}
+
+	/**
+	 * Checks if a chick should be promoted to a hen.
+	 * @returns {boolean} 
+	*/
+	function checkChicks() {
+		// Check first row
+		for(var col = 0; col < 3; col++) {
+			if(_board[0][col] === 'playerChick') {
+				playerChickPromotion = true;
+				playerChickPosition.row = 0;
+				playerChickPosition.col = col;
+				debugPanel('\n');
+				debugPanel('	Player chick gets promoted to a hen!');
+				return;
+			}
+
+			if (_board[3][col] === 'enemyChick') {
+				enemyChickPromotion = true;
+				enemyChickPromotion.row = 3;
+				enemyChickPosition.col = col;
+				debugPanel('\n');
+				debugPanel('	Enemy chick gets promoted to a hen!');
+				return;
+			}
+		}
 	}
 
 	/**
