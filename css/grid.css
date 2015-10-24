@@ -1,3 +1,7 @@
+h2 {
+    text-align: center;
+}
+
 .square {
     float:left;
     position: relative;
@@ -11,9 +15,10 @@
 }
 
 .game {
-	height: 600px;
-	width: 600px;
-	padding-top: 10px;
+    height: 600px;
+    width: 600px;
+    padding-top: 10px;
+    padding-left: 50px;
     left: 0px;
     right: 0px;
     top: 0px;
@@ -23,13 +28,28 @@
 
 #one {
     float: left;
-    padding-left: 100px;
+    padding-left: 150px;
 }
 
-#two {
+#enemyBench {
     float: right;
+    width: 30%;
+    padding-right: 150px;
+    padding-top: 50px;
+}
+
+#playerBench {
+    float: right;
+    width: 30%;
+    padding-right: 150px;
     padding-top: 10px;
-    padding-right: 50px;
+}
+
+#debugPanel {
+    float: right;
+    width: 30%;
+    padding-right: 200px;
+    padding-top: 75px;
 }
 
 .img1 { 
@@ -186,4 +206,4 @@
     margin:auto;
     content:url('../img/pieces/enemy/lion.png');
     position: absolute;
-}
+}}
