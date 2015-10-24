@@ -132,9 +132,6 @@ $(document).ready(function() {
 		});
 	});
 
-	printBoard();
-	// printEnemyBench();
-	// printPlayerBench();
 	// Set the first debug message
 	debugPanel('=================TURN ' + turnCount + '=================');
 	debugPanel('\n\n')
@@ -148,7 +145,6 @@ $(document).ready(function() {
 		for(var i = 0; i < 4; i++) {
 			console.log(_board[i]);
 		}
-
 		return;
 	}
 
@@ -158,6 +154,7 @@ $(document).ready(function() {
 	*/
 	function printEnemyBench() {
 		console.log('Enemy bench: ' + _enemyBench);
+		return;
 	}
 
 	/**
@@ -166,6 +163,7 @@ $(document).ready(function() {
 	*/
 	function printPlayerBench() {
 		console.log('Player bench: ' + _playerBench);
+		return;
 	}
 
 	/**
@@ -488,6 +486,8 @@ $(document).ready(function() {
 			var cell = $('#enemyElephant');
 			cell.addClass('playerElephant');
 			_playerBench[2] = 'playerElephant';
+		} else {
+			return;
 		}
 	}
 
