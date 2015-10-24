@@ -245,7 +245,6 @@ $(document).ready(function() {
 				return;
 			} 
 
-			console.log(_board[3][col]);
 			if (_board[3][col] === 'enemyLion') {
 				gameOver = true;
 				debugPanel('\n');
@@ -422,17 +421,17 @@ $(document).ready(function() {
 	*/
 	function _benchPiece(piece) {
 		if(piece == 'playerChick') {
-			_enemyBench[0] = piece;
+			_enemyBench[0] = 'enemyChick';
 		} else if(piece == 'playerGiraffe') {
-			_enemyBench[1] = piece;
+			_enemyBench[1] = 'enemyGiraffe';
 		} else if (piece == 'playerElephant') {
-			_enemyBench[2] = piece;
+			_enemyBench[2] = 'enemyElephant';
 		} else if (piece == 'enemyChick') {
-			_playerBench[0] = piece;
+			_playerBench[0] = 'playerChick';
 		} else if (piece == 'enemyGiraffe') {
-			_playerBench[1] = piece;
+			_playerBench[1] = 'playerGiraffe';
 		} else if (piece == 'enemyElephant') {
-			_playerBench[2] = piece;
+			_playerBench[2] = 'playerElephant';
 		}
 	}
 
@@ -453,24 +452,41 @@ $(document).ready(function() {
 	*/
 	function addToBench(piece) {
 		if(piece == 'playerChick') {
+			console.log("????");
 			var cell = $('#playerChick');
 			cell.addClass('enemyChick');
-			_enemyBench[0] = piece;
-		} else if(piece == 'playerGiraffe') {
+			_enemyBench[0] = 'enemyChick';
+			console.log(_enemyBench);
+		} 
+
+		else if(piece == 'playerGiraffe') {
 			var cell = $('#playerGiraffe');
 			cell.addClass('enemyGiraffe');
-		} else if (piece == 'playerElephant') {
+			_enemyBench[1] = 'enemyGiraffe';
+		} 
+
+		else if (piece == 'playerElephant') {
 			var cell = $('#playerElephant');
 			cell.addClass('enemyElephant');
-		} else if (piece == 'enemyChick') {
+			_enemyBench[2] = 'enemyElephant';
+		} 
+
+		else if (piece == 'enemyChick') {
 			var cell = $('#enemyChick');
 			cell.addClass('playerChick');
-		} else if (piece == 'enemyGiraffe') {
+			_playerBench[0] = 'playerChick';
+		} 
+
+		else if (piece == 'enemyGiraffe') {
 			var cell = $('#enemyGiraffe');
 			cell.addClass('playerGiraffe');
-		} else if (piece == 'enemyElephant') {
+			_playerBench[1] = 'playerGiraffe';
+		} 
+
+		else if (piece == 'enemyElephant') {
 			var cell = $('#enemyElephant');
 			cell.addClass('playerElephant');
+			_playerBench[2] = 'playerElephant';
 		}
 	}
 
@@ -480,15 +496,22 @@ $(document).ready(function() {
 		// We cancel the previous selection
 		selectedCell = false;
 		// We select a piece from our bench
+		console.log(_enemyBench);
 		if(!selectedBenchPiece) {
 			// Grab position of bench
 			var x = $(this).data('x');
-			console.log(x);
+			console.log(_enemyBench[x]);
 			// If the bench has a piece
 			if(isBenchOccupied(_enemyBench, x)) {
 				selectedBenchPiece = true; 
 			}
 		} 
+
+		// We selected a bench piece
+		// Time to select a cell and place it on the board
+		else if (selectedBenchPiece) {
+
+		}
 	});
 
 	// Detect clicks on player bench
