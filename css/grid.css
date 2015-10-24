@@ -26,18 +26,6 @@ h2 {
     margin:auto;
 }
 
-.playerBench {
-    width: 30%;
-    float: left;
-}
-
-.enemyBench {
-    height: 147px;
-    width: 48px;
-    float: left;
-    padding-left: 150px;
-}
-
 #one {
     float: left;
     padding-left: 150px;
