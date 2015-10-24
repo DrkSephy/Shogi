@@ -492,9 +492,14 @@ $(document).ready(function() {
 		}
 	}
 
-	function removeFromBench(position, piece) {
-		var $benchCell = ($('.enemyRow > .square[data-x=' + position + ']')).children();
-		$benchCell.removeClass(piece);
+	function removeFromBench(position, piece, player) {
+		if(player == 'enemy') {
+			var $benchCell = ($('.enemyRow > .square[data-x=' + position + ']')).children();
+			$benchCell.removeClass(piece);
+		} else if (player == 'player') {
+			var $benchCell = ($('.playerRow > .square[data-x=' + position + ']')).children();
+			$benchCell.removeClass(piece);
+		}
 		return;
 	}
 
@@ -517,13 +522,19 @@ $(document).ready(function() {
 
 	// Detect clicks on player bench
 	$('.playerRow > .square').click(function() {
-		var x = $(this).data('x');
-		console.log(isBenchOccupied(_playerBench, x));
+		var selectedCell = false;
+		if(!selectedPlayerBenchPiece) {
+			var x = $(this).data('x');
+			selectedPlayerBenchPiecePosition.col = x;
+			if(isBenchOccupied(_playerBench, x)) {
+				selectedPlayerBenchPiece = true;
+			}
+		}
 	});
 
 	// TODO: Refactor all of this code
 	$('.row > .square').click(function() {
-		// We selected a bench piece, so we check and place it
+		// We selected an enemy bench piece, so we check and place it
 		if(selectedEnemyBenchPiece && !gameOver) {
 			var x = $(this).data('x');
 			var y = $(this).data('y');
@@ -533,11 +544,9 @@ $(document).ready(function() {
 				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 				// Add CSS class to selected tile
 				$a.addClass(_enemyBench[selectedEnemyBenchPiecePosition.col]);
-				printBoard();
 				// Update internal game board state with name of placed piece
 				_board[x][y] = _enemyBench[selectedEnemyBenchPiecePosition.col];
-				printBoard();
-				removeFromBench(selectedEnemyBenchPiecePosition.col, _enemyBench[selectedEnemyBenchPiecePosition.col]);
+				removeFromBench(selectedEnemyBenchPiecePosition.col, _enemyBench[selectedEnemyBenchPiecePosition.col], 'enemy');
 				// Clear bench position
 				_enemyBench[selectedEnemyBenchPiecePosition.col] = -1;
 				selectedEnemyBenchPiecePosition.col = 0;
@@ -553,6 +562,35 @@ $(document).ready(function() {
 				selectedEnemyBenchPiece = false;
 			}
 		} 
+
+		// We selected a player bench piece, check and place it
+		else if(selectedPlayerBenchPiece && !gameOver) {
+			var x = $(this).data('x');
+			var y = $(this).data('y');
+			if(!isOccupied(x, y)) {
+				// Cell is not occupied, we can place the piece!
+				// Get square to place tile down
+				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
+				// Add CSS class to selected tile
+				$a.addClass(_playerBench[selectedPlayerBenchPiecePosition.col]);
+				// Update internal game board state with name of placed piece
+				_board[x][y] = _playerBench[selectedPlayerBenchPiecePosition.col];
+				removeFromBench(selectedPlayerBenchPiecePosition.col, _playerBench[selectedPlayerBenchPiecePosition.col], 'player');
+				// Clear bench position
+				_playerBench[selectedEnemyBenchPiecePosition.col] = -1;
+				selectedPlayerBenchPiecePosition.col = 0;
+				selectedPlayerBenchPiece = false;
+				// After placing a piece, we end this player's turn
+				toggleTurn();
+				// Increment the turn
+				incrementTurn();
+			}
+
+			// We tried to put our bench piece on an occupied cell
+			else {
+				selectedPlayerBenchPiece = true;
+			}
+		}
 
 		// We are selecting a game piece
 		else if(!selectedCell && !gameOver) {
