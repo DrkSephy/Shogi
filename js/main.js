@@ -520,6 +520,8 @@ $(document).ready(function() {
 			// Grab position of bench
 			var x = $(this).data('x');
 			selectedEnemyBenchPiecePosition.col = x;
+			debugPanel("\n");
+			debugPanel("	Enemy is trying to place the bench piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col]);
 			// If the bench has a piece
 			if(isBenchOccupied(_enemyBench, x)) {
 				selectedEnemyBenchPiece = true; 
@@ -534,6 +536,8 @@ $(document).ready(function() {
 		if(!selectedPlayerBenchPiece && playerTurn) {
 			var x = $(this).data('x');
 			selectedPlayerBenchPiecePosition.col = x;
+			debugPanel("\n");
+			debugPanel("	Player is trying to place the bench piece: " + _playerBench[selectedPlayerBenchPiecePosition.col]);
 			if(isBenchOccupied(_playerBench, x)) {
 				selectedPlayerBenchPiece = true;
 			}
@@ -552,6 +556,8 @@ $(document).ready(function() {
 				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 				// Add CSS class to selected tile
 				$a.addClass(_enemyBench[selectedEnemyBenchPiecePosition.col]);
+				debugPanel("\n");
+				debugPanel("	Enemy has placed the bench piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + " successfully!");
 				// Update internal game board state with name of placed piece
 				_board[x][y] = _enemyBench[selectedEnemyBenchPiecePosition.col];
 				removeFromBench(selectedEnemyBenchPiecePosition.col, _enemyBench[selectedEnemyBenchPiecePosition.col], 'enemy');
@@ -567,6 +573,8 @@ $(document).ready(function() {
 
 			// We tried to place the piece on an occupied cell, reset
 			else {
+				debugPanel("\n");
+				debugPanel("	Enemy tried to place the piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + "in an occupied cell");
 				selectedEnemyBenchPiece = false;
 			}
 		} 
@@ -581,6 +589,8 @@ $(document).ready(function() {
 				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 				// Add CSS class to selected tile
 				$a.addClass(_playerBench[selectedPlayerBenchPiecePosition.col]);
+				debugPanel("\n");
+				debugPanel("	Player has placed the bench piece: " + _playerBench[selectedPlayerBenchPiecePosition.col] + " successfully!");
 				// Update internal game board state with name of placed piece
 				_board[x][y] = _playerBench[selectedPlayerBenchPiecePosition.col];
 				removeFromBench(selectedPlayerBenchPiecePosition.col, _playerBench[selectedPlayerBenchPiecePosition.col], 'player');
@@ -596,6 +606,8 @@ $(document).ready(function() {
 
 			// We tried to put our bench piece on an occupied cell
 			else {
+				debugPanel("\n");
+				debugPanel("	Player tried to place the piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + "in an occupied space");
 				selectedPlayerBenchPiece = false;
 			}
 		}
