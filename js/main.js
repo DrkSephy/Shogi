@@ -507,9 +507,10 @@ $(document).ready(function() {
 	$('.enemyRow > .square').click(function() {
 		// If we had a piece selected and then clicked the bench,
 		// We cancel the previous selection
+		selectedEnemyBenchPiece = false;
 		selectedCell = false;
 		// We select a piece from our bench
-		if(!selectedEnemyBenchPiece) {
+		if(!selectedEnemyBenchPiece && enemyTurn) {
 			// Grab position of bench
 			var x = $(this).data('x');
 			selectedEnemyBenchPiecePosition.col = x;
@@ -522,8 +523,9 @@ $(document).ready(function() {
 
 	// Detect clicks on player bench
 	$('.playerRow > .square').click(function() {
+		selectedPlayerBenchPiece = false;
 		var selectedCell = false;
-		if(!selectedPlayerBenchPiece) {
+		if(!selectedPlayerBenchPiece && playerTurn) {
 			var x = $(this).data('x');
 			selectedPlayerBenchPiecePosition.col = x;
 			if(isBenchOccupied(_playerBench, x)) {
