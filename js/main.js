@@ -224,8 +224,8 @@ $(document).ready(function() {
 	 * @returns {undefined}
 	*/
 	function debugPanel(message) {
-		// $('#debug').append(message);
-		// $('#debug').scrollTop($('#debug')[0].scrollHeight);
+		$('#debug').append(message);
+		$('#debug').scrollTop($('#debug')[0].scrollHeight);
 
 		return;
 	}
@@ -235,7 +235,25 @@ $(document).ready(function() {
 	 * @return {boolean} Is the game over?
 	*/
 	function isGameOver() {
-		// First winning condition: lion captured
+		// Check if either lion has reached opposite end
+		// Check if player lion reached opposite end
+		for(var col = 0; col < 3; col++) {
+			if(_board[0][col] === 'playerLion') {
+				gameOver = true;
+				debugPanel('\n');
+				debugPanel('	Player has defeated the enemy!');
+				return;
+			} 
+
+			console.log(_board[3][col]);
+			if (_board[3][col] === 'enemyLion') {
+				gameOver = true;
+				debugPanel('\n');
+				debugPanel('	Enemy has defeated the player :/');
+				return;
+			}
+		}
+
 		// Check if either lion is captured
 		seenPlayerLion = false;
 		seenEnemyLion = false;
@@ -305,7 +323,7 @@ $(document).ready(function() {
 		}
 
 		// It is the player's turn, we cannot:
-		// 	Attack other player pieces
+		// Attack other player pieces
 		if(playerTurn) {
 			if(_board[attackPosition.row][attackPosition.col] !== -1 && 
 				(_board[attackPosition.row][attackPosition.col]).indexOf('player') !== -1) {
@@ -465,6 +483,7 @@ $(document).ready(function() {
 		if(!selectedBenchPiece) {
 			// Grab position of bench
 			var x = $(this).data('x');
+			console.log(x);
 			// If the bench has a piece
 			if(isBenchOccupied(_enemyBench, x)) {
 				selectedBenchPiece = true; 
@@ -564,9 +583,14 @@ $(document).ready(function() {
 					_board[selectedPosition.row][selectedPosition.col] = -1;
 					selectedCell = false;
 					attackedCell = false;
-					// Toggle the turn
-					toggleTurn();
-					incrementTurn();
+					// Check if the game is over 
+					isGameOver();
+					if(!gameOver) {
+						// Toggle the turn
+						toggleTurn();
+						// Increment turn
+						incrementTurn();
+					}
 				}
 			}
 		}
