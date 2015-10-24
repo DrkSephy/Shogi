@@ -142,7 +142,7 @@ $(document).ready(function() {
 
 	/**
 	 * Prints state of the board.
-	 * @return {undefined}
+	 * @returns {undefined}
 	*/
 	function printBoard() {
 		for(var i = 0; i < 4; i++) {
@@ -154,7 +154,7 @@ $(document).ready(function() {
 
 	/**
 	 * Prints state of the enemy bench.
-	 * @return {undefined}
+	 * @returns {undefined}
 	*/
 	function printEnemyBench() {
 		console.log('Enemy bench: ' + _enemyBench);
@@ -162,7 +162,7 @@ $(document).ready(function() {
 
 	/**
 	 * Prints state of the player bench.
-	 * @return {undefined}
+	 * @returns {undefined}
 	*/
 	function printPlayerBench() {
 		console.log('Player bench: ' + _playerBench);
@@ -215,7 +215,7 @@ $(document).ready(function() {
 	 * Returns cell contents.
 	 * @param {number} row The row to search.
 	 * @param {number} col The column to search.
-	 * @return {number, string} The value at [row][column]
+	 * @returns {number, string} The value at [row][column]
 	*/
 	function getCellContents(row, col) {
 		return _board[row][col];
@@ -224,18 +224,17 @@ $(document).ready(function() {
 	/**
 	 * Appends text to the debug panel.
 	 * @param {string} message The message to add to debug panel.
-	 * @returns {undefined}
+	 * @return {undefined}
 	*/
 	function debugPanel(message) {
 		$('#debug').append(message);
 		$('#debug').scrollTop($('#debug')[0].scrollHeight);
-
 		return;
 	}
 
 	/**
 	 * Determines if the game is over.
-	 * @return {boolean} Is the game over?
+	 * @returns {boolean} Is the game over?
 	*/
 	function isGameOver() {
 		// Check if either lion has reached opposite end
@@ -296,7 +295,7 @@ $(document).ready(function() {
 	 * Determines if a cell is occupied. 
 	 * @param {number} row The row to search.
 	 * @param {number} col The column to search.
-	 * @return {boolean} Whether a cell is occupied.
+	 * @returns {boolean} Whether a cell is occupied.
 	*/
 	function isOccupied(row, col) {
 		return _board[row][col] === -1 ? false : true;
@@ -492,6 +491,13 @@ $(document).ready(function() {
 		}
 	}
 
+	/**
+	 * Removes a piece from a bench.
+	 * @param {number} position The column of the piece in the internal bench.
+	 * @param {string} piece The name of the piece to remove from the internal bench.
+	 * @param {string} player The respective bench to remove a piece from
+	 * @return {undefined}
+	*/ 
 	function removeFromBench(position, piece, player) {
 		if(player == 'enemy') {
 			var $benchCell = ($('.enemyRow > .square[data-x=' + position + ']')).children();
