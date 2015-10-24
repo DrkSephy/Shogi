@@ -700,6 +700,25 @@ $(document).ready(function() {
 					if(!gameOver) {
 						// Check if a chick should be promoted
 						checkChicks();
+						if(enemyChickPromotion) {
+							var $enemyChick = ($('.square[data-x=' + enemyChickPosition.row + '][data-y=' + enemyChickPosition.col + ']')).children();
+							$enemyChick.removeClass('enemyChick');
+							$enemyChick.addClass('enemyHen');
+							// Reset position of enemy chick
+							enemyChickPosition.row = 0;
+							enemyChickPosition.col = 0;
+							// Reset promotion flag
+							enemyChickPromotion = false;
+						} else if (playerChickPromotion) {
+							var $playerChick = ($('.square[data-x=' + playerChickPosition.row + '][data-y=' + playerChickPosition.col + ']')).children();
+							$playerChick.removeClass('playerChick');
+							$playerChick.addClass('playerHen');
+							// Reset position of enemy chick
+							playerChickPosition.row = 0;
+							playerChickPosition.col = 0;
+							// Reset promotion flag
+							playerChickPosition = false;
+						}
 						// Toggle the turn
 						toggleTurn();
 						// Increment turn
@@ -737,6 +756,26 @@ $(document).ready(function() {
 					if(!gameOver) {
 						// Check if a chick should be promoted
 						checkChicks();
+						// Enemy Chick needs to be promoted
+						if(enemyChickPromotion) {
+							var $enemyChick = ($('.square[data-x=' + enemyChickPosition.row + '][data-y=' + enemyChickPosition.col + ']')).children();
+							$enemyChick.removeClass('enemyChick');
+							$enemyChick.addClass('enemyHen');
+							// Reset position of enemy chick
+							enemyChickPosition.row = 0;
+							enemyChickPosition.col = 0;
+							// Reset promotion flag
+							enemyChickPromotion = false;
+						} else if (playerChickPromotion) {
+							var $playerChick = ($('.square[data-x=' + playerChickPosition.row + '][data-y=' + playerChickPosition.col + ']')).children();
+							$playerChick.removeClass('playerChick');
+							$playerChick.addClass('playerHen');
+							// Reset position of enemy chick
+							playerChickPosition.row = 0;
+							playerChickPosition.col = 0;
+							// Reset promotion flag
+							playerChickPosition = false;
+						}
 						// Toggle the turn
 						toggleTurn();
 						// Increment turn

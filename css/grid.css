@@ -141,7 +141,15 @@ h2 {
 }
 
 .playerHen { 
-    background-image:url('../img/pieces/player/hen.png') 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/player/hen.png');
+    position: absolute;
 }
 
 .playerLion { 
@@ -193,7 +201,15 @@ h2 {
 }
 
 .enemyHen { 
-    background-image:url('../img/pieces/enemy/hen.png') 
+    height: 85%;
+    width: 85%;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin:auto;
+    content:url('../img/pieces/enemy/hen.png');
+    position: absolute;
 }
 
 .enemyLion { 
