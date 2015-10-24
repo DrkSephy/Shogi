@@ -42,7 +42,14 @@ h2 {
     float: right;
     width: 30%;
     padding-right: 150px;
-    padding-top: 200px;
+    padding-top: 10px;
+}
+
+#debugPanel {
+    float: right;
+    width: 30%;
+    padding-right: 200px;
+    padding-top: 75px;
 }
 
 .img1 { 
