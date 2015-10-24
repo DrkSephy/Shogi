@@ -424,7 +424,6 @@ $(document).ready(function() {
 	 * @returns {boolean} 
 	*/
 	function checkChicks() {
-		printBoard();
 		// Check first row
 		for(var col = 0; col < 3; col++) {
 			if(_board[0][col] === 'playerChick') {
@@ -766,6 +765,8 @@ $(document).ready(function() {
 							enemyChickPosition.col = 0;
 							// Reset promotion flag
 							enemyChickPromotion = false;
+							// Update internal state of the board
+							_board[x][y] = 'enemyHen';
 						} else if (playerChickPromotion) {
 							var $playerChick = ($('.square[data-x=' + playerChickPosition.row + '][data-y=' + playerChickPosition.col + ']')).children();
 							$playerChick.removeClass('playerChick');
@@ -774,7 +775,10 @@ $(document).ready(function() {
 							playerChickPosition.row = 0;
 							playerChickPosition.col = 0;
 							// Reset promotion flag
-							playerChickPosition = false;
+							playerChickPromotion = false;
+							// Update internal state of the board
+							_board[x][y] = 'playerHen';
+							printBoard();
 						}
 						// Toggle the turn
 						toggleTurn();
