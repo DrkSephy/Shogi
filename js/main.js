@@ -67,6 +67,14 @@ $(document).ready(function() {
 			{ row: 0,  col: -1 }, // West
 			{ row: 0,  col: 1  }, // East
 		],
+		'enemyHen' : [
+			{ row: 1,  col: 0  }, // South
+			{ row: -1, col: 0  }, // North
+			{ row: 0,  col: -1 }, // West
+			{ row: 0,  col: 1  }, // East
+			{ row: 1,  col: -1 }, // Southwest
+			{ row: 1,  col: 1  }, // Southeast
+		],
 		'playerChick' : [
 			{	row: -1, col: 0 }   // North
 		],
@@ -91,6 +99,14 @@ $(document).ready(function() {
 			{ row: 1,  col: 0  }, // South
 			{ row: 0,  col: -1 }, // West
 			{ row: 0,  col: 1  }, // East
+		],
+		'playerHen' : [
+			{ row: -1, col: 0 }, // North
+			{ row: 1,  col: 0 }, // South
+			{ row: 0,  col: -1}, // West
+			{ row: 0,  col: 1 }, // East
+			{ row: -1, col: -1}, // Northwest
+			{ row: -1, col: 1 }, // Northeast 
 		],
 	}
 
@@ -487,7 +503,6 @@ $(document).ready(function() {
 			var cell = $('#playerChick');
 			cell.addClass('enemyChick');
 			_enemyBench[0] = 'enemyChick';
-			console.log(_enemyBench);
 		} 
 
 		else if(piece == 'playerGiraffe') {
