@@ -40,6 +40,9 @@ $(document).ready(function() {
 	var playerChickPosition = { row: 0, col: 0 };
 	var enemyChickPromotion = false;
 	var enemyChickPosition = { row: 0, col: 0 };
+	// Prevent benched chicks from auto-promoting
+	var placedPlayerBenchChick = false;
+	var placedEnemyBenchChick = false;
 
 	var _pieces = {
 		'enemyChick' : [
@@ -442,7 +445,7 @@ $(document).ready(function() {
 	function checkChicks() {
 		// Check first row
 		for(var col = 0; col < 3; col++) {
-			if(_board[0][col] === 'playerChick') {
+			if(_board[0][col] === 'playerChick' && !placedPlayerBenchChick) {
 				playerChickPromotion = true;
 				playerChickPosition.row = 0;
 				playerChickPosition.col = col;
@@ -451,7 +454,7 @@ $(document).ready(function() {
 				return;
 			}
 
-			if (_board[3][col] === 'enemyChick') {
+			if (_board[3][col] === 'enemyChick' && !placedEnemyBenchChick) {
 				enemyChickPromotion = true;
 				enemyChickPosition.row = 3;
 				enemyChickPosition.col = col;
@@ -603,6 +606,10 @@ $(document).ready(function() {
 				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 				// Add CSS class to selected tile
 				$a.addClass(_enemyBench[selectedEnemyBenchPiecePosition.col]);
+				// We are placing a chick from our bench. Set auto-promotion prevention flag
+				if(_enemyBench[selectedEnemyBenchPiecePosition.col] == 'enemyChick') {
+					placedEnemyBenchChick = true;
+				}
 				debugPanel("\n");
 				debugPanel("	Enemy has placed the bench piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + " successfully!");
 				// Update internal game board state with name of placed piece
@@ -636,6 +643,10 @@ $(document).ready(function() {
 				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 				// Add CSS class to selected tile
 				$a.addClass(_playerBench[selectedPlayerBenchPiecePosition.col]);
+				// We are placing a chick from our bench. Set auto-promotion prevention flag
+				if(_playerBench[selectedPlayerBenchPiecePosition.col] == 'playerChick') {
+					placedPlayerBenchChick = true;
+				} 
 				debugPanel("\n");
 				debugPanel("	Player has placed the bench piece: " + _playerBench[selectedPlayerBenchPiecePosition.col] + " successfully!");
 				// Update internal game board state with name of placed piece
