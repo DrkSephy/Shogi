@@ -574,7 +574,7 @@ $(document).ready(function() {
 			// We tried to place the piece on an occupied cell, reset
 			else {
 				debugPanel("\n");
-				debugPanel("	Enemy tried to place the piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + "in an occupied cell");
+				debugPanel("	Enemy tried to place the piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + " in an occupied cell");
 				selectedEnemyBenchPiece = false;
 			}
 		} 
@@ -607,7 +607,7 @@ $(document).ready(function() {
 			// We tried to put our bench piece on an occupied cell
 			else {
 				debugPanel("\n");
-				debugPanel("	Player tried to place the piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + "in an occupied space");
+				debugPanel("	Player tried to place the piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + " in an occupied space");
 				selectedPlayerBenchPiece = false;
 			}
 		}
