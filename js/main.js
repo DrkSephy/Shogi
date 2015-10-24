@@ -588,7 +588,7 @@ $(document).ready(function() {
 
 			// We tried to put our bench piece on an occupied cell
 			else {
-				selectedPlayerBenchPiece = true;
+				selectedPlayerBenchPiece = false;
 			}
 		}
 
