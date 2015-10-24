@@ -709,4 +709,4 @@ $(document).ready(function() {
 			}
 		}
 	})
-});});
+});
