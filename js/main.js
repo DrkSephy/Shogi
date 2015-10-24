@@ -18,7 +18,10 @@ $(document).ready(function() {
 	// Did we select a cell to attack?
 	var attackedCell = false;
 	// Did we select a bench piece? 
-	var selectedBenchPiece = false;
+	var selectedEnemyBenchPiece = false;
+	var selectedPlayerBenchPiece = false;
+	var selectedPlayerBenchPiecePosition = { col: 0 };
+	var selectedEnemyBenchPiecePosition = { col: 0 }; 
 	// Is the game over?
 	var playerLionCaptured = false;
 	var enemyLionCaptured = false;
@@ -452,7 +455,6 @@ $(document).ready(function() {
 	*/
 	function addToBench(piece) {
 		if(piece == 'playerChick') {
-			console.log("????");
 			var cell = $('#playerChick');
 			cell.addClass('enemyChick');
 			_enemyBench[0] = 'enemyChick';
@@ -490,28 +492,27 @@ $(document).ready(function() {
 		}
 	}
 
+	function removeFromBench(position, piece) {
+		var $benchCell = ($('.enemyRow > .square[data-x=' + position + ']')).children();
+		$benchCell.removeClass(piece);
+		return;
+	}
+
 	// Detect clicks on enemy bench
 	$('.enemyRow > .square').click(function() {
 		// If we had a piece selected and then clicked the bench,
 		// We cancel the previous selection
 		selectedCell = false;
 		// We select a piece from our bench
-		console.log(_enemyBench);
-		if(!selectedBenchPiece) {
+		if(!selectedEnemyBenchPiece) {
 			// Grab position of bench
 			var x = $(this).data('x');
-			console.log(_enemyBench[x]);
+			selectedEnemyBenchPiecePosition.col = x;
 			// If the bench has a piece
 			if(isBenchOccupied(_enemyBench, x)) {
-				selectedBenchPiece = true; 
+				selectedEnemyBenchPiece = true; 
 			}
 		} 
-
-		// We selected a bench piece
-		// Time to select a cell and place it on the board
-		else if (selectedBenchPiece) {
-
-		}
 	});
 
 	// Detect clicks on player bench
@@ -522,7 +523,39 @@ $(document).ready(function() {
 
 	// TODO: Refactor all of this code
 	$('.row > .square').click(function() {
-		if(!selectedCell && !gameOver) {
+		// We selected a bench piece, so we check and place it
+		if(selectedEnemyBenchPiece && !gameOver) {
+			var x = $(this).data('x');
+			var y = $(this).data('y');
+			if(!isOccupied(x, y)) {
+				// Cell is not occupied, we can place the piece!
+				// Get square to place tile down
+				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
+				// Add CSS class to selected tile
+				$a.addClass(_enemyBench[selectedEnemyBenchPiecePosition.col]);
+				printBoard();
+				// Update internal game board state with name of placed piece
+				_board[x][y] = _enemyBench[selectedEnemyBenchPiecePosition.col];
+				printBoard();
+				removeFromBench(selectedEnemyBenchPiecePosition.col, _enemyBench[selectedEnemyBenchPiecePosition.col]);
+				// Clear bench position
+				_enemyBench[selectedEnemyBenchPiecePosition.col] = -1;
+				selectedEnemyBenchPiecePosition.col = 0;
+				selectedEnemyBenchPiece = false;
+				// After placing a piece, we end this player's turn
+				toggleTurn();
+				// Increment the turn
+				incrementTurn();
+			} 
+
+			// We tried to place the piece on an occupied cell, reset
+			else {
+				selectedEnemyBenchPiece = false;
+			}
+		} 
+
+		// We are selecting a game piece
+		else if(!selectedCell && !gameOver) {
 			var x = $(this).data('x');
 			var y = $(this).data('y');
 			if(isOccupied(x, y) && validSelection(x, y)) {
