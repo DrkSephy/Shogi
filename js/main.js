@@ -424,6 +424,7 @@ $(document).ready(function() {
 	 * @returns {boolean} 
 	*/
 	function checkChicks() {
+		printBoard();
 		// Check first row
 		for(var col = 0; col < 3; col++) {
 			if(_board[0][col] === 'playerChick') {
@@ -437,7 +438,7 @@ $(document).ready(function() {
 
 			if (_board[3][col] === 'enemyChick') {
 				enemyChickPromotion = true;
-				enemyChickPromotion.row = 3;
+				enemyChickPosition.row = 3;
 				enemyChickPosition.col = col;
 				debugPanel('\n');
 				debugPanel('	Enemy chick gets promoted to a hen!');
@@ -697,6 +698,8 @@ $(document).ready(function() {
 					// Check if the game is over 
 					isGameOver();
 					if(!gameOver) {
+						// Check if a chick should be promoted
+						checkChicks();
 						// Toggle the turn
 						toggleTurn();
 						// Increment turn
@@ -732,6 +735,8 @@ $(document).ready(function() {
 					// Check if the game is over 
 					isGameOver();
 					if(!gameOver) {
+						// Check if a chick should be promoted
+						checkChicks();
 						// Toggle the turn
 						toggleTurn();
 						// Increment turn
