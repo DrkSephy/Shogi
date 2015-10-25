@@ -455,7 +455,7 @@ $(document).ready(function() {
 
 	/**
 	 * Checks if a chick should be promoted to a hen.
-	 * @returns {boolean} 
+	 * @returns {undefined} 
 	*/
 	function checkChicks() {
 		// Check first row
@@ -491,7 +491,14 @@ $(document).ready(function() {
 		} else if (piece == 'playerElephant') {
 			_enemyBench[2] = 'enemyElephant';
 		} else if (piece == 'playerHen') {
-			_enemyBench[3] = 'enemyChick';
+			// If the first chick slot is not empty,
+			// place it inside of the last slot
+			if(_enemyBench[0] != -1) {
+				_enemyBench[3] = 'enemyChick';
+			} else {
+				// First slot is empty, place chick
+				_enemyBench[0] = 'enemyChick';
+			}
 		}
 		else if (piece == 'enemyChick') {
 			_playerBench[0] = 'playerChick';
@@ -500,7 +507,14 @@ $(document).ready(function() {
 		} else if (piece == 'enemyElephant') {
 			_playerBench[2] = 'playerElephant';
 		} else if (piece == 'enemyHen') {
-			_playerBench[3] = 'playerChick';
+			// If the first chick slot is not empty, 
+			// place it inside of the last slot
+			if(_playerBench[0] != -1 ) {
+				_playerBench[3] = 'playerChick';
+			} else {
+				// First slot is empty, place chick
+				_playerBench[0] = 'playerChick';
+			}
 		}
 	}
 
@@ -801,6 +815,7 @@ $(document).ready(function() {
 							enemyChickPosition.col = 0;
 							// Reset promotion flag
 							enemyChickPromotion = false;
+							_board[x][y] = 'enemyHen';
 						} else if (playerChickPromotion) {
 							var $playerChick = ($('.square[data-x=' + playerChickPosition.row + '][data-y=' + playerChickPosition.col + ']')).children();
 							$playerChick.removeClass('playerChick');
@@ -809,7 +824,8 @@ $(document).ready(function() {
 							playerChickPosition.row = 0;
 							playerChickPosition.col = 0;
 							// Reset promotion flag
-							playerChickPosition = false;
+							playerChickPromotion = false;
+							_board[x][y] = 'playerHen';
 						}
 						// Toggle the turn
 						toggleTurn();
@@ -875,7 +891,6 @@ $(document).ready(function() {
 							enemyChickPosition.col = 0;
 							// Reset promotion flag
 							enemyChickPromotion = false;
-							// Update internal state of the board
 							_board[x][y] = 'enemyHen';
 						} else if (playerChickPromotion) {
 							var $playerChick = ($('.square[data-x=' + playerChickPosition.row + '][data-y=' + playerChickPosition.col + ']')).children();
@@ -886,7 +901,6 @@ $(document).ready(function() {
 							playerChickPosition.col = 0;
 							// Reset promotion flag
 							playerChickPromotion = false;
-							// Update internal state of the board
 							_board[x][y] = 'playerHen';
 						}
 						// Toggle the turn
