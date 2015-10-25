@@ -38,30 +38,6 @@ h2 {
     padding-top: 50px;
 }
 
-.enemySquare {
-    float:left;
-    position: relative;
-    width: 24%;
-    padding-bottom : 30%; 
-    background-position:center center;
-    background-repeat:no-repeat;
-    border: 2px dashed gray;
-    background-size:cover;
-    cursor: pointer;
-}
-
-.playerSquare {
-    float:left;
-    position: relative;
-    width: 24%;
-    padding-bottom : 30%; 
-    background-position:center center;
-    background-repeat:no-repeat;
-    border: 2px dashed gray;
-    background-size:cover;
-    cursor: pointer;
-}
-
 #playerBench {
     float: right;
     width: 30%;
