@@ -157,14 +157,14 @@ $(document).ready(function() {
 	});
 
 	$('.enemyRow').each(function(rowIndex, row) {
-		$(this).find('.square').each(function(cellIndex, square) {
+		$(this).find('.enemySquare').each(function(cellIndex, square) {
 			_enemyBench[rowIndex] = -1;
 			$(square).attr({'data-x': rowIndex});
 		});
 	});
 
 	$('.playerRow').each(function(rowIndex, row) {
-		$(this).find('.square').each(function(cellIndex, square) {
+		$(this).find('.playerSquare').each(function(cellIndex, square) {
 			_playerBench[rowIndex] = -1;
 			$(square).attr({'data-x': rowIndex});
 		});
@@ -490,12 +490,17 @@ $(document).ready(function() {
 			_enemyBench[1] = 'enemyGiraffe';
 		} else if (piece == 'playerElephant') {
 			_enemyBench[2] = 'enemyElephant';
-		} else if (piece == 'enemyChick') {
+		} else if (piece == 'playerHen') {
+			_enemyBench[3] = 'enemyChick';
+		}
+		else if (piece == 'enemyChick') {
 			_playerBench[0] = 'playerChick';
 		} else if (piece == 'enemyGiraffe') {
 			_playerBench[1] = 'playerGiraffe';
 		} else if (piece == 'enemyElephant') {
 			_playerBench[2] = 'playerElephant';
+		} else if (piece == 'enemyHen') {
+			_playerBench[3] = 'playerChick';
 		}
 	}
 
@@ -533,6 +538,11 @@ $(document).ready(function() {
 			_enemyBench[2] = 'enemyElephant';
 		} 
 
+		else if (piece == 'playerHen') {
+			var cell = $('#playerHen');
+			cell.addClass('enemyChick');
+		}
+
 		else if (piece == 'enemyChick') {
 			var cell = $('#enemyChick');
 			cell.addClass('playerChick');
@@ -549,7 +559,14 @@ $(document).ready(function() {
 			var cell = $('#enemyElephant');
 			cell.addClass('playerElephant');
 			_playerBench[2] = 'playerElephant';
-		} else {
+		} 
+
+		else if (piece == 'enemyHen') {
+			var cell = $('#enemyHen');
+			cell.addClass('playerChick');
+		}
+
+		else {
 			return;
 		}
 	}
@@ -563,17 +580,17 @@ $(document).ready(function() {
 	*/ 
 	function removeFromBench(position, piece, player) {
 		if(player == 'enemy') {
-			var $benchCell = ($('.enemyRow > .square[data-x=' + position + ']')).children();
+			var $benchCell = ($('.enemyRow > .enemySquare[data-x=' + position + ']')).children();
 			$benchCell.removeClass(piece);
 		} else if (player == 'player') {
-			var $benchCell = ($('.playerRow > .square[data-x=' + position + ']')).children();
+			var $benchCell = ($('.playerRow > .playerSquare[data-x=' + position + ']')).children();
 			$benchCell.removeClass(piece);
 		}
 		return;
 	}
 
 	// Detect clicks on enemy bench
-	$('.enemyRow > .square').click(function() {
+	$('.enemyRow > .enemySquare').click(function() {
 		// If we had a piece selected and then clicked the bench,
 		// We cancel the previous selection
 		selectedEnemyBenchPiece = false;
@@ -593,7 +610,7 @@ $(document).ready(function() {
 	});
 
 	// Detect clicks on player bench
-	$('.playerRow > .square').click(function() {
+	$('.playerRow > .playerSquare').click(function() {
 		selectedPlayerBenchPiece = false;
 		var selectedCell = false;
 		if(!selectedPlayerBenchPiece && playerTurn) {
