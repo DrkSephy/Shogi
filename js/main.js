@@ -209,6 +209,7 @@ $(document).ready(function() {
 	 * @returns {undefined}
 	*/
 	function toggleTurn() {
+		printBoard();
 		if(playerTurn) {
 			playerTurn = false;
 			playerMoved = true;
@@ -459,7 +460,6 @@ $(document).ready(function() {
 	function checkChicks() {
 		// Check first row
 		for(var col = 0; col < 3; col++) {
-			// console.log(_board[0][col] === 'playerChick' && !placedPlayerBenchChick && movedPlayerChick);
 			if(_board[0][col] === 'playerChick' && movedPlayerChick) {
 				playerChickPromotion = true;
 				debugPanel('\n');
@@ -539,8 +539,18 @@ $(document).ready(function() {
 		} 
 
 		else if (piece == 'playerHen') {
-			var cell = $('#playerHen');
-			cell.addClass('enemyChick');
+			var cell = $('#playerChickTwo');
+			// Check if hen slot is holding a chick
+			if($(cell).hasClass('enemyChick')) {
+				// If so, we need to put the chick inside the first slot
+				cell = $('#playerChick');
+				cell.addClass('enemyChick');
+				_enemyBench[0] = 'enemyChick';
+			} else {
+				// Slot is free, place hen -> chick in slot
+				cell.addClass('enemyChick');
+				_enemyBench[3] = 'enemyChick';
+			}
 		}
 
 		else if (piece == 'enemyChick') {
@@ -562,8 +572,17 @@ $(document).ready(function() {
 		} 
 
 		else if (piece == 'enemyHen') {
-			var cell = $('#enemyHen');
-			cell.addClass('playerChick');
+			var cell = $('#enemyChickTwo');
+			// Check if hen slot is already holding a chick
+			if($(cell).hasClass('playerChick')) {
+				// If it does, put new chick inside first slot
+				cell = $('#enemyChick');
+				cell.addClass('playerChick');
+				_playerBench[0] = 'playerChick';
+			} else {
+				cell.addClass('playerChick');
+				_playerBench[3] = 'playerChick';
+			}
 		}
 
 		else {
@@ -869,7 +888,6 @@ $(document).ready(function() {
 							playerChickPromotion = false;
 							// Update internal state of the board
 							_board[x][y] = 'playerHen';
-							printBoard();
 						}
 						// Toggle the turn
 						toggleTurn();
