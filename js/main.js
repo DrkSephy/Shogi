@@ -485,35 +485,67 @@ $(document).ready(function() {
 	*/
 	function _benchPiece(piece) {
 		if(piece == 'playerChick') {
-			_enemyBench[0] = 'enemyChick';
-		} else if(piece == 'playerGiraffe') {
-			_enemyBench[1] = 'enemyGiraffe';
-		} else if (piece == 'playerElephant') {
-			_enemyBench[2] = 'enemyElephant';
-		} else if (piece == 'playerHen') {
-			// If the first chick slot is not empty,
-			// place it inside of the last slot
-			if(_enemyBench[0] != -1) {
-				_enemyBench[3] = 'enemyChick';
-			} else {
-				// First slot is empty, place chick
+			if(_enemyBench[0] == -1) {
 				_enemyBench[0] = 'enemyChick';
+			} else {
+				_enemyBench[3] = 'enemyChick';
+			}
+		} 
+
+		else if(piece == 'playerGiraffe') {
+			if(_enemyBench[1] == -1) {
+				_enemyBench[1] = 'enemyGiraffe';
+			} else {
+				_enemyBench[4] = 'enemyGiraffe';
+			}
+		} 
+
+		else if (piece == 'playerElephant') {
+			if(_enemyBench[2] == -1) {
+				_enemyBench[2] = 'enemyElephant';
+			} else {
+				_enemyBench[5] = 'enemyElephant';
+			}
+		} 
+
+		else if (piece == 'playerHen') {
+			if(_enemyBench[0] == -1) {
+				_enemyBench[0] = 'enemyChick';
+			} else {
+				_enemyBench[3] = 'enemyChick';
 			}
 		}
+
 		else if (piece == 'enemyChick') {
-			_playerBench[0] = 'playerChick';
-		} else if (piece == 'enemyGiraffe') {
-			_playerBench[1] = 'playerGiraffe';
-		} else if (piece == 'enemyElephant') {
-			_playerBench[2] = 'playerElephant';
-		} else if (piece == 'enemyHen') {
-			// If the first chick slot is not empty, 
-			// place it inside of the last slot
-			if(_playerBench[0] != -1 ) {
-				_playerBench[3] = 'playerChick';
-			} else {
-				// First slot is empty, place chick
+			if(_playerBench[0] == -1) {
 				_playerBench[0] = 'playerChick';
+			} else {
+				_playerBench[3] = 'playerChick';
+			}
+		} 
+
+		else if (piece == 'enemyGiraffe') {
+			if(_playerBench[1] == -1) {
+				_playerBench[1] = 'playerGiraffe';
+			} else {
+				_playerBench[4] = 'playerGiraffe';
+			}
+		} 
+
+		else if (piece == 'enemyElephant') {
+			if(_playerBench[2] == -1) {
+				_playerBench[2] = 'playerElephant';
+			} else {
+				_playerBench[5] = 'playerElephant';
+			}
+			
+		} 
+
+		else if (piece == 'enemyHen') {
+			if(_playerBench[0] == -1) {
+				_playerBench[0] = 'playerChick';
+			} else {
+				_playerBench[3] = 'playerChick';
 			}
 		}
 	}
@@ -536,66 +568,99 @@ $(document).ready(function() {
 	function addToBench(piece) {
 		if(piece == 'playerChick') {
 			var cell = $('#playerChick');
-			cell.addClass('enemyChick');
+			if($(cell).hasClass('enemyChick')) {
+				cell = $('#playerChickTwo');
+				cell.addClass('enemyChick');
+				_enemyBench[3] = 'enemyChick';
+			} else {
+				cell.addClass('enemyChick');
 			_enemyBench[0] = 'enemyChick';
+			}
 		} 
 
 		else if(piece == 'playerGiraffe') {
 			var cell = $('#playerGiraffe');
-			cell.addClass('enemyGiraffe');
-			_enemyBench[1] = 'enemyGiraffe';
-		} 
-
-		else if (piece == 'playerElephant') {
-			var cell = $('#playerElephant');
-			cell.addClass('enemyElephant');
-			_enemyBench[2] = 'enemyElephant';
-		} 
-
-		else if (piece == 'playerHen') {
-			var cell = $('#playerChickTwo');
-			// Check if hen slot is holding a chick
-			if($(cell).hasClass('enemyChick')) {
-				// If so, we need to put the chick inside the first slot
-				cell = $('#playerChick');
-				cell.addClass('enemyChick');
-				_enemyBench[0] = 'enemyChick';
+			if($(cell).hasClass('enemyGiraffe')) {
+				console.log("Duplicate Giraffe, place in extra slot");
+				cell = $('#playerGiraffeTwo');
+				cell.addClass('enemyGiraffe');
+				_enemyBench[4] = 'enemyGiraffe';
 			} else {
-				// Slot is free, place hen -> chick in slot
+				cell.addClass('enemyGiraffe');
+				_enemyBench[1] = 'enemyGiraffe';
+			}
+		} 
+
+		else if(piece == 'playerElephant') {
+			var cell = $('#playerElephant');
+			if($(cell).hasClass('enemyElephant')) {
+				cell = $('#playerElephantTwo');
+				cell.addClass('enemyElephant');
+				_enemyBench[5] = 'enemyElephant';
+			} else {
+				cell.addClass('enemyElephant');
+			_enemyBench[2] = 'enemyElephant';
+			}
+		} 
+
+		else if(piece == 'playerHen') {
+			var cell = $('#playerChick');
+			if($(cell).hasClass('enemyChick')) {
+				cell = $('#playerChickTwo');
 				cell.addClass('enemyChick');
 				_enemyBench[3] = 'enemyChick';
+			} else {
+				cell.addClass('enemyChick');
+			_enemyBench[0] = 'enemyChick';
+			}
+		}  
+
+		// Player bench pieces
+		else if(piece == 'enemyChick') {
+			var cell = $('#enemyChick');
+			if($(cell).hasClass('playerChick')) {
+				cell = $('#enemyChickTwo');
+				cell.addClass('playerChick');
+				_playerBench[3] = 'playerChick';
+			} else {
+				cell.addClass('playerChick');
+			_playerBench[0] = 'playerChick';
 			}
 		}
 
-		else if (piece == 'enemyChick') {
-			var cell = $('#enemyChick');
-			cell.addClass('playerChick');
-			_playerBench[0] = 'playerChick';
-		} 
-
-		else if (piece == 'enemyGiraffe') {
+		else if(piece == 'enemyGiraffe') {
 			var cell = $('#enemyGiraffe');
-			cell.addClass('playerGiraffe');
-			_playerBench[1] = 'playerGiraffe';
-		} 
-
-		else if (piece == 'enemyElephant') {
-			var cell = $('#enemyElephant');
-			cell.addClass('playerElephant');
-			_playerBench[2] = 'playerElephant';
-		} 
-
-		else if (piece == 'enemyHen') {
-			var cell = $('#enemyChickTwo');
-			// Check if hen slot is already holding a chick
-			if($(cell).hasClass('playerChick')) {
-				// If it does, put new chick inside first slot
-				cell = $('#enemyChick');
-				cell.addClass('playerChick');
-				_playerBench[0] = 'playerChick';
+			if($(cell).hasClass('playerGiraffe')) {
+				cell = $('#enemyGiraffeTwo');
+				cell.addClass('playerGiraffe');
+				_playerBench[4] = 'playerGiraffe';
 			} else {
+				cell.addClass('playerGiraffe');
+			_playerBench[1] = 'playerGiraffe';
+			}
+		}  
+
+		else if(piece == 'enemyElephant') {
+			var cell = $('#enemyElephant');
+			if($(cell).hasClass('playerElephant')) {
+				cell = $('#enemyElephantTwo');
+				cell.addClass('playerElephant');
+				_playerBench[5] = 'playerElephant';
+			} else {
+				cell.addClass('playerElephant');
+			_playerBench[2] = 'playerElephant';
+			}
+		} 
+
+		else if(piece == 'enemyHen') {
+			var cell = $('#enemyChick');
+			if($(cell).hasClass('playerChick')) {
+				cell = $('#enemyChickTwo');
 				cell.addClass('playerChick');
 				_playerBench[3] = 'playerChick';
+			} else {
+				cell.addClass('playerChick');
+			_playerBench[0] = 'playerChick';
 			}
 		}
 
