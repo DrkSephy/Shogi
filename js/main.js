@@ -50,10 +50,6 @@ $(document).ready(function() {
 	var enemyChickPromotion = false;
 	var enemyChickPosition = { row: 0, col: 0 };
 
-	// Prevent benched chicks from auto-promoting
-	var placedPlayerBenchChick = false;
-	var placedEnemyBenchChick = false;
-
 	// Player moved a chick, not placed
 	// 	- legitimate candidate for promotion
 	var movedPlayerChick = false;
