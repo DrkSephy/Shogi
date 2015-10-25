@@ -9,40 +9,58 @@ $(document).ready(function() {
 
 	// The position of the selected piece
 	var selectedPosition = { row: 0, col: 0 };
+
 	// The position of the attacked cell
 	var attackPosition = { row: 0, col: 0 };
+
 	// Difference between selected and attack cells
 	var differencePosition = { row: 0, col: 0 };
+
 	// Did we select a cell that is occupied?
 	var selectedCell = false;
+
 	// Did we select a cell to attack?
 	var attackedCell = false;
+
 	// Did we select a bench piece? 
 	var selectedEnemyBenchPiece = false;
 	var selectedPlayerBenchPiece = false;
 	var selectedPlayerBenchPiecePosition = { col: 0 };
 	var selectedEnemyBenchPiecePosition = { col: 0 }; 
+
 	// Is the game over?
 	var playerLionCaptured = false;
 	var enemyLionCaptured = false;
 	var seenPlayerLion = false;
 	var seenEnemyLion = false;
 	var gameOver = false;
+
 	// Whose turn is it?
 	var playerTurn = true;
 	var enemyTurn = false;
 	var turnCount = 1;
+
 	// Has either player moved?
 	var playerMoved = false;
 	var enemyMoved = false;
+
 	// Chick promotion variables
 	var playerChickPromotion = false;
 	var playerChickPosition = { row: 0, col: 0 };
 	var enemyChickPromotion = false;
 	var enemyChickPosition = { row: 0, col: 0 };
+
 	// Prevent benched chicks from auto-promoting
 	var placedPlayerBenchChick = false;
 	var placedEnemyBenchChick = false;
+
+	// Player moved a chick, not placed
+	// 	- legitimate candidate for promotion
+	var movedPlayerChick = false;
+
+	// Enemy moved a chick, not placed
+	// 	- legitimate candidate for promotion
+	var movedEnemyChick = false;
 
 	var _pieces = {
 		'enemyChick' : [
@@ -445,21 +463,20 @@ $(document).ready(function() {
 	function checkChicks() {
 		// Check first row
 		for(var col = 0; col < 3; col++) {
-			if(_board[0][col] === 'playerChick' && !placedPlayerBenchChick) {
+			// console.log(_board[0][col] === 'playerChick' && !placedPlayerBenchChick && movedPlayerChick);
+			if(_board[0][col] === 'playerChick' && movedPlayerChick) {
 				playerChickPromotion = true;
-				playerChickPosition.row = 0;
-				playerChickPosition.col = col;
 				debugPanel('\n');
 				debugPanel('	Player chick gets promoted to a hen!');
+				movedPlayerChick = false;
 				return;
 			}
 
-			if (_board[3][col] === 'enemyChick' && !placedEnemyBenchChick) {
+			if (_board[3][col] === 'enemyChick' && movedEnemyChick) {
 				enemyChickPromotion = true;
-				enemyChickPosition.row = 3;
-				enemyChickPosition.col = col;
 				debugPanel('\n');
 				debugPanel('	Enemy chick gets promoted to a hen!');
+				movedEnemyChick = false;
 				return;
 			}
 		}
@@ -606,9 +623,9 @@ $(document).ready(function() {
 				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 				// Add CSS class to selected tile
 				$a.addClass(_enemyBench[selectedEnemyBenchPiecePosition.col]);
-				// We are placing a chick from our bench. Set auto-promotion prevention flag
-				if(_enemyBench[selectedEnemyBenchPiecePosition.col] == 'enemyChick') {
-					placedEnemyBenchChick = true;
+				// We are placing a chick from our bench, so it cannot promote unless moved
+				if(selectedEnemyBenchPiecePosition.col == 'enemyChick') {
+					movedEnemyChick = false;
 				}
 				debugPanel("\n");
 				debugPanel("	Enemy has placed the bench piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + " successfully!");
@@ -643,9 +660,9 @@ $(document).ready(function() {
 				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 				// Add CSS class to selected tile
 				$a.addClass(_playerBench[selectedPlayerBenchPiecePosition.col]);
-				// We are placing a chick from our bench. Set auto-promotion prevention flag
+				// We are placing a chick from our bench, so it cannot promote unless moved
 				if(_playerBench[selectedPlayerBenchPiecePosition.col] == 'playerChick') {
-					placedPlayerBenchChick = true;
+					movedPlayerChick = false;
 				} 
 				debugPanel("\n");
 				debugPanel("	Player has placed the bench piece: " + _playerBench[selectedPlayerBenchPiecePosition.col] + " successfully!");
@@ -698,6 +715,24 @@ $(document).ready(function() {
 				if(validMove(attackerName)) {
 					// Add attacked piece to respective bench
 					addToBench(attackedName);
+
+					// If we moved a chick, it is valid for promotion
+					if(attackerName == 'playerChick') {
+						movedPlayerChick = true;
+						playerChickPosition.row = x;
+						playerChickPosition.col = y;
+					} else {
+						movedPlayerChick = false;
+					}
+
+					if (attackerName == 'enemyChick') {
+						movedEnemyChick = true;
+						enemyChickPosition.row = x;
+						enemyChickPosition.col = y;
+					} else {
+						movedEnemyChick = false;
+					}
+
 					var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 					var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
 					$p.removeClass(attackerName);
@@ -758,6 +793,23 @@ $(document).ready(function() {
 				differencePosition.col = attackPosition.col - selectedPosition.col;
 				var attackerName = _board[selectedPosition.row][selectedPosition.col];
 				if(validMove(attackerName)) {
+
+					// If we moved a chick, it is valid for promotion
+					if(attackerName == 'playerChick') {
+						movedPlayerChick = true;
+						playerChickPosition.row = x;
+						playerChickPosition.col = y;
+					} else {
+						movedPlayerChick = false;
+					}
+
+					if (attackerName == 'enemyChick') {
+						movedEnemyChick = true;
+						enemyChickPosition.row = x;
+						enemyChickPosition.col = y;
+					} else {
+						movedEnemyChick = false;
+					}
 					var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 					var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
 					$p.removeClass(attackerName);
