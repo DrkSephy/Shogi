@@ -157,14 +157,14 @@ $(document).ready(function() {
 	});
 
 	$('.enemyRow').each(function(rowIndex, row) {
-		$(this).find('.enemySquare').each(function(cellIndex, square) {
+		$(this).find('.square').each(function(cellIndex, square) {
 			_enemyBench[rowIndex] = -1;
 			$(square).attr({'data-x': rowIndex});
 		});
 	});
 
 	$('.playerRow').each(function(rowIndex, row) {
-		$(this).find('.playerSquare').each(function(cellIndex, square) {
+		$(this).find('.square').each(function(cellIndex, square) {
 			_playerBench[rowIndex] = -1;
 			$(square).attr({'data-x': rowIndex});
 		});
@@ -613,17 +613,17 @@ $(document).ready(function() {
 	*/ 
 	function removeFromBench(position, piece, player) {
 		if(player == 'enemy') {
-			var $benchCell = ($('.enemyRow > .enemySquare[data-x=' + position + ']')).children();
+			var $benchCell = ($('.enemyRow > .square[data-x=' + position + ']')).children();
 			$benchCell.removeClass(piece);
 		} else if (player == 'player') {
-			var $benchCell = ($('.playerRow > .playerSquare[data-x=' + position + ']')).children();
+			var $benchCell = ($('.playerRow > .square[data-x=' + position + ']')).children();
 			$benchCell.removeClass(piece);
 		}
 		return;
 	}
 
 	// Detect clicks on enemy bench
-	$('.enemyRow > .enemySquare').click(function() {
+	$('.enemyRow > .square').click(function() {
 		// If we had a piece selected and then clicked the bench,
 		// We cancel the previous selection
 		selectedEnemyBenchPiece = false;
@@ -643,7 +643,7 @@ $(document).ready(function() {
 	});
 
 	// Detect clicks on player bench
-	$('.playerRow > .playerSquare').click(function() {
+	$('.playerRow > .square').click(function() {
 		selectedPlayerBenchPiece = false;
 		var selectedCell = false;
 		if(!selectedPlayerBenchPiece && playerTurn) {
