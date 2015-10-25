@@ -35,21 +35,21 @@ h2 {
     float: right;
     width: 30%;
     padding-right: 150px;
-    padding-top: 50px;
+    padding-top: 0px;
 }
 
 #playerBench {
     float: right;
     width: 30%;
     padding-right: 150px;
-    padding-top: 10px;
+    padding-top: 0px;
 }
 
 #debugPanel {
     float: right;
     width: 30%;
     padding-right: 200px;
-    padding-top: 75px;
+    padding-top: 10px;
 }
 
 .img1 { 
