@@ -687,6 +687,7 @@ $(document).ready(function() {
 		return;
 	}
 
+
 	// Detect clicks on enemy bench
 	$('.enemyRow > .square').click(function() {
 		// If we had a piece selected and then clicked the bench,
@@ -976,5 +977,8 @@ $(document).ready(function() {
 				}
 			}
 		}
-	})
+	});
+
+	// Programmatic click!
+	// $('.row > .square[data-x=' + 2 + '][data-y=' + 1 + ']').click();
 });
