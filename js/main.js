@@ -981,4 +981,4 @@ $(document).ready(function() {
 
 	// Programmatic click!
 	// $('.row > .square[data-x=' + 2 + '][data-y=' + 1 + ']').click();
-});});
+});
