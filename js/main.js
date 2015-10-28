@@ -9,32 +9,54 @@ $(document).ready(function() {
 
 	// The position of the selected piece
 	var selectedPosition = { row: 0, col: 0 };
+
 	// The position of the attacked cell
 	var attackPosition = { row: 0, col: 0 };
+
 	// Difference between selected and attack cells
 	var differencePosition = { row: 0, col: 0 };
+
 	// Did we select a cell that is occupied?
 	var selectedCell = false;
+
 	// Did we select a cell to attack?
 	var attackedCell = false;
+
 	// Did we select a bench piece? 
 	var selectedEnemyBenchPiece = false;
 	var selectedPlayerBenchPiece = false;
 	var selectedPlayerBenchPiecePosition = { col: 0 };
 	var selectedEnemyBenchPiecePosition = { col: 0 }; 
+
 	// Is the game over?
 	var playerLionCaptured = false;
 	var enemyLionCaptured = false;
 	var seenPlayerLion = false;
 	var seenEnemyLion = false;
 	var gameOver = false;
+
 	// Whose turn is it?
 	var playerTurn = true;
 	var enemyTurn = false;
 	var turnCount = 1;
+
 	// Has either player moved?
 	var playerMoved = false;
 	var enemyMoved = false;
+
+	// Chick promotion variables
+	var playerChickPromotion = false;
+	var playerChickPosition = { row: 0, col: 0 };
+	var enemyChickPromotion = false;
+	var enemyChickPosition = { row: 0, col: 0 };
+
+	// Player moved a chick, not placed
+	// 	- legitimate candidate for promotion
+	var movedPlayerChick = false;
+
+	// Enemy moved a chick, not placed
+	// 	- legitimate candidate for promotion
+	var movedEnemyChick = false;
 
 	var _pieces = {
 		'enemyChick' : [
@@ -62,6 +84,14 @@ $(document).ready(function() {
 			{ row: 0,  col: -1 }, // West
 			{ row: 0,  col: 1  }, // East
 		],
+		'enemyHen' : [
+			{ row: 1,  col: 0  }, // South
+			{ row: -1, col: 0  }, // North
+			{ row: 0,  col: -1 }, // West
+			{ row: 0,  col: 1  }, // East
+			{ row: 1,  col: -1 }, // Southwest
+			{ row: 1,  col: 1  }, // Southeast
+		],
 		'playerChick' : [
 			{	row: -1, col: 0 }   // North
 		],
@@ -86,6 +116,14 @@ $(document).ready(function() {
 			{ row: 1,  col: 0  }, // South
 			{ row: 0,  col: -1 }, // West
 			{ row: 0,  col: 1  }, // East
+		],
+		'playerHen' : [
+			{ row: -1, col: 0 }, // North
+			{ row: 1,  col: 0 }, // South
+			{ row: 0,  col: -1}, // West
+			{ row: 0,  col: 1 }, // East
+			{ row: -1, col: -1}, // Northwest
+			{ row: -1, col: 1 }, // Northeast 
 		],
 	}
 
@@ -132,9 +170,6 @@ $(document).ready(function() {
 		});
 	});
 
-	printBoard();
-	// printEnemyBench();
-	// printPlayerBench();
 	// Set the first debug message
 	debugPanel('=================TURN ' + turnCount + '=================');
 	debugPanel('\n\n')
@@ -148,7 +183,6 @@ $(document).ready(function() {
 		for(var i = 0; i < 4; i++) {
 			console.log(_board[i]);
 		}
-
 		return;
 	}
 
@@ -158,6 +192,7 @@ $(document).ready(function() {
 	*/
 	function printEnemyBench() {
 		console.log('Enemy bench: ' + _enemyBench);
+		return;
 	}
 
 	/**
@@ -166,6 +201,7 @@ $(document).ready(function() {
 	*/
 	function printPlayerBench() {
 		console.log('Player bench: ' + _playerBench);
+		return;
 	}
 
 	/**
@@ -173,6 +209,7 @@ $(document).ready(function() {
 	 * @returns {undefined}
 	*/
 	function toggleTurn() {
+		printBoard();
 		if(playerTurn) {
 			playerTurn = false;
 			playerMoved = true;
@@ -417,23 +454,99 @@ $(document).ready(function() {
 	}
 
 	/**
+	 * Checks if a chick should be promoted to a hen.
+	 * @returns {undefined} 
+	*/
+	function checkChicks() {
+		// Check first row
+		for(var col = 0; col < 3; col++) {
+			if(_board[0][col] === 'playerChick' && movedPlayerChick) {
+				playerChickPromotion = true;
+				debugPanel('\n');
+				debugPanel('	Player chick gets promoted to a hen!');
+				movedPlayerChick = false;
+				return;
+			}
+
+			if (_board[3][col] === 'enemyChick' && movedEnemyChick) {
+				enemyChickPromotion = true;
+				debugPanel('\n');
+				debugPanel('	Enemy chick gets promoted to a hen!');
+				movedEnemyChick = false;
+				return;
+			}
+		}
+	}
+
+	/**
 	 * Updates internal bench states.
 	 * @param {string} piece The name of the piece to place.
 	 * @returns {undefined}
 	*/
 	function _benchPiece(piece) {
 		if(piece == 'playerChick') {
-			_enemyBench[0] = 'enemyChick';
-		} else if(piece == 'playerGiraffe') {
-			_enemyBench[1] = 'enemyGiraffe';
-		} else if (piece == 'playerElephant') {
-			_enemyBench[2] = 'enemyElephant';
-		} else if (piece == 'enemyChick') {
-			_playerBench[0] = 'playerChick';
-		} else if (piece == 'enemyGiraffe') {
-			_playerBench[1] = 'playerGiraffe';
-		} else if (piece == 'enemyElephant') {
-			_playerBench[2] = 'playerElephant';
+			if(_enemyBench[0] == -1) {
+				_enemyBench[0] = 'enemyChick';
+			} else {
+				_enemyBench[3] = 'enemyChick';
+			}
+		} 
+
+		else if(piece == 'playerGiraffe') {
+			if(_enemyBench[1] == -1) {
+				_enemyBench[1] = 'enemyGiraffe';
+			} else {
+				_enemyBench[4] = 'enemyGiraffe';
+			}
+		} 
+
+		else if (piece == 'playerElephant') {
+			if(_enemyBench[2] == -1) {
+				_enemyBench[2] = 'enemyElephant';
+			} else {
+				_enemyBench[5] = 'enemyElephant';
+			}
+		} 
+
+		else if (piece == 'playerHen') {
+			if(_enemyBench[0] == -1) {
+				_enemyBench[0] = 'enemyChick';
+			} else {
+				_enemyBench[3] = 'enemyChick';
+			}
+		}
+
+		else if (piece == 'enemyChick') {
+			if(_playerBench[0] == -1) {
+				_playerBench[0] = 'playerChick';
+			} else {
+				_playerBench[3] = 'playerChick';
+			}
+		} 
+
+		else if (piece == 'enemyGiraffe') {
+			if(_playerBench[1] == -1) {
+				_playerBench[1] = 'playerGiraffe';
+			} else {
+				_playerBench[4] = 'playerGiraffe';
+			}
+		} 
+
+		else if (piece == 'enemyElephant') {
+			if(_playerBench[2] == -1) {
+				_playerBench[2] = 'playerElephant';
+			} else {
+				_playerBench[5] = 'playerElephant';
+			}
+			
+		} 
+
+		else if (piece == 'enemyHen') {
+			if(_playerBench[0] == -1) {
+				_playerBench[0] = 'playerChick';
+			} else {
+				_playerBench[3] = 'playerChick';
+			}
 		}
 	}
 
@@ -455,39 +568,104 @@ $(document).ready(function() {
 	function addToBench(piece) {
 		if(piece == 'playerChick') {
 			var cell = $('#playerChick');
-			cell.addClass('enemyChick');
+			if($(cell).hasClass('enemyChick')) {
+				cell = $('#playerChickTwo');
+				cell.addClass('enemyChick');
+				_enemyBench[3] = 'enemyChick';
+			} else {
+				cell.addClass('enemyChick');
 			_enemyBench[0] = 'enemyChick';
-			console.log(_enemyBench);
+			}
 		} 
 
 		else if(piece == 'playerGiraffe') {
 			var cell = $('#playerGiraffe');
-			cell.addClass('enemyGiraffe');
-			_enemyBench[1] = 'enemyGiraffe';
+			if($(cell).hasClass('enemyGiraffe')) {
+				console.log("Duplicate Giraffe, place in extra slot");
+				cell = $('#playerGiraffeTwo');
+				cell.addClass('enemyGiraffe');
+				_enemyBench[4] = 'enemyGiraffe';
+			} else {
+				cell.addClass('enemyGiraffe');
+				_enemyBench[1] = 'enemyGiraffe';
+			}
 		} 
 
-		else if (piece == 'playerElephant') {
+		else if(piece == 'playerElephant') {
 			var cell = $('#playerElephant');
-			cell.addClass('enemyElephant');
+			if($(cell).hasClass('enemyElephant')) {
+				cell = $('#playerElephantTwo');
+				cell.addClass('enemyElephant');
+				_enemyBench[5] = 'enemyElephant';
+			} else {
+				cell.addClass('enemyElephant');
 			_enemyBench[2] = 'enemyElephant';
+			}
 		} 
 
-		else if (piece == 'enemyChick') {
+		else if(piece == 'playerHen') {
+			var cell = $('#playerChick');
+			if($(cell).hasClass('enemyChick')) {
+				cell = $('#playerChickTwo');
+				cell.addClass('enemyChick');
+				_enemyBench[3] = 'enemyChick';
+			} else {
+				cell.addClass('enemyChick');
+			_enemyBench[0] = 'enemyChick';
+			}
+		}  
+
+		// Player bench pieces
+		else if(piece == 'enemyChick') {
 			var cell = $('#enemyChick');
-			cell.addClass('playerChick');
+			if($(cell).hasClass('playerChick')) {
+				cell = $('#enemyChickTwo');
+				cell.addClass('playerChick');
+				_playerBench[3] = 'playerChick';
+			} else {
+				cell.addClass('playerChick');
 			_playerBench[0] = 'playerChick';
-		} 
+			}
+		}
 
-		else if (piece == 'enemyGiraffe') {
+		else if(piece == 'enemyGiraffe') {
 			var cell = $('#enemyGiraffe');
-			cell.addClass('playerGiraffe');
+			if($(cell).hasClass('playerGiraffe')) {
+				cell = $('#enemyGiraffeTwo');
+				cell.addClass('playerGiraffe');
+				_playerBench[4] = 'playerGiraffe';
+			} else {
+				cell.addClass('playerGiraffe');
 			_playerBench[1] = 'playerGiraffe';
+			}
+		}  
+
+		else if(piece == 'enemyElephant') {
+			var cell = $('#enemyElephant');
+			if($(cell).hasClass('playerElephant')) {
+				cell = $('#enemyElephantTwo');
+				cell.addClass('playerElephant');
+				_playerBench[5] = 'playerElephant';
+			} else {
+				cell.addClass('playerElephant');
+			_playerBench[2] = 'playerElephant';
+			}
 		} 
 
-		else if (piece == 'enemyElephant') {
-			var cell = $('#enemyElephant');
-			cell.addClass('playerElephant');
-			_playerBench[2] = 'playerElephant';
+		else if(piece == 'enemyHen') {
+			var cell = $('#enemyChick');
+			if($(cell).hasClass('playerChick')) {
+				cell = $('#enemyChickTwo');
+				cell.addClass('playerChick');
+				_playerBench[3] = 'playerChick';
+			} else {
+				cell.addClass('playerChick');
+			_playerBench[0] = 'playerChick';
+			}
+		}
+
+		else {
+			return;
 		}
 	}
 
@@ -508,6 +686,7 @@ $(document).ready(function() {
 		}
 		return;
 	}
+
 
 	// Detect clicks on enemy bench
 	$('.enemyRow > .square').click(function() {
@@ -556,6 +735,10 @@ $(document).ready(function() {
 				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 				// Add CSS class to selected tile
 				$a.addClass(_enemyBench[selectedEnemyBenchPiecePosition.col]);
+				// We are placing a chick from our bench, so it cannot promote unless moved
+				if(selectedEnemyBenchPiecePosition.col == 'enemyChick') {
+					movedEnemyChick = false;
+				}
 				debugPanel("\n");
 				debugPanel("	Enemy has placed the bench piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + " successfully!");
 				// Update internal game board state with name of placed piece
@@ -589,6 +772,10 @@ $(document).ready(function() {
 				var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 				// Add CSS class to selected tile
 				$a.addClass(_playerBench[selectedPlayerBenchPiecePosition.col]);
+				// We are placing a chick from our bench, so it cannot promote unless moved
+				if(_playerBench[selectedPlayerBenchPiecePosition.col] == 'playerChick') {
+					movedPlayerChick = false;
+				} 
 				debugPanel("\n");
 				debugPanel("	Player has placed the bench piece: " + _playerBench[selectedPlayerBenchPiecePosition.col] + " successfully!");
 				// Update internal game board state with name of placed piece
@@ -607,7 +794,7 @@ $(document).ready(function() {
 			// We tried to put our bench piece on an occupied cell
 			else {
 				debugPanel("\n");
-				debugPanel("	Player tried to place the piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + " in an occupied space");
+				debugPanel("	Player tried to place the piece: " + _playerBench[selectedPlayerBenchPiecePosition.col] + " in an occupied space");
 				selectedPlayerBenchPiece = false;
 			}
 		}
@@ -640,6 +827,24 @@ $(document).ready(function() {
 				if(validMove(attackerName)) {
 					// Add attacked piece to respective bench
 					addToBench(attackedName);
+
+					// If we moved a chick, it is valid for promotion
+					if(attackerName == 'playerChick') {
+						movedPlayerChick = true;
+						playerChickPosition.row = x;
+						playerChickPosition.col = y;
+					} else {
+						movedPlayerChick = false;
+					}
+
+					if (attackerName == 'enemyChick') {
+						movedEnemyChick = true;
+						enemyChickPosition.row = x;
+						enemyChickPosition.col = y;
+					} else {
+						movedEnemyChick = false;
+					}
+
 					var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 					var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
 					$p.removeClass(attackerName);
@@ -665,6 +870,29 @@ $(document).ready(function() {
 					// Check if the game is over 
 					isGameOver();
 					if(!gameOver) {
+						// Check if a chick should be promoted
+						checkChicks();
+						if(enemyChickPromotion) {
+							var $enemyChick = ($('.square[data-x=' + enemyChickPosition.row + '][data-y=' + enemyChickPosition.col + ']')).children();
+							$enemyChick.removeClass('enemyChick');
+							$enemyChick.addClass('enemyHen');
+							// Reset position of enemy chick
+							enemyChickPosition.row = 0;
+							enemyChickPosition.col = 0;
+							// Reset promotion flag
+							enemyChickPromotion = false;
+							_board[x][y] = 'enemyHen';
+						} else if (playerChickPromotion) {
+							var $playerChick = ($('.square[data-x=' + playerChickPosition.row + '][data-y=' + playerChickPosition.col + ']')).children();
+							$playerChick.removeClass('playerChick');
+							$playerChick.addClass('playerHen');
+							// Reset position of enemy chick
+							playerChickPosition.row = 0;
+							playerChickPosition.col = 0;
+							// Reset promotion flag
+							playerChickPromotion = false;
+							_board[x][y] = 'playerHen';
+						}
 						// Toggle the turn
 						toggleTurn();
 						// Increment turn
@@ -679,6 +907,23 @@ $(document).ready(function() {
 				differencePosition.col = attackPosition.col - selectedPosition.col;
 				var attackerName = _board[selectedPosition.row][selectedPosition.col];
 				if(validMove(attackerName)) {
+
+					// If we moved a chick, it is valid for promotion
+					if(attackerName == 'playerChick') {
+						movedPlayerChick = true;
+						playerChickPosition.row = x;
+						playerChickPosition.col = y;
+					} else {
+						movedPlayerChick = false;
+					}
+
+					if (attackerName == 'enemyChick') {
+						movedEnemyChick = true;
+						enemyChickPosition.row = x;
+						enemyChickPosition.col = y;
+					} else {
+						movedEnemyChick = false;
+					}
 					var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
 					var $p = ($('.square[data-x=' + selectedPosition.row + '][data-y=' + selectedPosition.col + ']')).children();
 					$p.removeClass(attackerName);
@@ -700,6 +945,30 @@ $(document).ready(function() {
 					// Check if the game is over 
 					isGameOver();
 					if(!gameOver) {
+						// Check if a chick should be promoted
+						checkChicks();
+						// Enemy Chick needs to be promoted
+						if(enemyChickPromotion) {
+							var $enemyChick = ($('.square[data-x=' + enemyChickPosition.row + '][data-y=' + enemyChickPosition.col + ']')).children();
+							$enemyChick.removeClass('enemyChick');
+							$enemyChick.addClass('enemyHen');
+							// Reset position of enemy chick
+							enemyChickPosition.row = 0;
+							enemyChickPosition.col = 0;
+							// Reset promotion flag
+							enemyChickPromotion = false;
+							_board[x][y] = 'enemyHen';
+						} else if (playerChickPromotion) {
+							var $playerChick = ($('.square[data-x=' + playerChickPosition.row + '][data-y=' + playerChickPosition.col + ']')).children();
+							$playerChick.removeClass('playerChick');
+							$playerChick.addClass('playerHen');
+							// Reset position of enemy chick
+							playerChickPosition.row = 0;
+							playerChickPosition.col = 0;
+							// Reset promotion flag
+							playerChickPromotion = false;
+							_board[x][y] = 'playerHen';
+						}
 						// Toggle the turn
 						toggleTurn();
 						// Increment turn
@@ -708,5 +977,8 @@ $(document).ready(function() {
 				}
 			}
 		}
-	})
-});
+	});
+
+	// Programmatic click!
+	// $('.row > .square[data-x=' + 2 + '][data-y=' + 1 + ']').click();
+});});
