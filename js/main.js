@@ -248,6 +248,12 @@ $(document).ready(function() {
 		return;
 	}
 
+	function minimax(board, player) {
+		// Function for determining best positions 
+		// Computer player will move first (max player)
+		return; 
+	}
+
 	/** 
 	 * Returns cell contents.
 	 * @param {number} row The row to search.
