@@ -254,6 +254,10 @@ $(document).ready(function() {
 		return; 
 	}
 
+	function evaluation() {
+		// Function for determining which player has won, and assign the score
+	}
+
 	/** 
 	 * Returns cell contents.
 	 * @param {number} row The row to search.
