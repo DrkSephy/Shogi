@@ -1,6 +1,6 @@
-# Artificial-Intelligence
+# Animal Shogi
 
-Implementations of various Artificial Intelligence constructs from the Artificial Intelligence Grad course at CCNY. 
+An implementation of Animal Shogi (known as Dobutsu Shogi in Japan), which is also a smaller scale version of the original Shogi for kids. 
 
 # Projects
 
