@@ -222,6 +222,11 @@ $(document).ready(function() {
 		return;
 	}
 
+	// Returns a list of all valid moves for the turn
+	function getValidMoves(board) {
+		return;
+	}
+
 	/**
 	 * Increments turn counter and resets move states.
 	 * @returns {undefined}
