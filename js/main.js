@@ -253,6 +253,14 @@ $(document).ready(function() {
 		return;
 	}
 
+	/**
+	 * Possible heuristics:
+	 * 	- How many tiles away from the lion
+	 * 		- Deduct one point for each enemy piece in the way
+	 * 		- Manhattan Distance
+	 *  - How many pieces are being threatened after a move
+	 * 		- Attacking enemy lion would normally be good
+	*/
 	function minimax(board, player) {
 		// Function for determining best positions 
 		// Computer player will move first (max player)
