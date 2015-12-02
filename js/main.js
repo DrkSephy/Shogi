@@ -692,6 +692,31 @@ $(document).ready(function() {
 		}
 	}
 
+	function clearCells() {
+		/**
+		 * Resets border properties of all cells.
+		 * @return {undefined}
+		*/
+		$('.row').each(function() {
+			$(this).find('.square').each(function() {
+				$(this).css('border', '2px dashed gray');
+			});
+		})
+
+		$('.playerRow').each(function() {
+			$(this).find('.square').each(function() {
+				$(this).css('border', '2px dashed gray');
+			});
+		})
+
+		$('.enemyRow').each(function() {
+			$(this).find('.square').each(function() {
+				$(this).css('border', '2px dashed gray');
+			});
+		});
+		return;
+	}
+
 	/**
 	 * Removes a piece from a bench.
 	 * @param {number} position The column of the piece in the internal bench.
@@ -733,6 +758,8 @@ $(document).ready(function() {
 
 	// Detect clicks on player bench
 	$('.playerRow > .square').click(function() {
+		$(this).css('border-color', 'red');
+		$(this).css('border-style', 'solid');
 		selectedPlayerBenchPiece = false;
 		var selectedCell = false;
 		if(!selectedPlayerBenchPiece && playerTurn) {
@@ -748,6 +775,8 @@ $(document).ready(function() {
 
 	// TODO: Refactor all of this code
 	$('.row > .square').click(function() {
+		$(this).css('border-color', 'red');
+		$(this).css('border-style', 'solid');
 		// We selected an enemy bench piece, so we check and place it
 		if(selectedEnemyBenchPiece && !gameOver) {
 			var x = $(this).data('x');
@@ -773,6 +802,8 @@ $(document).ready(function() {
 				selectedEnemyBenchPiece = false;
 				// After placing a piece, we end this player's turn
 				toggleTurn();
+				// Reset grid styles
+				clearCells();
 				// Increment the turn
 				incrementTurn();
 			} 
@@ -782,6 +813,8 @@ $(document).ready(function() {
 				debugPanel("\n");
 				debugPanel("	Enemy tried to place the piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + " in an occupied cell");
 				selectedEnemyBenchPiece = false;
+				// Reset grid styles
+				clearCells();
 			}
 		} 
 
@@ -789,6 +822,8 @@ $(document).ready(function() {
 		else if(selectedPlayerBenchPiece && !gameOver) {
 			var x = $(this).data('x');
 			var y = $(this).data('y');
+			$(this).css('border-color', 'red');
+			$(this).css('border-style', 'solid');
 			if(!isOccupied(x, y)) {
 				// Cell is not occupied, we can place the piece!
 				// Get square to place tile down
@@ -810,6 +845,8 @@ $(document).ready(function() {
 				selectedPlayerBenchPiece = false;
 				// After placing a piece, we end this player's turn
 				toggleTurn();
+				// Reset grid styles
+				clearCells();
 				// Increment the turn
 				incrementTurn();
 			}
@@ -890,6 +927,8 @@ $(document).ready(function() {
 					// Reset selected cells
 					selectedCell = false;
 					attackedCell = false;
+					// Reset grid styles
+					clearCells();
 					// Check if the game is over 
 					isGameOver();
 					if(!gameOver) {
@@ -965,6 +1004,8 @@ $(document).ready(function() {
 					_board[selectedPosition.row][selectedPosition.col] = -1;
 					selectedCell = false;
 					attackedCell = false;
+					// Reset grid styles
+					clearCells();
 					// Check if the game is over 
 					isGameOver();
 					if(!gameOver) {
