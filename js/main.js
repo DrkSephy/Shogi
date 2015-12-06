@@ -1,5 +1,11 @@
 $(document).ready(function() {
+
 	"use strict";
+
+	/**************************
+	*  	 INTERNAL VARIABLES   *
+	**************************/
+
 	// Internal state of board
 	var _board = [];
 	// Internal state of player bench
@@ -7,6 +13,10 @@ $(document).ready(function() {
 	// Internal state of enemy bench
 	var _enemyBench = [];
 
+	/**************************
+	*  	 POSITION VARIABLES   *
+	**************************/
+	
 	// The position of the selected piece
 	var selectedPosition = { row: 0, col: 0 };
 
@@ -15,6 +25,10 @@ $(document).ready(function() {
 
 	// Difference between selected and attack cells
 	var differencePosition = { row: 0, col: 0 };
+
+	/**************************
+	*  	 PIECE VALIDATION     *
+	**************************/
 
 	// Did we select a cell that is occupied?
 	var selectedCell = false;
@@ -28,14 +42,20 @@ $(document).ready(function() {
 	var selectedPlayerBenchPiecePosition = { col: 0 };
 	var selectedEnemyBenchPiecePosition = { col: 0 }; 
 
-	// Is the game over?
+	/********************************
+	*  	 GAME EVALUATION VARIABLES  *
+	*********************************/
+
 	var playerLionCaptured = false;
 	var enemyLionCaptured = false;
 	var seenPlayerLion = false;
 	var seenEnemyLion = false;
 	var gameOver = false;
 
-	// Whose turn is it?
+	/**************************
+	*  	   TURN VARIABLES     *
+	**************************/
+
 	var playerTurn = true;
 	var enemyTurn = false;
 	var turnCount = 1;
@@ -44,7 +64,10 @@ $(document).ready(function() {
 	var playerMoved = false;
 	var enemyMoved = false;
 
-	// Chick promotion variables
+	/**************************
+	*	 PROMOTION VARIABLES  *
+	**************************/
+	
 	var playerChickPromotion = false;
 	var playerChickPosition = { row: 0, col: 0 };
 	var enemyChickPromotion = false;
@@ -58,6 +81,10 @@ $(document).ready(function() {
 	// 	- legitimate candidate for promotion
 	var movedEnemyChick = false;
 
+	/**************************
+	*  	  LEGITIMATE MOVES    *
+	**************************/
+	
 	var _pieces = {
 		'enemyChick' : [
 			{	row: 1, col: 0 }  // South
@@ -127,6 +154,10 @@ $(document).ready(function() {
 		],
 	}
 
+	/*************************************
+	*  	 INTERNAL BOARD INITIALIZATION   *
+	*************************************/
+	
 	$('.row').each(function(rowIndex, row){
 		_board.push([]);
 		$(this).find('.square').each(function(cellIndex, square) {
@@ -156,6 +187,7 @@ $(document).ready(function() {
 		});
 	});
 
+	// Initialize Enemy Bench Internal Board
 	$('.enemyRow').each(function(rowIndex, row) {
 		$(this).find('.square').each(function(cellIndex, square) {
 			_enemyBench[rowIndex] = -1;
@@ -163,6 +195,7 @@ $(document).ready(function() {
 		});
 	});
 
+	// Initialize Player Bench Internal Board
 	$('.playerRow').each(function(rowIndex, row) {
 		$(this).find('.square').each(function(cellIndex, square) {
 			_playerBench[rowIndex] = -1;
@@ -175,6 +208,10 @@ $(document).ready(function() {
 	debugPanel('\n\n')
 	debugPanel('	Player move for turn: ' + turnCount);
 
+	/**************************
+	*  	   HELPER METHODS     *
+	**************************/
+	
 	/**
 	 * Prints state of the board.
 	 * @returns {undefined}
@@ -203,6 +240,31 @@ $(document).ready(function() {
 		console.log('Player bench: ' + _playerBench);
 		return;
 	}
+
+	/** 
+	 * Returns cell contents.
+	 * @param {number} row The row to search.
+	 * @param {number} col The column to search.
+	 * @returns {number, string} The value at [row][column]
+	*/
+	function getCellContents(row, col) {
+		return _board[row][col];
+	}
+
+	/**
+	 * Appends text to the debug panel.
+	 * @param {string} message The message to add to debug panel.
+	 * @return {undefined}
+	*/
+	function debugPanel(message) {
+		$('#debug').append(message);
+		$('#debug').scrollTop($('#debug')[0].scrollHeight);
+		return;
+	}
+
+	/**************************
+	*  	    GAME METHODS      *
+	**************************/	
 
 	/**
 	 * Switches the active turn player.
@@ -254,45 +316,6 @@ $(document).ready(function() {
 	}
 
 	/**
-	 * Possible heuristics:
-	 * 	- How many tiles away from the lion
-	 * 		- Deduct one point for each enemy piece in the way
-	 * 		- Manhattan Distance
-	 *  - How many pieces are being threatened after a move
-	 * 		- Attacking enemy lion would normally be good
-	*/
-	function minimax(board, player) {
-		// Function for determining best positions 
-		// Computer player will move first (max player)
-		return; 
-	}
-
-	function evaluation() {
-		// Function for determining which player has won, and assign the score
-	}
-
-	/** 
-	 * Returns cell contents.
-	 * @param {number} row The row to search.
-	 * @param {number} col The column to search.
-	 * @returns {number, string} The value at [row][column]
-	*/
-	function getCellContents(row, col) {
-		return _board[row][col];
-	}
-
-	/**
-	 * Appends text to the debug panel.
-	 * @param {string} message The message to add to debug panel.
-	 * @return {undefined}
-	*/
-	function debugPanel(message) {
-		$('#debug').append(message);
-		$('#debug').scrollTop($('#debug')[0].scrollHeight);
-		return;
-	}
-
-	/**
 	 * Determines if the game is over.
 	 * @returns {boolean} Is the game over?
 	*/
@@ -306,7 +329,6 @@ $(document).ready(function() {
 				debugPanel('	Player has defeated the enemy!');
 				return;
 			} 
-
 			if (_board[3][col] === 'enemyLion') {
 				gameOver = true;
 				debugPanel('\n');
@@ -328,7 +350,6 @@ $(document).ready(function() {
 					playerLionCaptured = false;
 					seenPlayerLion = true;
 				}
-
 				if(_board[row][col] !== 'enemyLion' && !seenEnemyLion) {
 					enemyLionCaptured = true;
 				} else {
@@ -337,7 +358,6 @@ $(document).ready(function() {
 				}
 			}
 		}
-
 		if(playerLionCaptured) {
 			debugPanel('\n');
 			debugPanel('	Enemy has won :/');
@@ -362,10 +382,10 @@ $(document).ready(function() {
 	}
 
 	/**
-		* Empties the contents of a cell.
-		* @param {number} row The row component to clear.
-		* @param {number} column The column component to clear.
-		* @returns {undefined}
+	 * Empties the contents of a cell.
+	 * @param {number} row The row component to clear.
+	 * @param {number} column The column component to clear.
+	 * @returns {undefined}
 	*/
 	function clearCell(row, col) {
 		_board[row][col] = -1;
@@ -373,9 +393,9 @@ $(document).ready(function() {
 	}
 
 	/**
-		* Checks if a move is valid.
-		* @param {string} attacker The piece attempting to move.
-		* @returns {boolean} Whether a move is valid. 
+	 * Checks if a move is valid.
+	 * @param {string} attacker The piece attempting to move.
+	 * @returns {boolean} Whether a move is valid. 
 	*/
 	function validMove(attacker) {
 		// Check if the new bounds are valid
@@ -414,7 +434,6 @@ $(document).ready(function() {
 				return true;
 			} 
 		}
-
 
 		if(playerTurn) {
 			debugPanel('\n');
@@ -735,7 +754,33 @@ $(document).ready(function() {
 		return;
 	}
 
+	/*********************
+	*      AI METHODS    *
+	*********************/
 
+	/**
+	 * Possible heuristics:
+	 * 	- How many tiles away from the lion
+	 * 		- Deduct one point for each enemy piece in the way
+	 * 		- Manhattan Distance
+	 *  - How many pieces are being threatened after a move
+	 * 		- Attacking enemy lion would normally be good
+	*/
+	function minimax(board, player) {
+		// Function for determining best positions 
+		// Computer player will move first (max player)
+		return; 
+	}
+
+	function evaluation() {
+		// Function for determining which player has won, and assign the score
+	}
+
+
+	/*********************
+	*    EVENT HANDLERS  *
+	*********************/
+	
 	// Detect clicks on enemy bench
 	$('.enemyRow > .square').click(function() {
 		// If we had a piece selected and then clicked the bench,
