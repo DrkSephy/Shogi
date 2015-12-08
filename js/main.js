@@ -285,7 +285,31 @@ $(document).ready(function() {
 	}
 
 	// Returns a list of all valid moves for the turn
-	function getValidMoves(board) {
+	function getValidMoves(board, player) {
+		var validMoves = {};
+		// Compute all valid moves for player
+		if(player === 'player') {
+			for(var row = 0; row < 4; row++) {
+				for(var col = 0; col < 3; col++) {
+
+					if(board[row][col] == 'playerChick') {
+						// Loop over all possible moves for the piece
+						for(var length = 0; length < _pieces['playerChick'].length; length++) {
+							var chickMoves = [];
+							// try to move the chick for each valid move
+							if(board[row + _pieces['playerChick'][length].row][col + _pieces['playerChick'][length].col] == -1) {
+								chickMoves.push({row: row + _pieces['playerChick'][length].row, col: col + _pieces['playerChick'][length].col});
+							} else {
+								console.log('This move is invalid!');
+							}
+						}
+						validMoves['playerChick'] = chickMoves;	
+					}
+				}
+			}
+		}
+		console.log(validMoves);
+
 		return;
 	}
 
@@ -820,6 +844,7 @@ $(document).ready(function() {
 
 	// TODO: Refactor all of this code
 	$('.row > .square').click(function() {
+		getValidMoves(_board, 'player');
 		$(this).css('border-color', 'red');
 		$(this).css('border-style', 'solid');
 		// We selected an enemy bench piece, so we check and place it
