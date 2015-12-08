@@ -294,8 +294,8 @@ $(document).ready(function() {
 
 					if(board[row][col] == 'playerChick') {
 						// Loop over all possible moves for the piece
+						var chickMoves = [];
 						for(var length = 0; length < _pieces['playerChick'].length; length++) {
-							var chickMoves = [];
 							// try to move the chick for each valid move
 							if(board[row + _pieces['playerChick'][length].row][col + _pieces['playerChick'][length].col] == -1) {
 								chickMoves.push({row: row + _pieces['playerChick'][length].row, col: col + _pieces['playerChick'][length].col});
@@ -304,6 +304,22 @@ $(document).ready(function() {
 							}
 						}
 						validMoves['playerChick'] = chickMoves;	
+					}
+
+					if(board[row][col] == 'playerLion') {
+						// Loop over all possible moves for playerLion
+						var lionRowPosition = row;
+						var lionColPosition = col;
+						var lionMoves = [];
+						for(var length = 0; length < _pieces['playerLion'].length; length++) {
+							var newLionRowPosition = lionRowPosition + _pieces['playerLion'][length].row;
+							var newLionColPosition = lionColPosition + _pieces['playerLion'][length].col;
+							if(newLionRowPosition < 4 && newLionColPosition < 3 && board[newLionRowPosition][newLionColPosition] == -1) {
+								console.log('valid possible move for lion')
+								lionMoves.push({row: newLionRowPosition, col: newLionColPosition});
+							}
+						}
+						validMoves['playerLion'] = lionMoves;
 					}
 				}
 			}
