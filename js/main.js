@@ -297,7 +297,8 @@ $(document).ready(function() {
 						var chickMoves = [];
 						for(var length = 0; length < _pieces['playerChick'].length; length++) {
 							// try to move the chick for each valid move
-							if(board[row + _pieces['playerChick'][length].row][col + _pieces['playerChick'][length].col] == -1) {
+							if(board[row + _pieces['playerChick'][length].row][col + _pieces['playerChick'][length].col] == -1 && 
+								row + _pieces['playerChick'][length].row] < 4 && col + _pieces['playerChick'][length].col]) {
 								chickMoves.push({row: row + _pieces['playerChick'][length].row, col: col + _pieces['playerChick'][length].col});
 							} else {
 								console.log('This move is invalid!');
@@ -320,6 +321,38 @@ $(document).ready(function() {
 							}
 						}
 						validMoves['playerLion'] = lionMoves;
+					}
+
+					if(board[row][col] == 'playerElephant') {
+						// Loop over all possible moves for playerLion
+						var elephantRowPosition = row;
+						var elephantColPosition = col;
+						var elephantMoves = [];
+						for(var length = 0; length < _pieces['playerElephant'].length; length++) {
+							var newElephantRowPosition = elephantRowPosition + _pieces['playerElephant'][length].row;
+							var newElephantColPosition = elephantColPosition + _pieces['playerElephant'][length].col;
+							if(newElephantRowPosition < 4 && newElephantColPosition < 3 && board[newElephantRowPosition][newElephantColPosition] == -1) {
+								console.log('valid possible move for elephant')
+								lionMoves.push({row: newElephantRowPosition, col: newElephantColPosition});
+							}
+						}
+						validMoves['playerElephant'] = elephantMoves;
+					}
+
+					if(board[row][col] == 'playerGiraffe') {
+						// Loop over all possible moves for playerLion
+						var giraffeRowPosition = row;
+						var giraffeColPosition = col;
+						var giraffeMoves = [];
+						for(var length = 0; length < _pieces['playerGiraffe'].length; length++) {
+							var newGiraffeRowPosition = giraffeRowPosition + _pieces['playerGiraffe'][length].row;
+							var newGiraffeColPosition = giraffeColPosition + _pieces['playerGiraffe'][length].col;
+							if(newGiraffeRowPosition < 4 && newGiraffeColPosition < 3 && board[newGiraffeRowPosition][newGiraffeColPosition] == -1) {
+								console.log('valid possible move for giraffe')
+								giraffeMoves.push({row: newGiraffeRowPosition, col: newGiraffeColPosition});
+							}
+						}
+						validMoves['playerGiraffe'] = giraffeMoves;
 					}
 				}
 			}
