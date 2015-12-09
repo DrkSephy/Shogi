@@ -288,75 +288,73 @@ $(document).ready(function() {
 	function getValidMoves(board, player) {
 		var validMoves = {};
 		// Compute all valid moves for player
-		if(player === 'player') {
-			for(var row = 0; row < 4; row++) {
-				for(var col = 0; col < 3; col++) {
-
-					if(board[row][col] == 'playerChick') {
-						// Loop over all possible moves for the piece
-						var chickMoves = [];
-						for(var length = 0; length < _pieces['playerChick'].length; length++) {
-							// try to move the chick for each valid move
-							if(board[row + _pieces['playerChick'][length].row][col + _pieces['playerChick'][length].col] == -1 && 
-								row + _pieces['playerChick'][length].row] < 4 && col + _pieces['playerChick'][length].col]) {
-								chickMoves.push({row: row + _pieces['playerChick'][length].row, col: col + _pieces['playerChick'][length].col});
-							} else {
-								console.log('This move is invalid!');
-							}
+		for(var row = 0; row < 4; row++) {
+			for(var col = 0; col < 3; col++) {
+				if(board[row][col] == player + 'Chick') {
+					// Loop over all possible moves for the piece
+					var chickMoves = [];
+					for(var length = 0; length < _pieces[player + 'Chick'].length; length++) {
+						// try to move the chick for each valid move
+						if(board[row + _pieces[player + 'Chick'][length].row][col + _pieces[player + 'Chick'][length].col] == -1 && 
+							row + _pieces[player + 'Chick'][length].row < 4 && col + _pieces[player + 'Chick'][length].col) {
+							chickMoves.push({row: row + _pieces[player + 'Chick'][length].row, col: col + _pieces[player + 'Chick'][length].col});
+						} else {
+							console.log('This move is invalid!');
 						}
-						validMoves['playerChick'] = chickMoves;	
 					}
+					validMoves[player + 'Chick'] = chickMoves;	
+				}
 
-					if(board[row][col] == 'playerLion') {
-						// Loop over all possible moves for playerLion
-						var lionRowPosition = row;
-						var lionColPosition = col;
-						var lionMoves = [];
-						for(var length = 0; length < _pieces['playerLion'].length; length++) {
-							var newLionRowPosition = lionRowPosition + _pieces['playerLion'][length].row;
-							var newLionColPosition = lionColPosition + _pieces['playerLion'][length].col;
-							if(newLionRowPosition < 4 && newLionColPosition < 3 && board[newLionRowPosition][newLionColPosition] == -1) {
-								console.log('valid possible move for lion')
-								lionMoves.push({row: newLionRowPosition, col: newLionColPosition});
-							}
+				if(board[row][col] == player + 'Lion') {
+					// Loop over all possible moves for playerLion
+					var lionRowPosition = row;
+					var lionColPosition = col;
+					var lionMoves = [];
+					for(var length = 0; length < _pieces[player + 'Lion'].length; length++) {
+						var newLionRowPosition = lionRowPosition + _pieces[player + 'Lion'][length].row;
+						var newLionColPosition = lionColPosition + _pieces[player + 'Lion'][length].col;
+						if(newLionRowPosition < 4 && newLionColPosition < 3 && board[newLionRowPosition][newLionColPosition] == -1) {
+							console.log('valid possible move for lion')
+							lionMoves.push({row: newLionRowPosition, col: newLionColPosition});
 						}
-						validMoves['playerLion'] = lionMoves;
 					}
+					validMoves[player + 'Lion'] = lionMoves;
+				}
 
-					if(board[row][col] == 'playerElephant') {
-						// Loop over all possible moves for playerLion
-						var elephantRowPosition = row;
-						var elephantColPosition = col;
-						var elephantMoves = [];
-						for(var length = 0; length < _pieces['playerElephant'].length; length++) {
-							var newElephantRowPosition = elephantRowPosition + _pieces['playerElephant'][length].row;
-							var newElephantColPosition = elephantColPosition + _pieces['playerElephant'][length].col;
-							if(newElephantRowPosition < 4 && newElephantColPosition < 3 && board[newElephantRowPosition][newElephantColPosition] == -1) {
-								console.log('valid possible move for elephant')
-								lionMoves.push({row: newElephantRowPosition, col: newElephantColPosition});
-							}
+				if(board[row][col] == player + 'Elephant') {
+					// Loop over all possible moves for playerLion
+					var elephantRowPosition = row;
+					var elephantColPosition = col;
+					var elephantMoves = [];
+					for(var length = 0; length < _pieces[player + 'Elephant'].length; length++) {
+						var newElephantRowPosition = elephantRowPosition + _pieces[player + 'Elephant'][length].row;
+						var newElephantColPosition = elephantColPosition + _pieces[player + 'Elephant'][length].col;
+						if(newElephantRowPosition < 4 && newElephantColPosition < 3 && board[newElephantRowPosition][newElephantColPosition] == -1) {
+							console.log('valid possible move for elephant')
+							lionMoves.push({row: newElephantRowPosition, col: newElephantColPosition});
 						}
-						validMoves['playerElephant'] = elephantMoves;
 					}
+					validMoves[player + 'Elephant'] = elephantMoves;
+				}
 
-					if(board[row][col] == 'playerGiraffe') {
-						// Loop over all possible moves for playerLion
-						var giraffeRowPosition = row;
-						var giraffeColPosition = col;
-						var giraffeMoves = [];
-						for(var length = 0; length < _pieces['playerGiraffe'].length; length++) {
-							var newGiraffeRowPosition = giraffeRowPosition + _pieces['playerGiraffe'][length].row;
-							var newGiraffeColPosition = giraffeColPosition + _pieces['playerGiraffe'][length].col;
-							if(newGiraffeRowPosition < 4 && newGiraffeColPosition < 3 && board[newGiraffeRowPosition][newGiraffeColPosition] == -1) {
-								console.log('valid possible move for giraffe')
-								giraffeMoves.push({row: newGiraffeRowPosition, col: newGiraffeColPosition});
-							}
+				if(board[row][col] == player + 'Giraffe') {
+					// Loop over all possible moves for playerLion
+					var giraffeRowPosition = row;
+					var giraffeColPosition = col;
+					var giraffeMoves = [];
+					for(var length = 0; length < _pieces[player + 'Giraffe'].length; length++) {
+						var newGiraffeRowPosition = giraffeRowPosition + _pieces[player + 'Giraffe'][length].row;
+						var newGiraffeColPosition = giraffeColPosition + _pieces[player + 'Giraffe'][length].col;
+						if(newGiraffeRowPosition < 4 && newGiraffeColPosition < 3 && board[newGiraffeRowPosition][newGiraffeColPosition] == -1) {
+							console.log('valid possible move for giraffe')
+							giraffeMoves.push({row: newGiraffeRowPosition, col: newGiraffeColPosition});
 						}
-						validMoves['playerGiraffe'] = giraffeMoves;
 					}
+					validMoves[player + 'Giraffe'] = giraffeMoves;
 				}
 			}
 		}
+
 		console.log(validMoves);
 
 		return;
