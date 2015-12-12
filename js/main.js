@@ -286,6 +286,7 @@ $(document).ready(function() {
 
 	// Returns a list of all valid moves for the turn
 	function getValidMoves(board, player) {
+		// Computes all valid moves for a player via manual movement
 		var validMoves = {};
 		// Compute all valid moves for player
 		for(var row = 0; row < 4; row++) {
@@ -298,9 +299,7 @@ $(document).ready(function() {
 						if(board[row + _pieces[player + 'Chick'][length].row][col + _pieces[player + 'Chick'][length].col] == -1 && 
 							row + _pieces[player + 'Chick'][length].row < 4 && col + _pieces[player + 'Chick'][length].col) {
 							chickMoves.push({row: row + _pieces[player + 'Chick'][length].row, col: col + _pieces[player + 'Chick'][length].col});
-						} else {
-							console.log('This move is invalid!');
-						}
+						} 
 					}
 					validMoves[player + 'Chick'] = chickMoves;	
 				}
@@ -314,7 +313,6 @@ $(document).ready(function() {
 						var newLionRowPosition = lionRowPosition + _pieces[player + 'Lion'][length].row;
 						var newLionColPosition = lionColPosition + _pieces[player + 'Lion'][length].col;
 						if(newLionRowPosition < 4 && newLionColPosition < 3 && board[newLionRowPosition][newLionColPosition] == -1) {
-							console.log('valid possible move for lion')
 							lionMoves.push({row: newLionRowPosition, col: newLionColPosition});
 						}
 					}
@@ -330,8 +328,7 @@ $(document).ready(function() {
 						var newElephantRowPosition = elephantRowPosition + _pieces[player + 'Elephant'][length].row;
 						var newElephantColPosition = elephantColPosition + _pieces[player + 'Elephant'][length].col;
 						if(newElephantRowPosition < 4 && newElephantColPosition < 3 && board[newElephantRowPosition][newElephantColPosition] == -1) {
-							console.log('valid possible move for elephant')
-							lionMoves.push({row: newElephantRowPosition, col: newElephantColPosition});
+							elephantMoves.push({row: newElephantRowPosition, col: newElephantColPosition});
 						}
 					}
 					validMoves[player + 'Elephant'] = elephantMoves;
@@ -346,7 +343,6 @@ $(document).ready(function() {
 						var newGiraffeRowPosition = giraffeRowPosition + _pieces[player + 'Giraffe'][length].row;
 						var newGiraffeColPosition = giraffeColPosition + _pieces[player + 'Giraffe'][length].col;
 						if(newGiraffeRowPosition < 4 && newGiraffeColPosition < 3 && board[newGiraffeRowPosition][newGiraffeColPosition] == -1) {
-							console.log('valid possible move for giraffe')
 							giraffeMoves.push({row: newGiraffeRowPosition, col: newGiraffeColPosition});
 						}
 					}
@@ -355,9 +351,13 @@ $(document).ready(function() {
 			}
 		}
 
+
 		console.log(validMoves);
 
-		return;
+		for(var piece = 0; piece < _playerBench.length; piece++) {
+			console.log(_playerBench[piece]);
+		}
+		return validMoves;
 	}
 
 	/**
