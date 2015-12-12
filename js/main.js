@@ -64,6 +64,8 @@ $(document).ready(function() {
 	var playerMoved = false;
 	var enemyMoved = false;
 
+	var currentTurn = null; 
+
 	/**************************
 	*	 PROMOTION VARIABLES  *
 	**************************/
@@ -276,11 +278,15 @@ $(document).ready(function() {
 			playerTurn = false;
 			playerMoved = true;
 			enemyTurn = true;
+			currentTurn = 'enemy';
 		} else if (enemyTurn) {
 			enemyTurn = false;
 			enemyMoved = true;
 			playerTurn = true;
+			currentTurn = 'player';
 		}
+
+		getValidMoves(_board, currentTurn);
 		return;
 	}
 
@@ -312,7 +318,9 @@ $(document).ready(function() {
 					for(var length = 0; length < _pieces[player + 'Lion'].length; length++) {
 						var newLionRowPosition = lionRowPosition + _pieces[player + 'Lion'][length].row;
 						var newLionColPosition = lionColPosition + _pieces[player + 'Lion'][length].col;
-						if(newLionRowPosition < 4 && newLionColPosition < 3 && board[newLionRowPosition][newLionColPosition] == -1) {
+						if(newLionRowPosition >= 0 && newLionRowPosition < 4 && 
+							 newLionColPosition >= 0 && newLionColPosition < 3 && 
+							 board[newLionRowPosition][newLionColPosition] == -1) {
 							lionMoves.push({row: newLionRowPosition, col: newLionColPosition});
 						}
 					}
@@ -327,7 +335,9 @@ $(document).ready(function() {
 					for(var length = 0; length < _pieces[player + 'Elephant'].length; length++) {
 						var newElephantRowPosition = elephantRowPosition + _pieces[player + 'Elephant'][length].row;
 						var newElephantColPosition = elephantColPosition + _pieces[player + 'Elephant'][length].col;
-						if(newElephantRowPosition < 4 && newElephantColPosition < 3 && board[newElephantRowPosition][newElephantColPosition] == -1) {
+						if(newElephantRowPosition >= 0 && newElephantRowPosition < 4 && 
+							 newElephantColPosition >= 0 && newElephantColPosition < 3 && 
+							 board[newElephantRowPosition][newElephantColPosition] == -1) {
 							elephantMoves.push({row: newElephantRowPosition, col: newElephantColPosition});
 						}
 					}
@@ -342,7 +352,9 @@ $(document).ready(function() {
 					for(var length = 0; length < _pieces[player + 'Giraffe'].length; length++) {
 						var newGiraffeRowPosition = giraffeRowPosition + _pieces[player + 'Giraffe'][length].row;
 						var newGiraffeColPosition = giraffeColPosition + _pieces[player + 'Giraffe'][length].col;
-						if(newGiraffeRowPosition < 4 && newGiraffeColPosition < 3 && board[newGiraffeRowPosition][newGiraffeColPosition] == -1) {
+						if(newGiraffeRowPosition >= 0 && newGiraffeRowPosition < 4 && 
+							 newGiraffeColPosition >= 0 && newGiraffeColPosition < 3 && 
+							 board[newGiraffeRowPosition][newGiraffeColPosition] == -1) {
 							giraffeMoves.push({row: newGiraffeRowPosition, col: newGiraffeColPosition});
 						}
 					}
@@ -354,9 +366,11 @@ $(document).ready(function() {
 
 		console.log(validMoves);
 
-		for(var piece = 0; piece < _playerBench.length; piece++) {
-			console.log(_playerBench[piece]);
-		}
+		/*
+			for(var piece = 0; piece < _playerBench.length; piece++) {
+				console.log(_playerBench[piece]);
+			}
+		*/
 		return validMoves;
 	}
 
@@ -891,7 +905,7 @@ $(document).ready(function() {
 
 	// TODO: Refactor all of this code
 	$('.row > .square').click(function() {
-		getValidMoves(_board, 'player');
+		// getValidMoves(_board, 'player');
 		$(this).css('border-color', 'red');
 		$(this).css('border-style', 'solid');
 		// We selected an enemy bench piece, so we check and place it
