@@ -273,7 +273,7 @@ $(document).ready(function() {
 	 * @returns {undefined}
 	*/
 	function toggleTurn() {
-		// printBoard();
+		printBoard();
 		if(playerTurn) {
 			playerTurn = false;
 			playerMoved = true;
@@ -622,77 +622,6 @@ $(document).ready(function() {
 		}
 	}
 
-	/**
-	 * Updates internal bench states.
-	 * @param {string} piece The name of the piece to place.
-	 * @returns {undefined}
-	*/
-	function _benchPiece(piece) {
-		if(piece == 'playerChick') {
-			if(_enemyBench[0] == -1) {
-				_enemyBench[0] = 'enemyChick';
-			} else {
-				_enemyBench[3] = 'enemyChick';
-			}
-		} 
-
-		else if(piece == 'playerGiraffe') {
-			if(_enemyBench[1] == -1) {
-				_enemyBench[1] = 'enemyGiraffe';
-			} else {
-				_enemyBench[4] = 'enemyGiraffe';
-			}
-		} 
-
-		else if (piece == 'playerElephant') {
-			if(_enemyBench[2] == -1) {
-				_enemyBench[2] = 'enemyElephant';
-			} else {
-				_enemyBench[5] = 'enemyElephant';
-			}
-		} 
-
-		else if (piece == 'playerHen') {
-			if(_enemyBench[0] == -1) {
-				_enemyBench[0] = 'enemyChick';
-			} else {
-				_enemyBench[3] = 'enemyChick';
-			}
-		}
-
-		else if (piece == 'enemyChick') {
-			if(_playerBench[0] == -1) {
-				_playerBench[0] = 'playerChick';
-			} else {
-				_playerBench[3] = 'playerChick';
-			}
-		} 
-
-		else if (piece == 'enemyGiraffe') {
-			if(_playerBench[1] == -1) {
-				_playerBench[1] = 'playerGiraffe';
-			} else {
-				_playerBench[4] = 'playerGiraffe';
-			}
-		} 
-
-		else if (piece == 'enemyElephant') {
-			if(_playerBench[2] == -1) {
-				_playerBench[2] = 'playerElephant';
-			} else {
-				_playerBench[5] = 'playerElephant';
-			}
-			
-		} 
-
-		else if (piece == 'enemyHen') {
-			if(_playerBench[0] == -1) {
-				_playerBench[0] = 'playerChick';
-			} else {
-				_playerBench[3] = 'playerChick';
-			}
-		}
-	}
 
 	/**
 	 * Checks if bench is occupied at a position.
@@ -1068,7 +997,7 @@ $(document).ready(function() {
 						debugPanel('	The enemy attacked the piece: ' + _board[attackPosition.row][attackPosition.col] + ' at position: ' + attackPosition.row + ', ' + attackPosition.col);
 					}
 					// Update respective bench
-					_benchPiece(attackedName);
+					// _benchPiece(attackedName);
 					// Update new internal board positions
 					_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
 					_board[selectedPosition.row][selectedPosition.col] = -1;
