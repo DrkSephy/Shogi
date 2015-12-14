@@ -292,7 +292,7 @@ $(document).ready(function() {
 
 	// Returns a list of all valid moves for the turn
 	function getValidMoves(board, player) {
-		// Computes all valid moves for a player via manual movement
+		// Computes all valid moves for a turn player
 		var validMoves = {};
 		// Compute all valid moves for player
 		for(var row = 0; row < 4; row++) {
@@ -311,7 +311,7 @@ $(document).ready(function() {
 				}
 
 				if(board[row][col] == player + 'Lion') {
-					// Loop over all possible moves for playerLion
+					// Loop over all possible moves for Lion
 					var lionRowPosition = row;
 					var lionColPosition = col;
 					var lionMoves = [];
@@ -328,7 +328,7 @@ $(document).ready(function() {
 				}
 
 				if(board[row][col] == player + 'Elephant') {
-					// Loop over all possible moves for playerLion
+					// Loop over all possible moves for Elephant
 					var elephantRowPosition = row;
 					var elephantColPosition = col;
 					var elephantMoves = [];
@@ -345,7 +345,7 @@ $(document).ready(function() {
 				}
 
 				if(board[row][col] == player + 'Giraffe') {
-					// Loop over all possible moves for playerLion
+					// Loop over all possible moves for Giraffe
 					var giraffeRowPosition = row;
 					var giraffeColPosition = col;
 					var giraffeMoves = [];
@@ -851,7 +851,6 @@ $(document).ready(function() {
 
 	// TODO: Refactor all of this code
 	$('.row > .square').click(function() {
-		// getValidMoves(_board, 'player');
 		$(this).css('border-color', 'red');
 		$(this).css('border-style', 'solid');
 		// We selected an enemy bench piece, so we check and place it
