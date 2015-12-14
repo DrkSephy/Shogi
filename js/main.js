@@ -273,7 +273,7 @@ $(document).ready(function() {
 	 * @returns {undefined}
 	*/
 	function toggleTurn() {
-		printBoard();
+		// printBoard();
 		if(playerTurn) {
 			playerTurn = false;
 			playerMoved = true;
@@ -365,12 +365,29 @@ $(document).ready(function() {
 
 
 		console.log(validMoves);
-
-		/*
+	
+		if(player === 'player') {
+			var placementMoves = [];
+			// Loop over all pieces on respective player's bench
 			for(var piece = 0; piece < _playerBench.length; piece++) {
+				// If there is a piece on the bench
 				console.log(_playerBench[piece]);
+				if(_playerBench[piece] !== -1) {
+					// console.log('There is a piece: ' + _playerBench[piece]);
+					// Each empty spot on our game board is a valid placement spot
+					for(var row = 0; row < 4; row++) {
+						for(var col = 0; col < 3; col++) {
+							// If the spot is empty, we can place the piece there
+							if(_board[row][col] == -1) {
+								placementMoves.push({piece: _playerBench[piece], row: row, col: col});
+							}
+						}
+					}
+				}
 			}
-		*/
+			validMoves['benchPlacement'] = placementMoves;
+		}
+
 		return validMoves;
 	}
 
