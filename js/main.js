@@ -298,13 +298,28 @@ $(document).ready(function() {
 		for(var row = 0; row < 4; row++) {
 			for(var col = 0; col < 3; col++) {
 				if(board[row][col] == player + 'Chick') {
+					var chickRowPosition = row;
+					var chickColPosition = col;
 					// Loop over all possible moves for the piece
 					var chickMoves = [];
 					for(var length = 0; length < _pieces[player + 'Chick'].length; length++) {
-						// try to move the chick for each valid move
-						if(board[row + _pieces[player + 'Chick'][length].row][col + _pieces[player + 'Chick'][length].col] == -1 && 
-							row + _pieces[player + 'Chick'][length].row < 4 && col + _pieces[player + 'Chick'][length].col) {
-							chickMoves.push({row: row + _pieces[player + 'Chick'][length].row, col: col + _pieces[player + 'Chick'][length].col});
+						var newChickRowPosition = chickRowPosition + _pieces[player + 'Chick'][length].row;
+						var newChickColPosition = chickColPosition + _pieces[player + 'Chick'][length].col;
+
+						if(newChickRowPosition >= 0 && newChickRowPosition < 4 && 
+							 newChickColPosition >= 0 && newChickColPosition < 3 && 
+							 board[newChickRowPosition][newChickColPosition] == -1) {
+							chickMoves.push({piece: player + 'Chick', row: newChickRowPosition, col: newChickColPosition});
+						}
+
+						if(newChickRowPosition >= 0 && newChickRowPosition < 4 && 
+							 newChickColPosition >= 0 && newChickColPosition < 3 && 
+							 board[newChickRowPosition][newChickColPosition] !== -1) {
+							 if(player === 'enemy' && (board[newChickRowPosition][newChickColPosition]).indexOf('player') > -1) {
+							 	chickMoves.push({piece: player + 'Chick', row: newChickRowPosition, col: newChickColPosition});
+							 } else if(player === 'player' && (board[newChickRowPosition][newChickColPosition]).indexOf('enemy') > -1) {
+							 	chickMoves.push({piece: player + 'Chick', row: newChickRowPosition, col: newChickColPosition});
+							 } 
 						} 
 					}
 					validMoves[player + 'Chick'] = chickMoves;	
@@ -318,10 +333,21 @@ $(document).ready(function() {
 					for(var length = 0; length < _pieces[player + 'Lion'].length; length++) {
 						var newLionRowPosition = lionRowPosition + _pieces[player + 'Lion'][length].row;
 						var newLionColPosition = lionColPosition + _pieces[player + 'Lion'][length].col;
+						
 						if(newLionRowPosition >= 0 && newLionRowPosition < 4 && 
 							 newLionColPosition >= 0 && newLionColPosition < 3 && 
 							 board[newLionRowPosition][newLionColPosition] == -1) {
-							lionMoves.push({row: newLionRowPosition, col: newLionColPosition});
+							lionMoves.push({piece: player + 'Lion', row: newLionRowPosition, col: newLionColPosition});
+						}
+
+						if(newLionRowPosition >= 0 && newLionRowPosition < 4 && 
+							 newLionColPosition >= 0 && newLionColPosition < 3 && 
+							 board[newLionRowPosition][newLionColPosition] !== -1) {
+							 if(player === 'enemy' && (board[newLionRowPosition][newLionColPosition]).indexOf('player') > -1) {
+							 	lionMoves.push({piece: player + 'Lion', row: newLionRowPosition, col: newLionColPosition});
+							 } else if(player === 'player' && (board[newLionRowPosition][newLionColPosition]).indexOf('enemy') > -1) {
+							 	lionMoves.push({piece: player + 'Lion', row: newLionRowPosition, col: newLionColPosition});
+							 } 
 						}
 					}
 					validMoves[player + 'Lion'] = lionMoves;
@@ -338,7 +364,17 @@ $(document).ready(function() {
 						if(newElephantRowPosition >= 0 && newElephantRowPosition < 4 && 
 							 newElephantColPosition >= 0 && newElephantColPosition < 3 && 
 							 board[newElephantRowPosition][newElephantColPosition] == -1) {
-							elephantMoves.push({row: newElephantRowPosition, col: newElephantColPosition});
+							elephantMoves.push({piece: player + 'Elephant', row: newElephantRowPosition, col: newElephantColPosition});
+						}
+
+						if(newElephantRowPosition >= 0 && newElephantRowPosition < 4 && 
+							 newElephantColPosition >= 0 && newElephantColPosition < 3 && 
+							 board[newElephantRowPosition][newElephantColPosition] !== -1) {
+							 if(player === 'enemy' && (board[newElephantRowPosition][newElephantColPosition]).indexOf('player') > -1) {
+							 	 elephantMoves.push({piece: player + 'Elephant', row: newElephantRowPosition, col: newElephantColPosition});
+							 } else if(player === 'player' && (board[newElephantRowPosition][newElephantColPosition]).indexOf('enemy') > -1) {
+							 	 elephantMoves.push({piece: player + 'Elephant', row: newElephantRowPosition, col: newElephantColPosition});
+							 } 
 						}
 					}
 					validMoves[player + 'Elephant'] = elephantMoves;
@@ -355,16 +391,23 @@ $(document).ready(function() {
 						if(newGiraffeRowPosition >= 0 && newGiraffeRowPosition < 4 && 
 							 newGiraffeColPosition >= 0 && newGiraffeColPosition < 3 && 
 							 board[newGiraffeRowPosition][newGiraffeColPosition] == -1) {
-							giraffeMoves.push({row: newGiraffeRowPosition, col: newGiraffeColPosition});
+							giraffeMoves.push({piece: player + 'Giraffe', row: newGiraffeRowPosition, col: newGiraffeColPosition});
+						}
+
+						if(newGiraffeRowPosition >= 0 && newGiraffeRowPosition < 4 && 
+							 newGiraffeColPosition >= 0 && newGiraffeColPosition < 3 && 
+							 board[newGiraffeRowPosition][newGiraffeColPosition] !== -1) {
+							 if(player === 'enemy' && (board[newGiraffeRowPosition][newGiraffeColPosition]).indexOf('player') > -1) {
+							 	 giraffeMoves.push({piece: player + 'Giraffe', row: newGiraffeRowPosition, col: newGiraffeColPosition});
+							 } else if(player === 'player' && (board[newGiraffeRowPosition][newGiraffeColPosition]).indexOf('enemy') > -1) {
+							 	 giraffeMoves.push({piece: player + 'Giraffe', row: newGiraffeRowPosition, col: newGiraffeColPosition});
+							 } 
 						}
 					}
 					validMoves[player + 'Giraffe'] = giraffeMoves;
 				}
 			}
 		}
-
-
-		console.log(validMoves);
 	
 		if(player === 'player') {
 			var placementMoves = [];
@@ -388,6 +431,8 @@ $(document).ready(function() {
 			validMoves['benchPlacement'] = placementMoves;
 		}
 
+		console.log(validMoves);
+		
 		return validMoves;
 	}
 
