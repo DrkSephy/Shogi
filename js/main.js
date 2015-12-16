@@ -406,6 +406,34 @@ $(document).ready(function() {
 					}
 					validMoves[player + 'Giraffe'] = giraffeMoves;
 				}
+
+				if(board[row][col] == player + 'Hen') {
+					console.log('???');
+					// Loop over all possible moves for Hen
+					var henRowPosition = row;
+					var henColPosition = col;
+					var henMoves = [];
+					for(var length = 0; length < _pieces[player + 'Hen'].length; length++) {
+						var newHenRowPosition = henRowPosition + _pieces[player + 'Hen'][length].row;
+						var newHenColPosition = henColPosition + _pieces[player + 'Hen'][length].col;
+						if(newHenRowPosition >= 0 && newHenRowPosition < 4 && 
+							 newHenColPosition >= 0 && newHenColPosition < 3 && 
+							 board[newHenRowPosition][newHenColPosition] == -1) {
+							henMoves.push({piece: player + 'Hen', row: newHenRowPosition, col: newHenColPosition});
+						}
+
+						if(newHenRowPosition >= 0 && newHenRowPosition < 4 && 
+							 newHenColPosition >= 0 && newHenColPosition < 3 && 
+							 board[newHenRowPosition][newHenColPosition] !== -1) {
+							 if(player === 'enemy' && (board[newHenRowPosition][newHenColPosition]).indexOf('player') > -1) {
+							 	 henMoves.push({piece: player + 'Hen', row: newHenRowPosition, col: newHenColPosition});
+							 } else if(player === 'player' && (board[newHenRowPosition][newHenColPosition]).indexOf('enemy') > -1) {
+							 	 henMoves.push({piece: player + 'Hen', row: newHenRowPosition, col: newHenColPosition});
+							 } 
+						}
+					}
+					validMoves[player + 'Hen'] = henMoves;
+				}
 			}
 		}
 	
