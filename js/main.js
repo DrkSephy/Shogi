@@ -281,7 +281,6 @@ $(document).ready(function() {
 	 * @returns {undefined}
 	*/
 	function toggleTurn() {
-		printBoard();
 		if(playerTurn) {
 			playerTurn = false;
 			playerMoved = true;
@@ -307,8 +306,11 @@ $(document).ready(function() {
 		if(piece['type'] === 'movement') {
 			// Select the piece
 			$('.row > .square[data-x=' + piece['from']['row'] + '][data-y=' + piece['from']['col'] + ']').click();
+			console.log('selected piece');
 			// Move the piece!
 			$('.row > .square[data-x=' + piece['to']['row'] + '][data-y=' + piece['to']['col'] + ']').click();
+			console.log('moved piece!!!!');
+			console.log(piece);
 		} 
 
 		if(piece['type'] === 'placement') {
@@ -385,16 +387,16 @@ $(document).ready(function() {
 						if(newElephantRowPosition >= 0 && newElephantRowPosition < 4 && 
 							 newElephantColPosition >= 0 && newElephantColPosition < 3 && 
 							 board[newElephantRowPosition][newElephantColPosition] == -1) {
-							validMoves.push({'type': 'movement', piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
+							validMoves.push({'type': 'movement', piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: elephantColPosition}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
 						}
 
 						if(newElephantRowPosition >= 0 && newElephantRowPosition < 4 && 
 							 newElephantColPosition >= 0 && newElephantColPosition < 3 && 
 							 board[newElephantRowPosition][newElephantColPosition] !== -1) {
 							 if(player === 'enemy' && (board[newElephantRowPosition][newElephantColPosition]).indexOf('player') > -1) {
-							 	 validMoves.push({'type': 'movement', piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
+							 	 validMoves.push({'type': 'movement', piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: elephantColPosition}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
 							 } else if(player === 'player' && (board[newElephantRowPosition][newElephantColPosition]).indexOf('enemy') > -1) {
-							 	 validMoves.push({'type': 'movement', piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
+							 	 validMoves.push({'type': 'movement', piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: elephantColPosition}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
 							 } 
 						}
 					}
