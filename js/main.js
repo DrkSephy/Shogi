@@ -439,6 +439,24 @@ $(document).ready(function() {
 			}
 		}
 
+		if(player === 'enemy') {
+			// Loop over all pieces on respective player's bench
+			for(var piece = 0; piece < _enemyBench.length; piece++) {
+				// If there is a piece on the bench
+				if(_enemyBench[piece] !== -1) {
+					// Each empty spot on our game board is a valid placement spot
+					for(var row = 0; row < 4; row++) {
+						for(var col = 0; col < 3; col++) {
+							// If the spot is empty, we can place the piece there
+							if(_board[row][col] == -1) {
+								validMoves.push({piece: _enemyBench[piece], row: row, col: col});
+							}
+						}
+					}
+				}
+			}
+		}
+
 		console.log(validMoves);
 		
 		return validMoves;
