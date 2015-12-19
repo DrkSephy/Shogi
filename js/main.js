@@ -1,5 +1,11 @@
 $(document).ready(function() {
+
 	"use strict";
+
+	/**************************
+	*  	 INTERNAL VARIABLES   *
+	**************************/
+
 	// Internal state of board
 	var _board = [];
 	// Internal state of player bench
@@ -7,6 +13,10 @@ $(document).ready(function() {
 	// Internal state of enemy bench
 	var _enemyBench = [];
 
+	/**************************
+	*  	 POSITION VARIABLES   *
+	**************************/
+	
 	// The position of the selected piece
 	var selectedPosition = { row: 0, col: 0 };
 
@@ -15,6 +25,10 @@ $(document).ready(function() {
 
 	// Difference between selected and attack cells
 	var differencePosition = { row: 0, col: 0 };
+
+	/**************************
+	*  	 PIECE VALIDATION     *
+	**************************/
 
 	// Did we select a cell that is occupied?
 	var selectedCell = false;
@@ -28,14 +42,20 @@ $(document).ready(function() {
 	var selectedPlayerBenchPiecePosition = { col: 0 };
 	var selectedEnemyBenchPiecePosition = { col: 0 }; 
 
-	// Is the game over?
+	/********************************
+	*  	 GAME EVALUATION VARIABLES  *
+	*********************************/
+
 	var playerLionCaptured = false;
 	var enemyLionCaptured = false;
 	var seenPlayerLion = false;
 	var seenEnemyLion = false;
 	var gameOver = false;
 
-	// Whose turn is it?
+	/**************************
+	*  	   TURN VARIABLES     *
+	**************************/
+
 	var playerTurn = true;
 	var enemyTurn = false;
 	var turnCount = 1;
@@ -44,7 +64,12 @@ $(document).ready(function() {
 	var playerMoved = false;
 	var enemyMoved = false;
 
-	// Chick promotion variables
+	var currentTurn = null; 
+
+	/**************************
+	*	 PROMOTION VARIABLES  *
+	**************************/
+	
 	var playerChickPromotion = false;
 	var playerChickPosition = { row: 0, col: 0 };
 	var enemyChickPromotion = false;
@@ -58,6 +83,10 @@ $(document).ready(function() {
 	// 	- legitimate candidate for promotion
 	var movedEnemyChick = false;
 
+	/**************************
+	*  	  LEGITIMATE MOVES    *
+	**************************/
+	
 	var _pieces = {
 		'enemyChick' : [
 			{	row: 1, col: 0 }  // South
@@ -127,6 +156,10 @@ $(document).ready(function() {
 		],
 	}
 
+	/*************************************
+	*  	 INTERNAL BOARD INITIALIZATION   *
+	*************************************/
+	
 	$('.row').each(function(rowIndex, row){
 		_board.push([]);
 		$(this).find('.square').each(function(cellIndex, square) {
@@ -156,6 +189,7 @@ $(document).ready(function() {
 		});
 	});
 
+	// Initialize Enemy Bench Internal Board
 	$('.enemyRow').each(function(rowIndex, row) {
 		$(this).find('.square').each(function(cellIndex, square) {
 			_enemyBench[rowIndex] = -1;
@@ -163,6 +197,7 @@ $(document).ready(function() {
 		});
 	});
 
+	// Initialize Player Bench Internal Board
 	$('.playerRow').each(function(rowIndex, row) {
 		$(this).find('.square').each(function(cellIndex, square) {
 			_playerBench[rowIndex] = -1;
@@ -175,6 +210,18 @@ $(document).ready(function() {
 	debugPanel('\n\n')
 	debugPanel('	Player move for turn: ' + turnCount);
 
+	/**************************
+	*  	   HELPER METHODS     *
+	**************************/
+
+	/**
+	 * Returns a random integer between min (inclusive) and max (inclusive).
+	 * @returns {number}
+	*/
+	function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+	
 	/**
 	 * Prints state of the board.
 	 * @returns {undefined}
@@ -204,22 +251,247 @@ $(document).ready(function() {
 		return;
 	}
 
+	/** 
+	 * Returns cell contents.
+	 * @param {number} row The row to search.
+	 * @param {number} col The column to search.
+	 * @returns {number, string} The value at [row][column]
+	*/
+	function getCellContents(row, col) {
+		return _board[row][col];
+	}
+
+	/**
+	 * Appends text to the debug panel.
+	 * @param {string} message The message to add to debug panel.
+	 * @return {undefined}
+	*/
+	function debugPanel(message) {
+		$('#debug').append(message);
+		$('#debug').scrollTop($('#debug')[0].scrollHeight);
+		return;
+	}
+
+	/**************************
+	*  	    GAME METHODS      *
+	**************************/	
+
 	/**
 	 * Switches the active turn player.
 	 * @returns {undefined}
 	*/
 	function toggleTurn() {
-		printBoard();
 		if(playerTurn) {
 			playerTurn = false;
 			playerMoved = true;
 			enemyTurn = true;
+			currentTurn = 'enemy';
+			// Call a function to make the enemy move
+			makeRandomMove();
 		} else if (enemyTurn) {
 			enemyTurn = false;
 			enemyMoved = true;
 			playerTurn = true;
+			currentTurn = 'player';
 		}
+
 		return;
+	}
+
+	function makeRandomMove() {
+		var moves = getValidMoves(_board, currentTurn);
+		var choice = getRandomInt(0, moves.length - 1);
+		var piece = moves[choice];
+		
+		if(piece['type'] === 'movement') {
+			// Select the piece
+			$('.row > .square[data-x=' + piece['from']['row'] + '][data-y=' + piece['from']['col'] + ']').click();
+			
+			setTimeout(function(){
+				// Move the piece!
+				$('.row > .square[data-x=' + piece['to']['row'] + '][data-y=' + piece['to']['col'] + ']').click();
+			},1000);
+		} 
+
+		if(piece['type'] === 'placement') {
+			// Select the piece
+			$('.enemyRow > .square[data-x=' + piece['from']['row'] + ']').click();
+
+			setTimeout(function(){
+				// Move the piece!
+				$('.row > .square[data-x=' + piece['to']['row'] + '][data-y=' + piece['to']['col'] + ']').click();
+			},1000);
+		}
+	}
+
+	// Returns a list of all valid moves for the turn
+	function getValidMoves(board, player) {
+		// Computes all valid moves for a turn player
+		var validMoves = [];
+	
+		for(var row = 0; row < 4; row++) {
+			for(var col = 0; col < 3; col++) {
+				if(board[row][col] == player + 'Chick') {
+					var chickRowPosition = row;
+					var chickColPosition = col;
+					for(var length = 0; length < _pieces[player + 'Chick'].length; length++) {
+						var newChickRowPosition = chickRowPosition + _pieces[player + 'Chick'][length].row;
+						var newChickColPosition = chickColPosition + _pieces[player + 'Chick'][length].col;
+
+						if(newChickRowPosition >= 0 && newChickRowPosition < 4 && 
+							 newChickColPosition >= 0 && newChickColPosition < 3 && 
+							 board[newChickRowPosition][newChickColPosition] == -1) {
+							validMoves.push({'type': 'movement', piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition},  'to': {row: newChickRowPosition, col: newChickColPosition}});
+						}
+
+						if(newChickRowPosition >= 0 && newChickRowPosition < 4 && 
+							 newChickColPosition >= 0 && newChickColPosition < 3 && 
+							 board[newChickRowPosition][newChickColPosition] !== -1) {
+							 if(player === 'enemy' && (board[newChickRowPosition][newChickColPosition]).indexOf('player') > -1) {
+							 	validMoves.push({'type': 'movement', piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition}, 'to': {row: newChickRowPosition, col: newChickColPosition}});
+							 } else if(player === 'player' && (board[newChickRowPosition][newChickColPosition]).indexOf('enemy') > -1) {
+							 	validMoves.push({'type': 'movement', piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition}, 'to': {row: newChickRowPosition, col: newChickColPosition}});
+							 } 
+						} 
+					}
+				}
+
+				if(board[row][col] == player + 'Lion') {
+					var lionRowPosition = row;
+					var lionColPosition = col;
+					for(var length = 0; length < _pieces[player + 'Lion'].length; length++) {
+						var newLionRowPosition = lionRowPosition + _pieces[player + 'Lion'][length].row;
+						var newLionColPosition = lionColPosition + _pieces[player + 'Lion'][length].col;
+						
+						if(newLionRowPosition >= 0 && newLionRowPosition < 4 && 
+							 newLionColPosition >= 0 && newLionColPosition < 3 && 
+							 board[newLionRowPosition][newLionColPosition] == -1) {
+							validMoves.push({'type': 'movement', piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
+						}
+
+						if(newLionRowPosition >= 0 && newLionRowPosition < 4 && 
+							 newLionColPosition >= 0 && newLionColPosition < 3 && 
+							 board[newLionRowPosition][newLionColPosition] !== -1) {
+							 if(player === 'enemy' && (board[newLionRowPosition][newLionColPosition]).indexOf('player') > -1) {
+							 	validMoves.push({'type': 'movement', piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
+							 } else if(player === 'player' && (board[newLionRowPosition][newLionColPosition]).indexOf('enemy') > -1) {
+							 	validMoves.push({'type': 'movement', piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
+							 } 
+						}
+					}
+				}
+
+				if(board[row][col] == player + 'Elephant') {	
+					var elephantRowPosition = row;
+					var elephantColPosition = col;
+					for(var length = 0; length < _pieces[player + 'Elephant'].length; length++) {
+						var newElephantRowPosition = elephantRowPosition + _pieces[player + 'Elephant'][length].row;
+						var newElephantColPosition = elephantColPosition + _pieces[player + 'Elephant'][length].col;
+						if(newElephantRowPosition >= 0 && newElephantRowPosition < 4 && 
+							 newElephantColPosition >= 0 && newElephantColPosition < 3 && 
+							 board[newElephantRowPosition][newElephantColPosition] == -1) {
+							validMoves.push({'type': 'movement', piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: elephantColPosition}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
+						}
+
+						if(newElephantRowPosition >= 0 && newElephantRowPosition < 4 && 
+							 newElephantColPosition >= 0 && newElephantColPosition < 3 && 
+							 board[newElephantRowPosition][newElephantColPosition] !== -1) {
+							 if(player === 'enemy' && (board[newElephantRowPosition][newElephantColPosition]).indexOf('player') > -1) {
+							 	 validMoves.push({'type': 'movement', piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: elephantColPosition}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
+							 } else if(player === 'player' && (board[newElephantRowPosition][newElephantColPosition]).indexOf('enemy') > -1) {
+							 	 validMoves.push({'type': 'movement', piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: elephantColPosition}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
+							 } 
+						}
+					}
+				}
+
+				if(board[row][col] == player + 'Giraffe') {
+					var giraffeRowPosition = row;
+					var giraffeColPosition = col;
+					for(var length = 0; length < _pieces[player + 'Giraffe'].length; length++) {
+						var newGiraffeRowPosition = giraffeRowPosition + _pieces[player + 'Giraffe'][length].row;
+						var newGiraffeColPosition = giraffeColPosition + _pieces[player + 'Giraffe'][length].col;
+						if(newGiraffeRowPosition >= 0 && newGiraffeRowPosition < 4 && 
+							 newGiraffeColPosition >= 0 && newGiraffeColPosition < 3 && 
+							 board[newGiraffeRowPosition][newGiraffeColPosition] == -1) {
+							validMoves.push({'type': 'movement', piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
+						}
+
+						if(newGiraffeRowPosition >= 0 && newGiraffeRowPosition < 4 && 
+							 newGiraffeColPosition >= 0 && newGiraffeColPosition < 3 && 
+							 board[newGiraffeRowPosition][newGiraffeColPosition] !== -1) {
+							 if(player === 'enemy' && (board[newGiraffeRowPosition][newGiraffeColPosition]).indexOf('player') > -1) {
+							 	 validMoves.push({'type': 'movement', piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
+							 } else if(player === 'player' && (board[newGiraffeRowPosition][newGiraffeColPosition]).indexOf('enemy') > -1) {
+							 	 validMoves.push({'type': 'movement', piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
+							 } 
+						}
+					}
+				}
+
+				if(board[row][col] == player + 'Hen') {
+					var henRowPosition = row;
+					var henColPosition = col;
+					for(var length = 0; length < _pieces[player + 'Hen'].length; length++) {
+						var newHenRowPosition = henRowPosition + _pieces[player + 'Hen'][length].row;
+						var newHenColPosition = henColPosition + _pieces[player + 'Hen'][length].col;
+						if(newHenRowPosition >= 0 && newHenRowPosition < 4 && 
+							 newHenColPosition >= 0 && newHenColPosition < 3 && 
+							 board[newHenRowPosition][newHenColPosition] == -1) {
+							validMoves.push({'type': 'movement', piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
+						}
+
+						if(newHenRowPosition >= 0 && newHenRowPosition < 4 && 
+							 newHenColPosition >= 0 && newHenColPosition < 3 && 
+							 board[newHenRowPosition][newHenColPosition] !== -1) {
+							 if(player === 'enemy' && (board[newHenRowPosition][newHenColPosition]).indexOf('player') > -1) {
+							 	 validMoves.push({'type': 'movement', piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
+							 } else if(player === 'player' && (board[newHenRowPosition][newHenColPosition]).indexOf('enemy') > -1) {
+							 	 validMoves.push({'type': 'movement', piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
+							 } 
+						}
+					}
+				}
+			}
+		}
+	
+		if(player === 'player') {
+			// Loop over all pieces on respective player's bench
+			for(var piece = 0; piece < _playerBench.length; piece++) {
+				// If there is a piece on the bench
+				if(_playerBench[piece] !== -1) {
+					// Each empty spot on our game board is a valid placement spot
+					for(var row = 0; row < 4; row++) {
+						for(var col = 0; col < 3; col++) {
+							// If the spot is empty, we can place the piece there
+							if(_board[row][col] == -1) {
+								validMoves.push({'type': 'placement', piece: _playerBench[piece], 'from': {row: piece}, 'to': {row: row, col: col}});
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if(player === 'enemy') {
+			// Loop over all pieces on respective player's bench
+			for(var piece = 0; piece < _enemyBench.length; piece++) {
+				// If there is a piece on the bench
+				if(_enemyBench[piece] !== -1) {
+					// Each empty spot on our game board is a valid placement spot
+					for(var row = 0; row < 4; row++) {
+						for(var col = 0; col < 3; col++) {
+							// If the spot is empty, we can place the piece there
+							if(_board[row][col] == -1) {
+								validMoves.push({'type': 'placement', piece: _enemyBench[piece], 'from': {row: piece}, 'to': {row: row, col: col}});
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return validMoves;
 	}
 
 	/**
@@ -248,27 +520,6 @@ $(document).ready(function() {
 		return;
 	}
 
-	/** 
-	 * Returns cell contents.
-	 * @param {number} row The row to search.
-	 * @param {number} col The column to search.
-	 * @returns {number, string} The value at [row][column]
-	*/
-	function getCellContents(row, col) {
-		return _board[row][col];
-	}
-
-	/**
-	 * Appends text to the debug panel.
-	 * @param {string} message The message to add to debug panel.
-	 * @return {undefined}
-	*/
-	function debugPanel(message) {
-		$('#debug').append(message);
-		$('#debug').scrollTop($('#debug')[0].scrollHeight);
-		return;
-	}
-
 	/**
 	 * Determines if the game is over.
 	 * @returns {boolean} Is the game over?
@@ -283,7 +534,6 @@ $(document).ready(function() {
 				debugPanel('	Player has defeated the enemy!');
 				return;
 			} 
-
 			if (_board[3][col] === 'enemyLion') {
 				gameOver = true;
 				debugPanel('\n');
@@ -305,7 +555,6 @@ $(document).ready(function() {
 					playerLionCaptured = false;
 					seenPlayerLion = true;
 				}
-
 				if(_board[row][col] !== 'enemyLion' && !seenEnemyLion) {
 					enemyLionCaptured = true;
 				} else {
@@ -314,7 +563,6 @@ $(document).ready(function() {
 				}
 			}
 		}
-
 		if(playerLionCaptured) {
 			debugPanel('\n');
 			debugPanel('	Enemy has won :/');
@@ -339,10 +587,10 @@ $(document).ready(function() {
 	}
 
 	/**
-		* Empties the contents of a cell.
-		* @param {number} row The row component to clear.
-		* @param {number} column The column component to clear.
-		* @returns {undefined}
+	 * Empties the contents of a cell.
+	 * @param {number} row The row component to clear.
+	 * @param {number} column The column component to clear.
+	 * @returns {undefined}
 	*/
 	function clearCell(row, col) {
 		_board[row][col] = -1;
@@ -350,9 +598,9 @@ $(document).ready(function() {
 	}
 
 	/**
-		* Checks if a move is valid.
-		* @param {string} attacker The piece attempting to move.
-		* @returns {boolean} Whether a move is valid. 
+	 * Checks if a move is valid.
+	 * @param {string} attacker The piece attempting to move.
+	 * @returns {boolean} Whether a move is valid. 
 	*/
 	function validMove(attacker) {
 		// Check if the new bounds are valid
@@ -391,7 +639,6 @@ $(document).ready(function() {
 				return true;
 			} 
 		}
-
 
 		if(playerTurn) {
 			debugPanel('\n');
@@ -474,78 +721,6 @@ $(document).ready(function() {
 				debugPanel('	Enemy chick gets promoted to a hen!');
 				movedEnemyChick = false;
 				return;
-			}
-		}
-	}
-
-	/**
-	 * Updates internal bench states.
-	 * @param {string} piece The name of the piece to place.
-	 * @returns {undefined}
-	*/
-	function _benchPiece(piece) {
-		if(piece == 'playerChick') {
-			if(_enemyBench[0] == -1) {
-				_enemyBench[0] = 'enemyChick';
-			} else {
-				_enemyBench[3] = 'enemyChick';
-			}
-		} 
-
-		else if(piece == 'playerGiraffe') {
-			if(_enemyBench[1] == -1) {
-				_enemyBench[1] = 'enemyGiraffe';
-			} else {
-				_enemyBench[4] = 'enemyGiraffe';
-			}
-		} 
-
-		else if (piece == 'playerElephant') {
-			if(_enemyBench[2] == -1) {
-				_enemyBench[2] = 'enemyElephant';
-			} else {
-				_enemyBench[5] = 'enemyElephant';
-			}
-		} 
-
-		else if (piece == 'playerHen') {
-			if(_enemyBench[0] == -1) {
-				_enemyBench[0] = 'enemyChick';
-			} else {
-				_enemyBench[3] = 'enemyChick';
-			}
-		}
-
-		else if (piece == 'enemyChick') {
-			if(_playerBench[0] == -1) {
-				_playerBench[0] = 'playerChick';
-			} else {
-				_playerBench[3] = 'playerChick';
-			}
-		} 
-
-		else if (piece == 'enemyGiraffe') {
-			if(_playerBench[1] == -1) {
-				_playerBench[1] = 'playerGiraffe';
-			} else {
-				_playerBench[4] = 'playerGiraffe';
-			}
-		} 
-
-		else if (piece == 'enemyElephant') {
-			if(_playerBench[2] == -1) {
-				_playerBench[2] = 'playerElephant';
-			} else {
-				_playerBench[5] = 'playerElephant';
-			}
-			
-		} 
-
-		else if (piece == 'enemyHen') {
-			if(_playerBench[0] == -1) {
-				_playerBench[0] = 'playerChick';
-			} else {
-				_playerBench[3] = 'playerChick';
 			}
 		}
 	}
@@ -669,6 +844,31 @@ $(document).ready(function() {
 		}
 	}
 
+	function clearCells() {
+		/**
+		 * Resets border properties of all cells.
+		 * @return {undefined}
+		*/
+		$('.row').each(function() {
+			$(this).find('.square').each(function() {
+				$(this).css('border', '2px dashed gray');
+			});
+		})
+
+		$('.playerRow').each(function() {
+			$(this).find('.square').each(function() {
+				$(this).css('border', '2px dashed gray');
+			});
+		})
+
+		$('.enemyRow').each(function() {
+			$(this).find('.square').each(function() {
+				$(this).css('border', '2px dashed gray');
+			});
+		});
+		return;
+	}
+
 	/**
 	 * Removes a piece from a bench.
 	 * @param {number} position The column of the piece in the internal bench.
@@ -687,7 +887,33 @@ $(document).ready(function() {
 		return;
 	}
 
+	/*********************
+	*      AI METHODS    *
+	*********************/
 
+	/**
+	 * Possible heuristics:
+	 * 	- How many tiles away from the lion
+	 * 		- Deduct one point for each enemy piece in the way
+	 * 		- Manhattan Distance
+	 *  - How many pieces are being threatened after a move
+	 * 		- Attacking enemy lion would normally be good
+	*/
+	function minimax(board, player) {
+		// Function for determining best positions 
+		// Computer player will move first (max player)
+		return; 
+	}
+
+	function evaluation() {
+		// Function for determining which player has won, and assign the score
+	}
+
+
+	/*********************
+	*    EVENT HANDLERS  *
+	*********************/
+	
 	// Detect clicks on enemy bench
 	$('.enemyRow > .square').click(function() {
 		// If we had a piece selected and then clicked the bench,
@@ -710,6 +936,8 @@ $(document).ready(function() {
 
 	// Detect clicks on player bench
 	$('.playerRow > .square').click(function() {
+		$(this).css('border-color', 'red');
+		$(this).css('border-style', 'solid');
 		selectedPlayerBenchPiece = false;
 		var selectedCell = false;
 		if(!selectedPlayerBenchPiece && playerTurn) {
@@ -725,6 +953,8 @@ $(document).ready(function() {
 
 	// TODO: Refactor all of this code
 	$('.row > .square').click(function() {
+		$(this).css('border-color', 'red');
+		$(this).css('border-style', 'solid');
 		// We selected an enemy bench piece, so we check and place it
 		if(selectedEnemyBenchPiece && !gameOver) {
 			var x = $(this).data('x');
@@ -750,6 +980,8 @@ $(document).ready(function() {
 				selectedEnemyBenchPiece = false;
 				// After placing a piece, we end this player's turn
 				toggleTurn();
+				// Reset grid styles
+				clearCells();
 				// Increment the turn
 				incrementTurn();
 			} 
@@ -759,6 +991,8 @@ $(document).ready(function() {
 				debugPanel("\n");
 				debugPanel("	Enemy tried to place the piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + " in an occupied cell");
 				selectedEnemyBenchPiece = false;
+				// Reset grid styles
+				clearCells();
 			}
 		} 
 
@@ -766,6 +1000,8 @@ $(document).ready(function() {
 		else if(selectedPlayerBenchPiece && !gameOver) {
 			var x = $(this).data('x');
 			var y = $(this).data('y');
+			$(this).css('border-color', 'red');
+			$(this).css('border-style', 'solid');
 			if(!isOccupied(x, y)) {
 				// Cell is not occupied, we can place the piece!
 				// Get square to place tile down
@@ -787,6 +1023,8 @@ $(document).ready(function() {
 				selectedPlayerBenchPiece = false;
 				// After placing a piece, we end this player's turn
 				toggleTurn();
+				// Reset grid styles
+				clearCells();
 				// Increment the turn
 				incrementTurn();
 			}
@@ -860,13 +1098,15 @@ $(document).ready(function() {
 						debugPanel('	The enemy attacked the piece: ' + _board[attackPosition.row][attackPosition.col] + ' at position: ' + attackPosition.row + ', ' + attackPosition.col);
 					}
 					// Update respective bench
-					_benchPiece(attackedName);
+					// _benchPiece(attackedName);
 					// Update new internal board positions
 					_board[x][y] = _board[selectedPosition.row][selectedPosition.col];
 					_board[selectedPosition.row][selectedPosition.col] = -1;
 					// Reset selected cells
 					selectedCell = false;
 					attackedCell = false;
+					// Reset grid styles
+					clearCells();
 					// Check if the game is over 
 					isGameOver();
 					if(!gameOver) {
@@ -942,6 +1182,8 @@ $(document).ready(function() {
 					_board[selectedPosition.row][selectedPosition.col] = -1;
 					selectedCell = false;
 					attackedCell = false;
+					// Reset grid styles
+					clearCells();
 					// Check if the game is over 
 					isGameOver();
 					if(!gameOver) {
