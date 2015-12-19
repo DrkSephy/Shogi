@@ -213,7 +213,7 @@ $(document).ready(function() {
 	/**************************
 	*  	   HELPER METHODS     *
 	**************************/
-	
+
 	/**
 	 * Returns a random integer between min (inclusive) and max (inclusive).
 	 * @returns {number}
@@ -301,7 +301,22 @@ $(document).ready(function() {
 
 	function makeRandomMove() {
 		var moves = getValidMoves(_board, currentTurn);
-		console.log(moves);
+		var choice = getRandomInt(0, moves.length - 1);
+		var piece = moves[choice];
+		
+		if(piece['type'] === 'movement') {
+			// Select the piece
+			$('.row > .square[data-x=' + piece['from']['row'] + '][data-y=' + piece['from']['col'] + ']').click();
+			// Move the piece!
+			$('.row > .square[data-x=' + piece['to']['row'] + '][data-y=' + piece['to']['col'] + ']').click();
+		} 
+
+		if(piece['type'] === 'placement') {
+			// Select the piece
+			$('.enemyRow > .square[data-x=' + piece['from']['row'] + ']').click();
+			// Move the piece!
+			$('.row > .square[data-x=' + piece['to']['row'] + '][data-y=' + piece['to']['col'] + ']').click();
+		}
 	}
 
 	// Returns a list of all valid moves for the turn
