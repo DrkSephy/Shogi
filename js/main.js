@@ -306,18 +306,21 @@ $(document).ready(function() {
 		if(piece['type'] === 'movement') {
 			// Select the piece
 			$('.row > .square[data-x=' + piece['from']['row'] + '][data-y=' + piece['from']['col'] + ']').click();
-			console.log('selected piece');
-			// Move the piece!
-			$('.row > .square[data-x=' + piece['to']['row'] + '][data-y=' + piece['to']['col'] + ']').click();
-			console.log('moved piece!!!!');
-			console.log(piece);
+			
+			setTimeout(function(){
+				// Move the piece!
+				$('.row > .square[data-x=' + piece['to']['row'] + '][data-y=' + piece['to']['col'] + ']').click();
+			},1000);
 		} 
 
 		if(piece['type'] === 'placement') {
 			// Select the piece
 			$('.enemyRow > .square[data-x=' + piece['from']['row'] + ']').click();
-			// Move the piece!
-			$('.row > .square[data-x=' + piece['to']['row'] + '][data-y=' + piece['to']['col'] + ']').click();
+
+			setTimeout(function(){
+				// Move the piece!
+				$('.row > .square[data-x=' + piece['to']['row'] + '][data-y=' + piece['to']['col'] + ']').click();
+			},1000);
 		}
 	}
 
