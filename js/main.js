@@ -293,14 +293,13 @@ $(document).ready(function() {
 	// Returns a list of all valid moves for the turn
 	function getValidMoves(board, player) {
 		// Computes all valid moves for a turn player
-		var validMoves = {};
+		var validMoves = [];
 	
 		for(var row = 0; row < 4; row++) {
 			for(var col = 0; col < 3; col++) {
 				if(board[row][col] == player + 'Chick') {
 					var chickRowPosition = row;
 					var chickColPosition = col;
-					var chickMoves = [];
 					for(var length = 0; length < _pieces[player + 'Chick'].length; length++) {
 						var newChickRowPosition = chickRowPosition + _pieces[player + 'Chick'][length].row;
 						var newChickColPosition = chickColPosition + _pieces[player + 'Chick'][length].col;
@@ -308,26 +307,24 @@ $(document).ready(function() {
 						if(newChickRowPosition >= 0 && newChickRowPosition < 4 && 
 							 newChickColPosition >= 0 && newChickColPosition < 3 && 
 							 board[newChickRowPosition][newChickColPosition] == -1) {
-							chickMoves.push({piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition},  'to': {row: newChickRowPosition, col: newChickColPosition}});
+							validMoves.push({piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition},  'to': {row: newChickRowPosition, col: newChickColPosition}});
 						}
 
 						if(newChickRowPosition >= 0 && newChickRowPosition < 4 && 
 							 newChickColPosition >= 0 && newChickColPosition < 3 && 
 							 board[newChickRowPosition][newChickColPosition] !== -1) {
 							 if(player === 'enemy' && (board[newChickRowPosition][newChickColPosition]).indexOf('player') > -1) {
-							 	chickMoves.push({piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition}, 'to': {row: newChickRowPosition, col: newChickColPosition}});
+							 	validMoves.push({piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition}, 'to': {row: newChickRowPosition, col: newChickColPosition}});
 							 } else if(player === 'player' && (board[newChickRowPosition][newChickColPosition]).indexOf('enemy') > -1) {
-							 	chickMoves.push({piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition}, 'to': {row: newChickRowPosition, col: newChickColPosition}});
+							 	validMoves.push({piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition}, 'to': {row: newChickRowPosition, col: newChickColPosition}});
 							 } 
 						} 
 					}
-					validMoves[player + 'Chick'] = chickMoves;	
 				}
 
 				if(board[row][col] == player + 'Lion') {
 					var lionRowPosition = row;
 					var lionColPosition = col;
-					var lionMoves = [];
 					for(var length = 0; length < _pieces[player + 'Lion'].length; length++) {
 						var newLionRowPosition = lionRowPosition + _pieces[player + 'Lion'][length].row;
 						var newLionColPosition = lionColPosition + _pieces[player + 'Lion'][length].col;
@@ -335,121 +332,111 @@ $(document).ready(function() {
 						if(newLionRowPosition >= 0 && newLionRowPosition < 4 && 
 							 newLionColPosition >= 0 && newLionColPosition < 3 && 
 							 board[newLionRowPosition][newLionColPosition] == -1) {
-							lionMoves.push({piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
+							validMoves.push({piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
 						}
 
 						if(newLionRowPosition >= 0 && newLionRowPosition < 4 && 
 							 newLionColPosition >= 0 && newLionColPosition < 3 && 
 							 board[newLionRowPosition][newLionColPosition] !== -1) {
 							 if(player === 'enemy' && (board[newLionRowPosition][newLionColPosition]).indexOf('player') > -1) {
-							 	lionMoves.push({piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
+							 	validMoves.push({piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
 							 } else if(player === 'player' && (board[newLionRowPosition][newLionColPosition]).indexOf('enemy') > -1) {
-							 	lionMoves.push({piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
+							 	validMoves.push({piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
 							 } 
 						}
 					}
-					validMoves[player + 'Lion'] = lionMoves;
 				}
 
 				if(board[row][col] == player + 'Elephant') {	
 					var elephantRowPosition = row;
 					var elephantColPosition = col;
-					var elephantMoves = [];
 					for(var length = 0; length < _pieces[player + 'Elephant'].length; length++) {
 						var newElephantRowPosition = elephantRowPosition + _pieces[player + 'Elephant'][length].row;
 						var newElephantColPosition = elephantColPosition + _pieces[player + 'Elephant'][length].col;
 						if(newElephantRowPosition >= 0 && newElephantRowPosition < 4 && 
 							 newElephantColPosition >= 0 && newElephantColPosition < 3 && 
 							 board[newElephantRowPosition][newElephantColPosition] == -1) {
-							elephantMoves.push({piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
+							validMoves.push({piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
 						}
 
 						if(newElephantRowPosition >= 0 && newElephantRowPosition < 4 && 
 							 newElephantColPosition >= 0 && newElephantColPosition < 3 && 
 							 board[newElephantRowPosition][newElephantColPosition] !== -1) {
 							 if(player === 'enemy' && (board[newElephantRowPosition][newElephantColPosition]).indexOf('player') > -1) {
-							 	 elephantMoves.push({piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
+							 	 validMoves.push({piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
 							 } else if(player === 'player' && (board[newElephantRowPosition][newElephantColPosition]).indexOf('enemy') > -1) {
-							 	 elephantMoves.push({piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
+							 	 validMoves.push({piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
 							 } 
 						}
 					}
-					validMoves[player + 'Elephant'] = elephantMoves;
 				}
 
 				if(board[row][col] == player + 'Giraffe') {
 					var giraffeRowPosition = row;
 					var giraffeColPosition = col;
-					var giraffeMoves = [];
 					for(var length = 0; length < _pieces[player + 'Giraffe'].length; length++) {
 						var newGiraffeRowPosition = giraffeRowPosition + _pieces[player + 'Giraffe'][length].row;
 						var newGiraffeColPosition = giraffeColPosition + _pieces[player + 'Giraffe'][length].col;
 						if(newGiraffeRowPosition >= 0 && newGiraffeRowPosition < 4 && 
 							 newGiraffeColPosition >= 0 && newGiraffeColPosition < 3 && 
 							 board[newGiraffeRowPosition][newGiraffeColPosition] == -1) {
-							giraffeMoves.push({piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
+							validMoves.push({piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
 						}
 
 						if(newGiraffeRowPosition >= 0 && newGiraffeRowPosition < 4 && 
 							 newGiraffeColPosition >= 0 && newGiraffeColPosition < 3 && 
 							 board[newGiraffeRowPosition][newGiraffeColPosition] !== -1) {
 							 if(player === 'enemy' && (board[newGiraffeRowPosition][newGiraffeColPosition]).indexOf('player') > -1) {
-							 	 giraffeMoves.push({piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
+							 	 validMoves.push({piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
 							 } else if(player === 'player' && (board[newGiraffeRowPosition][newGiraffeColPosition]).indexOf('enemy') > -1) {
-							 	 giraffeMoves.push({piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
+							 	 validMoves.push({piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
 							 } 
 						}
 					}
-					validMoves[player + 'Giraffe'] = giraffeMoves;
 				}
 
 				if(board[row][col] == player + 'Hen') {
 					var henRowPosition = row;
 					var henColPosition = col;
-					var henMoves = [];
 					for(var length = 0; length < _pieces[player + 'Hen'].length; length++) {
 						var newHenRowPosition = henRowPosition + _pieces[player + 'Hen'][length].row;
 						var newHenColPosition = henColPosition + _pieces[player + 'Hen'][length].col;
 						if(newHenRowPosition >= 0 && newHenRowPosition < 4 && 
 							 newHenColPosition >= 0 && newHenColPosition < 3 && 
 							 board[newHenRowPosition][newHenColPosition] == -1) {
-							henMoves.push({piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
+							validMoves.push({piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
 						}
 
 						if(newHenRowPosition >= 0 && newHenRowPosition < 4 && 
 							 newHenColPosition >= 0 && newHenColPosition < 3 && 
 							 board[newHenRowPosition][newHenColPosition] !== -1) {
 							 if(player === 'enemy' && (board[newHenRowPosition][newHenColPosition]).indexOf('player') > -1) {
-							 	 henMoves.push({piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
+							 	 validMoves.push({piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
 							 } else if(player === 'player' && (board[newHenRowPosition][newHenColPosition]).indexOf('enemy') > -1) {
-							 	 henMoves.push({piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
+							 	 validMoves.push({piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
 							 } 
 						}
 					}
-					validMoves[player + 'Hen'] = henMoves;
 				}
 			}
 		}
 	
 		if(player === 'player') {
-			var placementMoves = [];
 			// Loop over all pieces on respective player's bench
 			for(var piece = 0; piece < _playerBench.length; piece++) {
 				// If there is a piece on the bench
-				console.log(_playerBench[piece]);
 				if(_playerBench[piece] !== -1) {
 					// Each empty spot on our game board is a valid placement spot
 					for(var row = 0; row < 4; row++) {
 						for(var col = 0; col < 3; col++) {
 							// If the spot is empty, we can place the piece there
 							if(_board[row][col] == -1) {
-								placementMoves.push({piece: _playerBench[piece], row: row, col: col});
+								validMoves.push({piece: _playerBench[piece], row: row, col: col});
 							}
 						}
 					}
 				}
 			}
-			validMoves['benchPlacement'] = placementMoves;
 		}
 
 		console.log(validMoves);
