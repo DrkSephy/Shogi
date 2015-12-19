@@ -307,16 +307,16 @@ $(document).ready(function() {
 						if(newChickRowPosition >= 0 && newChickRowPosition < 4 && 
 							 newChickColPosition >= 0 && newChickColPosition < 3 && 
 							 board[newChickRowPosition][newChickColPosition] == -1) {
-							validMoves.push({piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition},  'to': {row: newChickRowPosition, col: newChickColPosition}});
+							validMoves.push({'type': 'movement', piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition},  'to': {row: newChickRowPosition, col: newChickColPosition}});
 						}
 
 						if(newChickRowPosition >= 0 && newChickRowPosition < 4 && 
 							 newChickColPosition >= 0 && newChickColPosition < 3 && 
 							 board[newChickRowPosition][newChickColPosition] !== -1) {
 							 if(player === 'enemy' && (board[newChickRowPosition][newChickColPosition]).indexOf('player') > -1) {
-							 	validMoves.push({piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition}, 'to': {row: newChickRowPosition, col: newChickColPosition}});
+							 	validMoves.push({'type': 'movement', piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition}, 'to': {row: newChickRowPosition, col: newChickColPosition}});
 							 } else if(player === 'player' && (board[newChickRowPosition][newChickColPosition]).indexOf('enemy') > -1) {
-							 	validMoves.push({piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition}, 'to': {row: newChickRowPosition, col: newChickColPosition}});
+							 	validMoves.push({'type': 'movement', piece: player + 'Chick', 'from': {row: chickRowPosition, col: chickColPosition}, 'to': {row: newChickRowPosition, col: newChickColPosition}});
 							 } 
 						} 
 					}
@@ -332,16 +332,16 @@ $(document).ready(function() {
 						if(newLionRowPosition >= 0 && newLionRowPosition < 4 && 
 							 newLionColPosition >= 0 && newLionColPosition < 3 && 
 							 board[newLionRowPosition][newLionColPosition] == -1) {
-							validMoves.push({piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
+							validMoves.push({'type': 'movement', piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
 						}
 
 						if(newLionRowPosition >= 0 && newLionRowPosition < 4 && 
 							 newLionColPosition >= 0 && newLionColPosition < 3 && 
 							 board[newLionRowPosition][newLionColPosition] !== -1) {
 							 if(player === 'enemy' && (board[newLionRowPosition][newLionColPosition]).indexOf('player') > -1) {
-							 	validMoves.push({piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
+							 	validMoves.push({'type': 'movement', piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
 							 } else if(player === 'player' && (board[newLionRowPosition][newLionColPosition]).indexOf('enemy') > -1) {
-							 	validMoves.push({piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
+							 	validMoves.push({'type': 'movement', piece: player + 'Lion', 'from': {row: lionRowPosition, col: lionColPosition}, 'to': {row: newLionRowPosition, col: newLionColPosition}});
 							 } 
 						}
 					}
@@ -356,16 +356,16 @@ $(document).ready(function() {
 						if(newElephantRowPosition >= 0 && newElephantRowPosition < 4 && 
 							 newElephantColPosition >= 0 && newElephantColPosition < 3 && 
 							 board[newElephantRowPosition][newElephantColPosition] == -1) {
-							validMoves.push({piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
+							validMoves.push({'type': 'movement', piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
 						}
 
 						if(newElephantRowPosition >= 0 && newElephantRowPosition < 4 && 
 							 newElephantColPosition >= 0 && newElephantColPosition < 3 && 
 							 board[newElephantRowPosition][newElephantColPosition] !== -1) {
 							 if(player === 'enemy' && (board[newElephantRowPosition][newElephantColPosition]).indexOf('player') > -1) {
-							 	 validMoves.push({piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
+							 	 validMoves.push({'type': 'movement', piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
 							 } else if(player === 'player' && (board[newElephantRowPosition][newElephantColPosition]).indexOf('enemy') > -1) {
-							 	 validMoves.push({piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
+							 	 validMoves.push({'type': 'movement', piece: player + 'Elephant', 'from': {row: elephantRowPosition, col: 'elephantColPosition'}, 'to': {row: newElephantRowPosition, col: newElephantColPosition}});
 							 } 
 						}
 					}
@@ -380,16 +380,16 @@ $(document).ready(function() {
 						if(newGiraffeRowPosition >= 0 && newGiraffeRowPosition < 4 && 
 							 newGiraffeColPosition >= 0 && newGiraffeColPosition < 3 && 
 							 board[newGiraffeRowPosition][newGiraffeColPosition] == -1) {
-							validMoves.push({piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
+							validMoves.push({'type': 'movement', piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
 						}
 
 						if(newGiraffeRowPosition >= 0 && newGiraffeRowPosition < 4 && 
 							 newGiraffeColPosition >= 0 && newGiraffeColPosition < 3 && 
 							 board[newGiraffeRowPosition][newGiraffeColPosition] !== -1) {
 							 if(player === 'enemy' && (board[newGiraffeRowPosition][newGiraffeColPosition]).indexOf('player') > -1) {
-							 	 validMoves.push({piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
+							 	 validMoves.push({'type': 'movement', piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
 							 } else if(player === 'player' && (board[newGiraffeRowPosition][newGiraffeColPosition]).indexOf('enemy') > -1) {
-							 	 validMoves.push({piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
+							 	 validMoves.push({'type': 'movement', piece: player + 'Giraffe', 'from': {row: giraffeRowPosition, col: giraffeColPosition}, 'to': {row: newGiraffeRowPosition, col: newGiraffeColPosition}});
 							 } 
 						}
 					}
@@ -404,16 +404,16 @@ $(document).ready(function() {
 						if(newHenRowPosition >= 0 && newHenRowPosition < 4 && 
 							 newHenColPosition >= 0 && newHenColPosition < 3 && 
 							 board[newHenRowPosition][newHenColPosition] == -1) {
-							validMoves.push({piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
+							validMoves.push({'type': 'movement', piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
 						}
 
 						if(newHenRowPosition >= 0 && newHenRowPosition < 4 && 
 							 newHenColPosition >= 0 && newHenColPosition < 3 && 
 							 board[newHenRowPosition][newHenColPosition] !== -1) {
 							 if(player === 'enemy' && (board[newHenRowPosition][newHenColPosition]).indexOf('player') > -1) {
-							 	 validMoves.push({piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
+							 	 validMoves.push({'type': 'movement', piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
 							 } else if(player === 'player' && (board[newHenRowPosition][newHenColPosition]).indexOf('enemy') > -1) {
-							 	 validMoves.push({piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
+							 	 validMoves.push({'type': 'movement', piece: player + 'Hen', 'from': {row: henRowPosition, col: henColPosition}, 'to': {row: newHenRowPosition, col: newHenColPosition}});
 							 } 
 						}
 					}
@@ -431,7 +431,7 @@ $(document).ready(function() {
 						for(var col = 0; col < 3; col++) {
 							// If the spot is empty, we can place the piece there
 							if(_board[row][col] == -1) {
-								validMoves.push({piece: _playerBench[piece], row: row, col: col});
+								validMoves.push({'type': 'placement', piece: _playerBench[piece], 'from': {row: piece}, 'to': {row: row, col: col}});
 							}
 						}
 					}
@@ -449,7 +449,7 @@ $(document).ready(function() {
 						for(var col = 0; col < 3; col++) {
 							// If the spot is empty, we can place the piece there
 							if(_board[row][col] == -1) {
-								validMoves.push({piece: _enemyBench[piece], row: row, col: col});
+								validMoves.push({'type': 'placement', piece: _enemyBench[piece], 'from': {row: piece}, 'to': {row: row, col: col}});
 							}
 						}
 					}
@@ -692,7 +692,6 @@ $(document).ready(function() {
 			}
 		}
 	}
-
 
 	/**
 	 * Checks if bench is occupied at a position.
