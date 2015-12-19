@@ -215,6 +215,14 @@ $(document).ready(function() {
 	**************************/
 	
 	/**
+	 * Returns a random integer between min (inclusive) and max (inclusive).
+	 * @returns {number}
+	*/
+	function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+	
+	/**
 	 * Prints state of the board.
 	 * @returns {undefined}
 	*/
@@ -279,6 +287,8 @@ $(document).ready(function() {
 			playerMoved = true;
 			enemyTurn = true;
 			currentTurn = 'enemy';
+			// Call a function to make the enemy move
+			makeRandomMove();
 		} else if (enemyTurn) {
 			enemyTurn = false;
 			enemyMoved = true;
@@ -286,8 +296,12 @@ $(document).ready(function() {
 			currentTurn = 'player';
 		}
 
-		getValidMoves(_board, currentTurn);
 		return;
+	}
+
+	function makeRandomMove() {
+		var moves = getValidMoves(_board, currentTurn);
+		console.log(moves);
 	}
 
 	// Returns a list of all valid moves for the turn
@@ -456,8 +470,6 @@ $(document).ready(function() {
 				}
 			}
 		}
-
-		console.log(validMoves);
 		
 		return validMoves;
 	}
