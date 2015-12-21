@@ -306,7 +306,8 @@ $(document).ready(function() {
 			currentTurn = 'enemy';
 			// Call a function to make the enemy move
 			// makeRandomMove();
-			makeAllPossibleMoves();
+			var boards = makeAllPossibleMoves();
+			manhattanDistance(boards);
 		} else if (enemyTurn) {
 			enemyTurn = false;
 			enemyMoved = true;
@@ -348,11 +349,39 @@ $(document).ready(function() {
 
 		$.each(boards, function(index) {
 			printBoard(boards[index]);
+			console.log('------------------');
 		});
 
 		return boards;
 	}
 
+	/**
+   * Computes Manhattan Distance of all pieces to lion.
+   * @param {list} Array of board configurations to test.
+   * @returns 
+  */
+	function manhattanDistance(configurations) {
+		// Get position of player lion
+		var position = getPosition('playerLion');
+		var distances = [];
+		
+		// Loop over all configurations
+		$.each(configurations, function(index) {
+			var configuration = configurations[index];
+			var manhattanDistanceTotal = 0;
+			for(var row = 0; row < 4; row++) {
+				for(var col = 0; col < 3; col++) {
+					if(configuration[row][col] != -1 && (configuration[row][col]).indexOf('enemy') > -1) {
+						var distance = Math.abs(position.row - row) + Math.abs(position.col - col);
+						manhattanDistanceTotal += distance;
+					}
+				}
+			}
+			distances.push(manhattanDistanceTotal);
+		});
+		console.log(distances);
+		
+	}
 	
 
 	/**
