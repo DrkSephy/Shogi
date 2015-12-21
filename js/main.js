@@ -290,6 +290,38 @@ $(document).ready(function() {
 		return position; 
 	}
 
+	/**
+	 * Makes a move on the internal board, and updates front-end
+	 * @param {object} move Contains information for move
+	 * @returns {undefined}
+	*/
+	function _makeMove(move) {
+		var fromRowPos = move.from.row;
+		var fromColPos = move.from.col;
+		var toRowPos   = move.to.row;
+		var toColPos   = move.to.col;
+
+		if(move.type === 'movement') {
+			// Select the piece
+			$('.row > .square[data-x=' + fromRowPos + '][data-y=' + fromColPos + ']').click();
+			
+			setTimeout(function(){
+				// Move the piece!
+				$('.row > .square[data-x=' + toRowPos + '][data-y=' + toColPos + ']').click();
+			},1000);
+		} 
+
+		if(move.type === 'placement') {
+			// Select the piece
+			$('.enemyRow > .square[data-x=' + move['from']['row'] + ']').click();
+
+			setTimeout(function(){
+				// Move the piece!
+				$('.row > .square[data-x=' + move['to']['row'] + '][data-y=' + move['to']['col'] + ']').click();
+			},1000);
+		}
+	}
+
 	/**************************
 	*  	    GAME METHODS      *
 	**************************/	
@@ -350,11 +382,6 @@ $(document).ready(function() {
 			board[toRowPos][toColPos] = pieceName;
 		});
 
-		$.each(boards, function(index) {
-			printBoard(boards[index]);
-			console.log('------------------');
-		});
-
 		return boards;
 	}
 
@@ -389,7 +416,11 @@ $(document).ready(function() {
 		// first one in the array
 		var move = moves[distances.indexOf(minimumDistance)];
 		// Log the best move for this turn
+		console.log('The move that minimizes manhattan distance is: ')
 		console.log(move);
+		console.log('Whose distance is: ' + minimumDistance);
+		// Make the move
+		_makeMove(move);
 	}
 	
 
