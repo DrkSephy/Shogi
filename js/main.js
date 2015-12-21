@@ -306,8 +306,11 @@ $(document).ready(function() {
 			currentTurn = 'enemy';
 			// Call a function to make the enemy move
 			// makeRandomMove();
-			var boards = makeAllPossibleMoves();
-			manhattanDistance(boards);
+			// Get all possible moves
+			var moves = getValidMoves(_board, currentTurn);
+			var boards = makeAllPossibleMoves(moves);
+			// Get manhattan distance of all moves
+			manhattanDistance(boards, moves);
 		} else if (enemyTurn) {
 			enemyTurn = false;
 			enemyMoved = true;
@@ -320,11 +323,11 @@ $(document).ready(function() {
 
 	/**
 	 * Returns all possible board configurations after each move.  
+	 * @param {list} moves All moves to be tried
 	 * @returns {list} All possible board configurations.
 	*/
-	function makeAllPossibleMoves() {
+	function makeAllPossibleMoves(moves) {
 		var boards = [];
-		var moves = getValidMoves(_board, currentTurn);
 		
 		// Make enough copies of the board for all possible moves
 		for(var copy = 0; copy < moves.length; copy++) {
@@ -358,9 +361,9 @@ $(document).ready(function() {
 	/**
    * Computes Manhattan Distance of all pieces to lion.
    * @param {list} Array of board configurations to test.
-   * @returns 
+   * @returns Move with minimal Manhattan Distance
   */
-	function manhattanDistance(configurations) {
+	function manhattanDistance(configurations, moves) {
 		// Get position of player lion
 		var position = getPosition('playerLion');
 		var distances = [];
@@ -379,8 +382,14 @@ $(document).ready(function() {
 			}
 			distances.push(manhattanDistanceTotal);
 		});
-		console.log(distances);
 		
+		var minimumDistance = Math.min.apply(Math, distances)
+		// Use indexOf to find index of the move that minimizes the difference
+		// In the case of multiple moves with minimum value, this will choose the
+		// first one in the array
+		var move = moves[distances.indexOf(minimumDistance)];
+		// Log the best move for this turn
+		console.log(move);
 	}
 	
 
