@@ -291,6 +291,37 @@ $(document).ready(function() {
 	}
 
 	/**
+	 * Determines occurances of all pieces on the board.
+	 * @param {string} board The board to iterate over
+	 * @return {object} count The number of occurances of all pieces
+	*/
+	function getOccurances(board) {
+		var occurances = {
+			'enemyLion' 	 	: 0,
+			'playerLion'	 	: 0,
+			'enemyElephant'	: 0,
+			'playerElephant': 0,
+			'enemyGiraffe'  : 0,
+			'playerGiraffe' : 0,
+			'enemyChick' 		: 0,
+			'playerChick'		: 0,
+			'enemyHen'			: 0,
+			'playerHen'			: 0
+		}
+
+		for(var row = 0; row < 4; row++) {
+			for(var col = 0; col < 3; col++) {
+				// If position is not empty
+				if(board[row][col] != -1) {
+					occurances[board[row][col]] += 1;
+				}
+			}
+		}
+
+		return occurances;
+	}
+
+	/**
 	 * Makes a move on the internal board, and updates front-end
 	 * @param {object} move Contains information for move
 	 * @returns {undefined}
