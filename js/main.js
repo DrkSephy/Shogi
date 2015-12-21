@@ -498,7 +498,7 @@ $(document).ready(function() {
     $.each(configurations, function(index) {
       var materialScore     = 0;
       var mobilityScore     = 0;
-      var threatenedPieces  = [];
+      var inCheck           = 0;
       // Indexed board configuration
       var configuration = configurations[index];
       // Get frequency of each piece
@@ -515,32 +515,12 @@ $(document).ready(function() {
       var validEnemyMoves = getValidMoves(configuration, 'enemy');
       // Compute all valid moves for the player in this board configuration
       var validPlayerMoves = getValidMoves(configuration, 'player');
-      
-      // Log board before checking player moves
-      // printBoard(configuration);
-
+      // Check if the enemy put themselves in check. If so, player will win next turn
       var threatenedPieces = getThreatenedPieces(configuration, validPlayerMoves);
-      console.log(threatenedPieces);
-      // console.log(mew);
-      // // Find all pieces player can capture on their turn under this board
-      // $.each(validPlayerMoves, function(index) {
-      //   var threatenedPieces = [];
-      //   var move = validPlayerMoves[index]
-      //   if(move.type === 'movement') {
-      //     var toRowPos = move.to.row;
-      //     var toColPos = move.to.col;
-      //     if(configuration[toRowPos][toColPos] != -1) {
-      //       if((configuration[toRowPos][toColPos]).indexOf('enemy') > -1) {
-      //         threatenedPieces.push(configuration[toRowPos][toColPos]);
-      //       }  
-      //     }
-      //     console.log(threatenedPieces);
-          
-      //   }
-      // });
-      // console.log('--------finished printing moves player can do on this board--------');
-
-      // console.log(threaten);
+      if($.inArray('enemyLion', threatenedPieces) > -1) {
+        console.log('Enemy put themselves in suicide situation');
+        inCheck = Number.NEGATIVE_INFINITY;
+      }
       
       // Mobility bonus should be implemented based on piece, to prevent AI from repeatedly
       // moving the lion which provides more possible moves
@@ -551,12 +531,18 @@ $(document).ready(function() {
       mobilityScore = mobilityWeight * (validEnemyMoves.length - validPlayerMoves.length);
       // mobilityScore = pieceMobilityWeight[piece] * (validEnemyMoves.length - validPlayerMoves.length);
       
-      var totalScore = materialScore + mobilityScore;
+      // Total score is worth of pieces + mobility score + inCheck
+      var totalScore = materialScore + mobilityScore + inCheck;
+
+      // Log the board being checked
+      console.log('The board being analyzed is.....');
+      printBoard(configuration);
+      console.log('Which got a score of ' + totalScore);
       scores.push(totalScore);
     });
     
     var maximumValue = Math.max.apply(Math, scores);
-    console.log(maximumValue);
+    console.log('The move with maximal value is: ' + maximumValue);
     // Get index of move that resulted in maximum evaluation
     var move = moves[scores.indexOf(maximumValue)];
     // Log the best move that maximizes the board evaluation function
