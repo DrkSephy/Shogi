@@ -288,7 +288,27 @@ $(document).ready(function() {
         }
       }
     }
+    
     return position; 
+  }
+
+  /**
+   * Determines is a piece is on the board.
+   * @param {object} board The configuration to test.
+   * @param {string} piece The piece to search for.
+   * @returns {boolean} found Whether the piece was found.
+  */
+  function isPieceOnBoard(board, piece) {
+    var found = false;
+    for(var row = 0; row < 4; row++) {
+      for(var col = 0; col < 3; col++) {
+        if(board[row][col] === piece) {
+          found = true;
+        }
+      }
+    }
+
+    return found;
   }
 
   /**
@@ -517,8 +537,10 @@ $(document).ready(function() {
       var validPlayerMoves = getValidMoves(configuration, 'player');
       // Check if the enemy put themselves in check. If so, player will win next turn
       var threatenedPieces = getThreatenedPieces(configuration, validPlayerMoves);
-      if($.inArray('enemyLion', threatenedPieces) > -1) {
-        console.log('Enemy put themselves in suicide situation');
+      // We also need to check if we would win by making the move, too
+      // Check if making this move captures the player lion
+      var isPlayerLionAlive = isPieceOnBoard(configuration, 'playerLion');
+      if($.inArray('enemyLion', threatenedPieces) > -1 && isPlayerLionAlive) {
         inCheck = Number.NEGATIVE_INFINITY;
       }
       
@@ -820,17 +842,17 @@ $(document).ready(function() {
    * Determines if the game is over.
    * @returns {boolean} Is the game over?
   */
-  function isGameOver() {
+  function isGameOver(board) {
     // Check if either lion has reached opposite end
     // Check if player lion reached opposite end
     for(var col = 0; col < 3; col++) {
-      if(_board[0][col] === 'playerLion') {
+      if(board[0][col] === 'playerLion') {
         gameOver = true;
         debugPanel('\n');
         debugPanel('  Player has defeated the enemy!');
         return;
       } 
-      if (_board[3][col] === 'enemyLion') {
+      if (board[3][col] === 'enemyLion') {
         gameOver = true;
         debugPanel('\n');
         debugPanel('  Enemy has defeated the player :/');
@@ -845,13 +867,13 @@ $(document).ready(function() {
       for(var col = 0; col < 3; col++) {
         // If the current entry is not the player lion
         // And we haven't seen it yet
-        if(_board[row][col] !== 'playerLion' && !seenPlayerLion) {
+        if(board[row][col] !== 'playerLion' && !seenPlayerLion) {
           playerLionCaptured = true;
         } else {
           playerLionCaptured = false;
           seenPlayerLion = true;
         }
-        if(_board[row][col] !== 'enemyLion' && !seenEnemyLion) {
+        if(board[row][col] !== 'enemyLion' && !seenEnemyLion) {
           enemyLionCaptured = true;
         } else {
           enemyLionCaptured = false;
@@ -1404,7 +1426,7 @@ $(document).ready(function() {
           // Reset grid styles
           clearCells();
           // Check if the game is over 
-          isGameOver();
+          isGameOver(_board);
           if(!gameOver) {
             // Check if a chick should be promoted
             checkChicks();
@@ -1481,7 +1503,7 @@ $(document).ready(function() {
           // Reset grid styles
           clearCells();
           // Check if the game is over 
-          isGameOver();
+          isGameOver(_board);
           if(!gameOver) {
             // Check if a chick should be promoted
             checkChicks();
