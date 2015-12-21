@@ -230,6 +230,7 @@ $(document).ready(function() {
     for(var i = 0; i < 4; i++) {
       console.log(board[i]);
     }
+    console.log('--------------Finished printing board----------------');
     return;
   }
 
@@ -320,6 +321,31 @@ $(document).ready(function() {
 
     return occurances;
   }
+
+  /**
+   * Determines which pieces on the board are threatened.
+   * @param {object} moves All possible moves for this turn.
+   * @param {object} board The configuration to test.
+   * @returns {list} threatenedPieces A list containing all threatened pieces.
+  */
+  function getThreatenedPieces(board, moves) {
+    var threatenedPieces = [];
+    $.each(moves, function(index) {
+      var move = moves[index];
+      if(move.type === 'movement') {
+        var toRowPos = move.to.row;
+        var toColPos = move.to.col;
+        if(board[toRowPos][toColPos] != -1) {
+          if((board[toRowPos][toColPos]).indexOf('enemy') > -1) {
+            threatenedPieces.push(board[toRowPos][toColPos]);
+          }  
+        }
+      }
+    });
+
+    return threatenedPieces;
+  }
+  
 
   /**
    * Makes a move on the internal board, and updates front-end
@@ -470,8 +496,9 @@ $(document).ready(function() {
     // Store all scores of each board
     var scores = []; 
     $.each(configurations, function(index) {
-      var materialScore   = 0;
-      var mobilityScore   = 0;
+      var materialScore     = 0;
+      var mobilityScore     = 0;
+      var threatenedPieces  = [];
       // Indexed board configuration
       var configuration = configurations[index];
       // Get frequency of each piece
@@ -488,6 +515,32 @@ $(document).ready(function() {
       var validEnemyMoves = getValidMoves(configuration, 'enemy');
       // Compute all valid moves for the player in this board configuration
       var validPlayerMoves = getValidMoves(configuration, 'player');
+      
+      // Log board before checking player moves
+      // printBoard(configuration);
+
+      var threatenedPieces = getThreatenedPieces(configuration, validPlayerMoves);
+      console.log(threatenedPieces);
+      // console.log(mew);
+      // // Find all pieces player can capture on their turn under this board
+      // $.each(validPlayerMoves, function(index) {
+      //   var threatenedPieces = [];
+      //   var move = validPlayerMoves[index]
+      //   if(move.type === 'movement') {
+      //     var toRowPos = move.to.row;
+      //     var toColPos = move.to.col;
+      //     if(configuration[toRowPos][toColPos] != -1) {
+      //       if((configuration[toRowPos][toColPos]).indexOf('enemy') > -1) {
+      //         threatenedPieces.push(configuration[toRowPos][toColPos]);
+      //       }  
+      //     }
+      //     console.log(threatenedPieces);
+          
+      //   }
+      // });
+      // console.log('--------finished printing moves player can do on this board--------');
+
+      // console.log(threaten);
       
       // Mobility bonus should be implemented based on piece, to prevent AI from repeatedly
       // moving the lion which provides more possible moves
