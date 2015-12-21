@@ -272,6 +272,24 @@ $(document).ready(function() {
 		return;
 	}
 
+	/**
+	 * Determines location of a piece.
+	 * @param {string} piece The name of the piece to locate. 
+	 * @return {object} position The Row/Col position of piece.
+	*/
+	function getPosition(piece) {
+		var position = {'row': 0, 'col': 0};
+		for(var row = 0; row < 4; row++) {
+			for(var col = 0; col < 3; col++) {
+				if(_board[row][col] === piece) {
+					position.row = row;
+					position.col = col;
+				}
+			}
+		}
+		return position; 
+	}
+
 	/**************************
 	*  	    GAME METHODS      *
 	**************************/	
@@ -334,6 +352,8 @@ $(document).ready(function() {
 
 		return boards;
 	}
+
+	
 
 	/**
 	 * AI player will make a random move.
