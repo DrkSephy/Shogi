@@ -451,7 +451,22 @@ $(document).ready(function() {
     var giraffeWeight   = 5;
     var chickWeight     = 1;
     var henWeight       = 7;
+    // Static weight
     var mobilityWeight  = 0.1;
+    // Piece-wise mobility weight
+    var pieceMobilityWeight = {
+      'enemyLion'     : 0.5,
+      'playerLion'    : 0.5,
+      'enemyElephant' : 0.3,
+      'playerElephant': 0.3,
+      'enemyGiraffe'  : 0.2,
+      'playerGiraffe' : 0.2,
+      'enemyChick'    : 0.4,
+      'playerChick'   : 0.4,
+      'enemyHen'      : 0.1,
+      'playerHen'     : 0.1
+    }
+
     // Store all scores of each board
     var scores = []; 
     $.each(configurations, function(index) {
@@ -473,7 +488,16 @@ $(document).ready(function() {
       var validEnemyMoves = getValidMoves(configuration, 'enemy');
       // Compute all valid moves for the player in this board configuration
       var validPlayerMoves = getValidMoves(configuration, 'player');
+      
+      // Mobility bonus should be implemented based on piece, to prevent AI from repeatedly
+      // moving the lion which provides more possible moves
+
+      // Store the piece that is being moved 
+      var piece = moves[index].piece;
+      
       mobilityScore = mobilityWeight * (validEnemyMoves.length - validPlayerMoves.length);
+      // mobilityScore = pieceMobilityWeight[piece] * (validEnemyMoves.length - validPlayerMoves.length);
+      
       var totalScore = materialScore + mobilityScore;
       scores.push(totalScore);
     });
