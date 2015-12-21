@@ -226,9 +226,9 @@ $(document).ready(function() {
 	 * Prints state of the board.
 	 * @returns {undefined}
 	*/
-	function printBoard() {
+	function printBoard(board) {
 		for(var i = 0; i < 4; i++) {
-			console.log(_board[i]);
+			console.log(board[i]);
 		}
 		return;
 	}
@@ -272,6 +272,56 @@ $(document).ready(function() {
 		return;
 	}
 
+	/**
+	 * Determines location of a piece.
+	 * @param {string} piece The name of the piece to locate. 
+	 * @return {object} position The Row/Col position of piece.
+	*/
+	function getPosition(piece) {
+		var position = {'row': 0, 'col': 0};
+		for(var row = 0; row < 4; row++) {
+			for(var col = 0; col < 3; col++) {
+				if(_board[row][col] === piece) {
+					position.row = row;
+					position.col = col;
+				}
+			}
+		}
+		return position; 
+	}
+
+	/**
+	 * Makes a move on the internal board, and updates front-end
+	 * @param {object} move Contains information for move
+	 * @returns {undefined}
+	*/
+	function _makeMove(move) {
+		var fromRowPos = move.from.row;
+		var fromColPos = move.from.col;
+		var toRowPos   = move.to.row;
+		var toColPos   = move.to.col;
+
+		if(move.type === 'movement') {
+			// Select the piece
+			$('.row > .square[data-x=' + fromRowPos + '][data-y=' + fromColPos + ']').click();
+			
+			setTimeout(function(){
+				// Move the piece!
+				$('.row > .square[data-x=' + toRowPos + '][data-y=' + toColPos + ']').click();
+			},1000);
+		} 
+
+		if(move.type === 'placement') {
+			// Select the piece
+			$('.enemyRow > .square[data-x=' + move['from']['row'] + ']').click();
+
+			setTimeout(function(){
+				// Move the piece!
+				$('.row > .square[data-x=' + move['to']['row'] + '][data-y=' + move['to']['col'] + ']').click();
+			},1000);
+		}
+	}
+
 	/**************************
 	*  	    GAME METHODS      *
 	**************************/	
@@ -287,7 +337,12 @@ $(document).ready(function() {
 			enemyTurn = true;
 			currentTurn = 'enemy';
 			// Call a function to make the enemy move
-			makeRandomMove();
+			// makeRandomMove();
+			// Get all possible moves
+			var moves = getValidMoves(_board, currentTurn);
+			var boards = makeAllPossibleMoves(moves);
+			// Get manhattan distance of all moves
+			manhattanDistance(boards, moves);
 		} else if (enemyTurn) {
 			enemyTurn = false;
 			enemyMoved = true;
@@ -298,6 +353,81 @@ $(document).ready(function() {
 		return;
 	}
 
+	/**
+	 * Returns all possible board configurations after each move.  
+	 * @param {list} moves All moves to be tried
+	 * @returns {list} All possible board configurations.
+	*/
+	function makeAllPossibleMoves(moves) {
+		var boards = [];
+		
+		// Make enough copies of the board for all possible moves
+		for(var copy = 0; copy < moves.length; copy++) {
+			// Deep copy our internal board
+			var copiedBoard = $.extend(true, {}, _board);
+			boards.push(copiedBoard);
+		}
+
+		$.each(moves, function(index) {
+			var board = boards[index];
+			var fromRowPos = moves[index]['from']['row'];
+			var fromColPos = moves[index]['from']['col'];
+			var toRowPos   = moves[index]['to']['row'];
+			var toColPos   = moves[index]['to']['col'];
+			var pieceName  = moves[index]['piece'];
+			
+			// Clear contents of cell 
+			board[fromRowPos][fromColPos] = -1;
+			// Move piece
+			board[toRowPos][toColPos] = pieceName;
+		});
+
+		return boards;
+	}
+
+	/**
+   * Computes Manhattan Distance of all pieces to lion.
+   * @param {list} Array of board configurations to test.
+   * @returns Move with minimal Manhattan Distance
+  */
+	function manhattanDistance(configurations, moves) {
+		// Get position of player lion
+		var position = getPosition('playerLion');
+		var distances = [];
+		
+		// Loop over all configurations
+		$.each(configurations, function(index) {
+			var configuration = configurations[index];
+			var manhattanDistanceTotal = 0;
+			for(var row = 0; row < 4; row++) {
+				for(var col = 0; col < 3; col++) {
+					if(configuration[row][col] != -1 && (configuration[row][col]).indexOf('enemy') > -1) {
+						var distance = Math.abs(position.row - row) + Math.abs(position.col - col);
+						manhattanDistanceTotal += distance;
+					}
+				}
+			}
+			distances.push(manhattanDistanceTotal);
+		});
+		
+		var minimumDistance = Math.min.apply(Math, distances)
+		// Use indexOf to find index of the move that minimizes the difference
+		// In the case of multiple moves with minimum value, this will choose the
+		// first one in the array
+		var move = moves[distances.indexOf(minimumDistance)];
+		// Log the best move for this turn
+		console.log('The move that minimizes manhattan distance is: ')
+		console.log(move);
+		console.log('Whose distance is: ' + minimumDistance);
+		// Make the move
+		_makeMove(move);
+	}
+	
+
+	/**
+	 * AI player will make a random move.
+	 *
+	*/
 	function makeRandomMove() {
 		var moves = getValidMoves(_board, currentTurn);
 		var choice = getRandomInt(0, moves.length - 1);
