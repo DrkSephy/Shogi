@@ -226,9 +226,9 @@ $(document).ready(function() {
 	 * Prints state of the board.
 	 * @returns {undefined}
 	*/
-	function printBoard() {
+	function printBoard(board) {
 		for(var i = 0; i < 4; i++) {
-			console.log(_board[i]);
+			console.log(board[i]);
 		}
 		return;
 	}
@@ -287,7 +287,8 @@ $(document).ready(function() {
 			enemyTurn = true;
 			currentTurn = 'enemy';
 			// Call a function to make the enemy move
-			makeRandomMove();
+			// makeRandomMove();
+			makeAllPossibleMoves();
 		} else if (enemyTurn) {
 			enemyTurn = false;
 			enemyMoved = true;
@@ -298,6 +299,46 @@ $(document).ready(function() {
 		return;
 	}
 
+	/**
+	 * Returns all possible board configurations after each move.  
+	 * @returns {list} All possible board configurations.
+	*/
+	function makeAllPossibleMoves() {
+		var boards = [];
+		var moves = getValidMoves(_board, currentTurn);
+		
+		// Make enough copies of the board for all possible moves
+		for(var copy = 0; copy < moves.length; copy++) {
+			// Deep copy our internal board
+			var copiedBoard = $.extend(true, {}, _board);
+			boards.push(copiedBoard);
+		}
+
+		$.each(moves, function(index) {
+			var board = boards[index];
+			var fromRowPos = moves[index]['from']['row'];
+			var fromColPos = moves[index]['from']['col'];
+			var toRowPos   = moves[index]['to']['row'];
+			var toColPos   = moves[index]['to']['col'];
+			var pieceName  = moves[index]['piece'];
+			
+			// Clear contents of cell 
+			board[fromRowPos][fromColPos] = -1;
+			// Move piece
+			board[toRowPos][toColPos] = pieceName;
+		});
+
+		$.each(boards, function(index) {
+			printBoard(boards[index]);
+		});
+
+		return boards;
+	}
+
+	/**
+	 * AI player will make a random move.
+	 *
+	*/
 	function makeRandomMove() {
 		var moves = getValidMoves(_board, currentTurn);
 		var choice = getRandomInt(0, moves.length - 1);
