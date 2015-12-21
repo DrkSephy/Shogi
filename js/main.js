@@ -386,8 +386,33 @@ $(document).ready(function() {
 	}
 
 	/**
+	 * Computes the evaluation of the board based on the heuristic:
+	 * 				f(board) = materialScore + mobilityScore
+	 * 
+	 * Where materialScore = 
+	 * 		lionWeight 		 * (enemyLion - playerLion) + 
+	 * 		elephantWeight * (enemyElephant - playerElephant) + 
+	 * 		giraffeWeight  * (enemyGiraffe - playerGiraffe) +
+	 *    chickWeight    * (enemyChick - playerChick) + 
+	 *    henWeight      * (enemyHen - playerHen) 
+	 * 
+	 * where the weights can be set appropriately. 
+	 *
+	 * mobilityScore = mobilityWeight * (# of enemy moves - # of player moves)
+	 *
+	 * where it is generally advantageous to have more moves available. 
+	 * 
+	 * @param {list} configurations Array of board configurations to test.
+	 * @param {object} moves Contains all possible moves
+	 * @returns {object} The best possible move for this turn.
+	*/
+	function boardEvaluation(configurations, moves) {
+
+	}
+
+	/**
    * Computes Manhattan Distance of all pieces to lion.
-   * @param {list} Array of board configurations to test.
+   * @param {list} configurations Array of board configurations to test.
    * @returns Move with minimal Manhattan Distance
   */
 	function manhattanDistance(configurations, moves) {
@@ -423,7 +448,6 @@ $(document).ready(function() {
 		_makeMove(move);
 	}
 	
-
 	/**
 	 * AI player will make a random move.
 	 *
