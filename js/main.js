@@ -367,13 +367,21 @@ $(document).ready(function() {
       playerMoved = true;
       enemyTurn = true;
       currentTurn = 'enemy';
-      // Call a function to make the enemy move
+      // AI will make a random move
       // makeRandomMove();
-      // Get all possible moves
+
+      // Get all possible moves for enemy
       var moves = getValidMoves(_board, currentTurn);
+      // Get all possible board combinations
       var boards = makeAllPossibleMoves(moves);
-      // Get manhattan distance of all moves
-      manhattanDistance(boards, moves);
+
+      // AI will make a move based on manhattan distance 
+      // To playerLion
+      // manhattanDistance(boards, moves);
+
+      // AI will make move based on custom heuristic
+      boardEvaluation(boards, moves);
+
     } else if (enemyTurn) {
       enemyTurn = false;
       enemyMoved = true;
@@ -434,17 +442,57 @@ $(document).ready(function() {
    * where it is generally advantageous to have more moves available. 
    * 
    * @param {list} configurations Array of board configurations to test.
-   * @param {object} moves Contains all possible moves
+   * @param {object} moves Contains all possible moves.
    * @returns {object} The best possible move for this turn.
   */
   function boardEvaluation(configurations, moves) {
+    var lionWeight      = 10;
+    var elephantWeight  = 3;
+    var giraffeWeight   = 5;
+    var chickWeight     = 1;
+    var henWeight       = 7;
+    var mobilityWeight  = 0.1;
+    // Store all scores of each board
+    var scores = []; 
+    $.each(configurations, function(index) {
+      var materialScore   = 0;
+      var mobilityScore   = 0;
+      // Indexed board configuration
+      var configuration = configurations[index];
+      // Get frequency of each piece
+      var occurances = getOccurances(configuration);
+      // Compute material score
+      materialScore = 
+        lionWeight * (occurances['enemyLion'] - occurances['playerLion']) + 
+        elephantWeight * (occurances['enemyElephant'] - occurances['playerElephant']) + 
+        giraffeWeight * (occurances['enemyGiraffe'] - occurances['playerGiraffe']) + 
+        chickWeight * (occurances['enemyChick'] - occurances['playerChick']) + 
+        henWeight * (occurances['enemyHen'] - occurances['playerHen']);
 
+      // Compute all valid moves for the enemy in this board configuration
+      var validEnemyMoves = getValidMoves(configuration, 'enemy');
+      // Compute all valid moves for the player in this board configuration
+      var validPlayerMoves = getValidMoves(configuration, 'player');
+      mobilityScore = mobilityWeight * (validEnemyMoves.length - validPlayerMoves.length);
+      var totalScore = materialScore + mobilityScore;
+      scores.push(totalScore);
+    });
+    
+    var maximumValue = Math.max.apply(Math, scores);
+    console.log(maximumValue);
+    // Get index of move that resulted in maximum evaluation
+    var move = moves[scores.indexOf(maximumValue)];
+    // Log the best move that maximizes the board evaluation function
+    console.log(move);
+    // Make the best move!
+    _makeMove(move);
   }
 
   /**
    * Computes Manhattan Distance of all pieces to lion.
    * @param {list} configurations Array of board configurations to test.
-   * @returns Move with minimal Manhattan Distance
+   * @param {object} moves Contains all possible moves.
+   * @returns Move with minimal Manhattan Distance.
   */
   function manhattanDistance(configurations, moves) {
     // Get position of player lion
