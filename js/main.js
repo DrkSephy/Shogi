@@ -249,6 +249,7 @@ $(document).ready(function() {
   */
   function printPlayerBench() {
     console.log('Player bench: ' + _playerBench);
+    console.log('----------------Finished printing benches--------------------');
     return;
   }
 
@@ -288,7 +289,7 @@ $(document).ready(function() {
         }
       }
     }
-    
+
     return position; 
   }
 
@@ -537,6 +538,7 @@ $(document).ready(function() {
       var validPlayerMoves = getValidMoves(configuration, 'player');
       // Check if the enemy put themselves in check. If so, player will win next turn
       var threatenedPieces = getThreatenedPieces(configuration, validPlayerMoves);
+
       // We also need to check if we would win by making the move, too
       // Check if making this move captures the player lion
       var isPlayerLionAlive = isPieceOnBoard(configuration, 'playerLion');
@@ -548,8 +550,9 @@ $(document).ready(function() {
       // moving the lion which provides more possible moves
 
       // Store the piece that is being moved 
-      var piece = moves[index].piece;
+      // var piece = moves[index].piece;
       
+      // NOTE: It seems that moves which don't use piece-wise weights 
       mobilityScore = mobilityWeight * (validEnemyMoves.length - validPlayerMoves.length);
       // mobilityScore = pieceMobilityWeight[piece] * (validEnemyMoves.length - validPlayerMoves.length);
       
@@ -557,18 +560,18 @@ $(document).ready(function() {
       var totalScore = materialScore + mobilityScore + inCheck;
 
       // Log the board being checked
-      console.log('The board being analyzed is.....');
-      printBoard(configuration);
-      console.log('Which got a score of ' + totalScore);
+      // console.log('The board being analyzed is.....');
+      // printBoard(configuration);
+      // console.log('Which got a score of ' + totalScore);
       scores.push(totalScore);
     });
     
     var maximumValue = Math.max.apply(Math, scores);
-    console.log('The move with maximal value is: ' + maximumValue);
+    // console.log('The move with maximal value is: ' + maximumValue);
     // Get index of move that resulted in maximum evaluation
     var move = moves[scores.indexOf(maximumValue)];
     // Log the best move that maximizes the board evaluation function
-    console.log(move);
+    // console.log(move);
     // Make the best move!
     _makeMove(move);
   }
@@ -1074,7 +1077,6 @@ $(document).ready(function() {
     else if(piece == 'playerGiraffe') {
       var cell = $('#playerGiraffe');
       if($(cell).hasClass('enemyGiraffe')) {
-        console.log("Duplicate Giraffe, place in extra slot");
         cell = $('#playerGiraffeTwo');
         cell.addClass('enemyGiraffe');
         _enemyBench[4] = 'enemyGiraffe';
@@ -1206,7 +1208,7 @@ $(document).ready(function() {
   }
 
   /*********************
-  *      AI METHODS    *
+  *     AI METHODS     *
   *********************/
 
   /**
@@ -1221,10 +1223,6 @@ $(document).ready(function() {
     // Function for determining best positions 
     // Computer player will move first (max player)
     return; 
-  }
-
-  function evaluation() {
-    // Function for determining which player has won, and assign the score
   }
 
 
@@ -1262,14 +1260,13 @@ $(document).ready(function() {
       var x = $(this).data('x');
       selectedPlayerBenchPiecePosition.col = x;
       debugPanel("\n");
-      debugPanel("  Player is trying to place the bench piece: " + _playerBench[selectedPlayerBenchPiecePosition.col]);
+      debugPanel("  Player is trying to place the bench piece: " + _playerBench[selectedPlayerBenchPiecePosition.col] + ' in col: ' + x);
       if(isBenchOccupied(_playerBench, x)) {
         selectedPlayerBenchPiece = true;
       }
     }
   });
 
-  // TODO: Refactor all of this code
   $('.row > .square').click(function() {
     $(this).css('border-color', 'red');
     $(this).css('border-style', 'solid');
@@ -1278,28 +1275,41 @@ $(document).ready(function() {
       var x = $(this).data('x');
       var y = $(this).data('y');
       if(!isOccupied(x, y)) {
+
         // Cell is not occupied, we can place the piece!
         // Get square to place tile down
         var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
+
         // Add CSS class to selected tile
         $a.addClass(_enemyBench[selectedEnemyBenchPiecePosition.col]);
+
         // We are placing a chick from our bench, so it cannot promote unless moved
         if(selectedEnemyBenchPiecePosition.col == 'enemyChick') {
           movedEnemyChick = false;
         }
+
         debugPanel("\n");
         debugPanel("  Enemy has placed the bench piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col] + " successfully!");
+
         // Update internal game board state with name of placed piece
         _board[x][y] = _enemyBench[selectedEnemyBenchPiecePosition.col];
+
+        // Remove the CSS class for the corresponding cell
         removeFromBench(selectedEnemyBenchPiecePosition.col, _enemyBench[selectedEnemyBenchPiecePosition.col], 'enemy');
+
         // Clear bench position
         _enemyBench[selectedEnemyBenchPiecePosition.col] = -1;
+
+        // Reset variables storing bench piece
         selectedEnemyBenchPiecePosition.col = 0;
         selectedEnemyBenchPiece = false;
+
         // After placing a piece, we end this player's turn
         toggleTurn();
+
         // Reset grid styles
         clearCells();
+
         // Increment the turn
         incrementTurn();
       } 
@@ -1321,26 +1331,38 @@ $(document).ready(function() {
       $(this).css('border-color', 'red');
       $(this).css('border-style', 'solid');
       if(!isOccupied(x, y)) {
+
         // Cell is not occupied, we can place the piece!
         // Get square to place tile down
         var $a = ($('.square[data-x=' + x + '][data-y=' + y + ']')).children();
+
         // Add CSS class to selected tile
         $a.addClass(_playerBench[selectedPlayerBenchPiecePosition.col]);
+
         // We are placing a chick from our bench, so it cannot promote unless moved
         if(_playerBench[selectedPlayerBenchPiecePosition.col] == 'playerChick') {
           movedPlayerChick = false;
         } 
+
         debugPanel("\n");
         debugPanel("  Player has placed the bench piece: " + _playerBench[selectedPlayerBenchPiecePosition.col] + " successfully!");
+
         // Update internal game board state with name of placed piece
         _board[x][y] = _playerBench[selectedPlayerBenchPiecePosition.col];
+
+        // Remove CSS class for position
         removeFromBench(selectedPlayerBenchPiecePosition.col, _playerBench[selectedPlayerBenchPiecePosition.col], 'player');
+
         // Clear bench position
-        _playerBench[selectedEnemyBenchPiecePosition.col] = -1;
+        _playerBench[selectedPlayerBenchPiecePosition.col] = -1;
+
+        // Clear holder variables
         selectedPlayerBenchPiecePosition.col = 0;
         selectedPlayerBenchPiece = false;
+
         // After placing a piece, we end this player's turn
         toggleTurn();
+
         // Reset grid styles
         clearCells();
         // Increment the turn
@@ -1453,6 +1475,7 @@ $(document).ready(function() {
             }
             // Toggle the turn
             toggleTurn();
+
             // Increment turn
             incrementTurn();
           }
@@ -1531,6 +1554,7 @@ $(document).ready(function() {
             }
             // Toggle the turn
             toggleTurn();
+
             // Increment turn
             incrementTurn();
           }
