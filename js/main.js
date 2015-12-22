@@ -1219,9 +1219,22 @@ $(document).ready(function() {
    *  - How many pieces are being threatened after a move
    *    - Attacking enemy lion would normally be good
   */
-  function minimax(board, player) {
-    // Function for determining best positions 
-    // Computer player will move first (max player)
+  function minimax(board) {
+    var scores = [];
+    var moves  = [];
+
+    // Get all available moves for current player
+    var possibleMoves = getValidMoves(board, currentTurn);
+
+    // Get all configuration states for each move
+    var boards = makeAllPossibleMoves(possibleMoves);
+
+    // For each board, call minimax on it
+    $.each(boards, function(board) {
+      scores.push(minimax(board));
+      moves.push()
+    });
+
     return; 
   }
 
