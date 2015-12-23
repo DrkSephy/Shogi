@@ -75,12 +75,12 @@ $(document).ready(function() {
   var enemyChickPromotion = false;
   var enemyChickPosition = { row: 0, col: 0 };
 
-  // Player moved a chick, not placed
-  //  - legitimate candidate for promotion
+  // If Player moved a chick (not placed)
+  // it is a legitimate candidate for promotion to Hen
   var movedPlayerChick = false;
 
-  // Enemy moved a chick, not placed
-  //  - legitimate candidate for promotion
+  // If Enemy moved a chick (not placed)
+  // it is legitimate candidate for promotion to Hen
   var movedEnemyChick = false;
 
   /**************************
@@ -236,7 +236,7 @@ $(document).ready(function() {
 
   /**
    * Prints state of the enemy bench.
-   * @returns {undefined}
+   * @returns {undefined}.
   */
   function printEnemyBench() {
     console.log('Enemy bench: ' + _enemyBench);
@@ -257,7 +257,7 @@ $(document).ready(function() {
    * Returns cell contents.
    * @param {number} row The row to search.
    * @param {number} col The column to search.
-   * @returns {number, string} The value at [row][column]
+   * @returns {number, string} The value at [row][column].
   */
   function getCellContents(row, col) {
     return _board[row][col];
@@ -314,8 +314,8 @@ $(document).ready(function() {
 
   /**
    * Determines occurances of all pieces on the board.
-   * @param {string} board The board to iterate over
-   * @return {object} count The number of occurances of all pieces
+   * @param {string} board The board to iterate over.
+   * @return {object} count The number of occurances of all pieces.
   */
   function getOccurances(board) {
     var occurances = {
@@ -369,8 +369,8 @@ $(document).ready(function() {
   
 
   /**
-   * Makes a move on the internal board, and updates front-end
-   * @param {object} move Contains information for move
+   * Makes a move on the internal board, and updates front-end.
+   * @param {object} move Contains information for move.
    * @returns {undefined}
   */
   function _makeMove(move) {
@@ -414,11 +414,13 @@ $(document).ready(function() {
       playerMoved = true;
       enemyTurn = true;
       currentTurn = 'enemy';
+
       // AI will make a random move
       // makeRandomMove();
 
       // Get all possible moves for enemy
       var moves = getValidMoves(_board, currentTurn);
+
       // Get all possible board combinations
       var boards = makeAllPossibleMoves(moves);
 
@@ -441,7 +443,7 @@ $(document).ready(function() {
 
   /**
    * Returns all possible board configurations after each move.  
-   * @param {list} moves All moves to be tried
+   * @param {list} moves All moves to be tried.
    * @returns {list} All possible board configurations.
   */
   function makeAllPossibleMoves(moves) {
@@ -464,6 +466,7 @@ $(document).ready(function() {
       
       // Clear contents of cell 
       board[fromRowPos][fromColPos] = -1;
+
       // Move piece
       board[toRowPos][toColPos] = pieceName;
     });
@@ -473,6 +476,7 @@ $(document).ready(function() {
 
   /**
    * Computes the evaluation of the board based on the heuristic:
+   *
    *        f(board) = materialScore + mobilityScore
    * 
    * Where materialScore = 
@@ -498,8 +502,10 @@ $(document).ready(function() {
     var giraffeWeight   = 5;
     var chickWeight     = 1;
     var henWeight       = 7;
+
     // Static weight
     var mobilityWeight  = 0.1;
+
     // Piece-wise mobility weight
     var pieceMobilityWeight = {
       'enemyLion'     : 0.5,
@@ -520,10 +526,13 @@ $(document).ready(function() {
       var materialScore     = 0;
       var mobilityScore     = 0;
       var inCheck           = 0;
+
       // Indexed board configuration
       var configuration = configurations[index];
+
       // Get frequency of each piece
       var occurances = getOccurances(configuration);
+
       // Compute material score
       materialScore = 
         lionWeight * (occurances['enemyLion'] - occurances['playerLion']) + 
@@ -534,8 +543,10 @@ $(document).ready(function() {
 
       // Compute all valid moves for the enemy in this board configuration
       var validEnemyMoves = getValidMoves(configuration, 'enemy');
+
       // Compute all valid moves for the player in this board configuration
       var validPlayerMoves = getValidMoves(configuration, 'player');
+
       // Check if the enemy put themselves in check. If so, player will win next turn
       var threatenedPieces = getThreatenedPieces(configuration, validPlayerMoves);
 
@@ -552,26 +563,22 @@ $(document).ready(function() {
       // Store the piece that is being moved 
       // var piece = moves[index].piece;
       
-      // NOTE: It seems that moves which don't use piece-wise weights 
+      // NOTE: It seems that moves which don't use piece-wise weights are tougher
       mobilityScore = mobilityWeight * (validEnemyMoves.length - validPlayerMoves.length);
       // mobilityScore = pieceMobilityWeight[piece] * (validEnemyMoves.length - validPlayerMoves.length);
       
       // Total score is worth of pieces + mobility score + inCheck
       var totalScore = materialScore + mobilityScore + inCheck;
 
-      // Log the board being checked
-      // console.log('The board being analyzed is.....');
-      // printBoard(configuration);
-      // console.log('Which got a score of ' + totalScore);
       scores.push(totalScore);
     });
     
+    // Get maximum value from scores
     var maximumValue = Math.max.apply(Math, scores);
-    // console.log('The move with maximal value is: ' + maximumValue);
+    
     // Get index of move that resulted in maximum evaluation
     var move = moves[scores.indexOf(maximumValue)];
-    // Log the best move that maximizes the board evaluation function
-    // console.log(move);
+
     // Make the best move!
     _makeMove(move);
   }
@@ -607,10 +614,7 @@ $(document).ready(function() {
     // In the case of multiple moves with minimum value, this will choose the
     // first one in the array
     var move = moves[distances.indexOf(minimumDistance)];
-    // Log the best move for this turn
-    console.log('The move that minimizes manhattan distance is: ')
-    console.log(move);
-    console.log('Whose distance is: ' + minimumDistance);
+
     // Make the move
     _makeMove(move);
   }
@@ -645,7 +649,12 @@ $(document).ready(function() {
     }
   }
 
-  // Returns a list of all valid moves for the turn
+  /**
+   * Computes all valid moves for a turn player on a board.
+   * @param {object} board The configuration to find all possible moves in.
+   * @param {string} player The player to find all valid moves for.
+   * @returns {object} validMoves An object containing all valid moves with To/From data.
+  */
   function getValidMoves(board, player) {
     // Computes all valid moves for a turn player
     var validMoves = [];
@@ -1193,7 +1202,7 @@ $(document).ready(function() {
    * Removes a piece from a bench.
    * @param {number} position The column of the piece in the internal bench.
    * @param {string} piece The name of the piece to remove from the internal bench.
-   * @param {string} player The respective bench to remove a piece from
+   * @param {string} player The respective bench to remove a piece from.
    * @return {undefined}
   */ 
   function removeFromBench(position, piece, player) {
@@ -1240,7 +1249,7 @@ $(document).ready(function() {
 
 
   /*********************
-  *    EVENT HANDLERS  *
+  *   EVENT HANDLERS   *
   *********************/
   
   // Detect clicks on enemy bench
