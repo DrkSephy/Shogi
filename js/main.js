@@ -388,17 +388,19 @@ $(document).ready(function() {
       setTimeout(function(){
         // Move the piece!
         $('.row > .square[data-x=' + toRowPos + '][data-y=' + toColPos + ']').click();
-      },1000);
+      },2000);
     } 
 
     if(move.type === 'placement') {
-      // Select the piece
-      $('.enemyRow > .square[data-x=' + move['from']['row'] + ']').click();
+      setTimeout(function(){
+        // Select the piece
+        $('.enemyRow > .square[data-x=' + move['from']['row'] + ']').click();
+      },1000);
 
       setTimeout(function(){
         // Move the piece!
         $('.row > .square[data-x=' + move['to']['row'] + '][data-y=' + move['to']['col'] + ']').click();
-      },1000);
+      },2000);
     }
   }
 
@@ -1294,7 +1296,6 @@ $(document).ready(function() {
   });
 
   $('.row > .square').click(function() {
-    console.log('Clicked a square');
     $(this).css('border-color', 'red');
     $(this).css('border-style', 'solid');
     // We selected an enemy bench piece, so we check and place it
@@ -1408,6 +1409,8 @@ $(document).ready(function() {
     else if(!selectedCell && !gameOver) {
       var x = $(this).data('x');
       var y = $(this).data('y');
+      $(this).css('border-color', 'red');
+      $(this).css('border-style', 'solid');
       if(isOccupied(x, y) && validSelection(x, y)) {
         // We've selected a piece to move
         selectedCell = true;
@@ -1422,8 +1425,11 @@ $(document).ready(function() {
       // Grab the x, y coordinates of the attacked square
       var x = $(this).data('x');
       var y = $(this).data('y');
+      $(this).css('border-color', 'red');
+      $(this).css('border-style', 'solid');
       // If the square is occupied, we attack!
       if(isOccupied(x, y)) {
+        console.log('Attacking');
         var attackedName = _board[x][y];
         var attackerName = _board[selectedPosition.row][selectedPosition.col];
         attackPosition.row = x, attackPosition.col = y;
