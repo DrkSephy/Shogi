@@ -380,8 +380,10 @@ $(document).ready(function() {
     var toColPos   = move.to.col;
 
     if(move.type === 'movement') {
-      // Select the piece
-      $('.row > .square[data-x=' + fromRowPos + '][data-y=' + fromColPos + ']').click();
+      setTimeout(function(){
+        // Select the piece
+        $('.row > .square[data-x=' + fromRowPos + '][data-y=' + fromColPos + ']').click();
+      },1000);
       
       setTimeout(function(){
         // Move the piece!
@@ -1247,6 +1249,8 @@ $(document).ready(function() {
     return; 
   }
 
+  // Let the enemy move first
+  toggleTurn();
 
   /*********************
   *   EVENT HANDLERS   *
@@ -1290,6 +1294,7 @@ $(document).ready(function() {
   });
 
   $('.row > .square').click(function() {
+    console.log('Clicked a square');
     $(this).css('border-color', 'red');
     $(this).css('border-style', 'solid');
     // We selected an enemy bench piece, so we check and place it
