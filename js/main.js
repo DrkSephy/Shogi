@@ -1268,6 +1268,8 @@ $(document).ready(function() {
     if(!selectedEnemyBenchPiece && enemyTurn) {
       // Grab position of bench
       var x = $(this).data('x');
+      $(this).css('border-color', 'red');
+      $(this).css('border-style', 'solid');
       selectedEnemyBenchPiecePosition.col = x;
       debugPanel("\n");
       debugPanel("  Enemy is trying to place the bench piece: " + _enemyBench[selectedEnemyBenchPiecePosition.col]);
