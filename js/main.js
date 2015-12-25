@@ -504,6 +504,78 @@ $(document).ready(function() {
   }
 
   /**
+   * Returns the score of a new game state.
+   * @param {object} configuration The game state to score.
+   * @returns {number} score The score of the current game state.
+  */
+  function evaluateSingleBoard(configuration) {
+    // Piece-wise weights
+    var lionWeight      = 10;
+    var elephantWeight  = 3;
+    var giraffeWeight   = 5;
+    var chickWeight     = 1;
+    var henWeight       = 7;
+
+    // Static weight
+    var mobilityWeight  = 0.1;
+
+    // Piece-wise mobility weight
+    var pieceMobilityWeight = {
+      'enemyLion'     : 0.5,
+      'playerLion'    : 0.5,
+      'enemyElephant' : 0.3,
+      'playerElephant': 0.3,
+      'enemyGiraffe'  : 0.2,
+      'playerGiraffe' : 0.2,
+      'enemyChick'    : 0.4,
+      'playerChick'   : 0.4,
+      'enemyHen'      : 0.1,
+      'playerHen'     : 0.1
+    }
+
+    var score;
+    var materialScore     = 0;
+    var mobilityScore     = 0;
+    var inCheck           = 0;
+
+    // Get frequency of each piece
+    var occurances = getOccurances(configuration);
+
+    // Compute material score
+    materialScore = 
+      lionWeight * (occurances['enemyLion'] - occurances['playerLion']) + 
+      elephantWeight * (occurances['enemyElephant'] - occurances['playerElephant']) + 
+      giraffeWeight * (occurances['enemyGiraffe'] - occurances['playerGiraffe']) + 
+      chickWeight * (occurances['enemyChick'] - occurances['playerChick']) + 
+      henWeight * (occurances['enemyHen'] - occurances['playerHen']);
+
+    // Compute all valid moves for the enemy in this board configuration
+    var validEnemyMoves = getValidMoves(configuration, 'enemy');
+
+    // Compute all valid moves for the player in this board configuration
+    var validPlayerMoves = getValidMoves(configuration, 'player');
+
+    // Check if the enemy put themselves in check. If so, player will win next turn
+    var threatenedPieces = getThreatenedPieces(configuration, validPlayerMoves);
+
+    // We also need to check if we would win by making the move, too
+    // Check if making this move captures the player lion
+    var isPlayerLionAlive = isPieceOnBoard(configuration, 'playerLion');
+
+    if($.inArray('enemyLion', threatenedPieces) > -1 && isPlayerLionAlive) {
+      inCheck = Number.NEGATIVE_INFINITY;
+    }
+
+    mobilityScore = mobilityWeight * (validEnemyMoves.length - validPlayerMoves.length);
+    // mobilityScore = pieceMobilityWeight[piece] * (validEnemyMoves.length - validPlayerMoves.length);
+    
+    // Total score is worth of pieces + mobility score + inCheck
+    score = materialScore + mobilityScore + inCheck;
+
+    return score;
+  }
+
+  /**
    * Computes the evaluation of the board based on the heuristic:
    *
    *        f(board) = materialScore + mobilityScore
