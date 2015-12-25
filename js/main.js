@@ -479,6 +479,31 @@ $(document).ready(function() {
   }
 
   /**
+   * Returns a new board configuration for a single move.
+   * @param {object} move The parameters describing the piece being moved
+   * @returns {object} copiedBoard The new game state after the move was made.
+  */
+  function makeSingleMove(move) {
+    // Copy the board
+    var copiedBoard = $.extend(true, {}, _board);
+    
+    // Store movement parameters
+    var fromRowPos = move['from']['row'];
+    var fromColPos = move['from']['col'];
+    var toRowPos   = move['to']['row'];
+    var toColPos   = move['to']['col'];
+    var pieceName  = move['piece'];
+
+    // Clear contents of cell
+    copiedBoard[fromRowPos][fromColPos] = -1;
+
+    // Move piece 
+    copiedBoard[toRowPos][toColPos] = pieceName;
+
+    return copiedBoard;
+  }
+
+  /**
    * Computes the evaluation of the board based on the heuristic:
    *
    *        f(board) = materialScore + mobilityScore
