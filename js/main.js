@@ -434,14 +434,18 @@ $(document).ready(function() {
 
       // AI will make move based on custom heuristic
       // boardEvaluation(boards, moves);
-      setTimeout(function() {
-        // Get the best move
-        var data = minimax(5, 'enemy', _board);
-        console.log(data);
-        var move = data[1];
-        console.log(move);
-        _makeMove(move);
-      }, 500);
+      // setTimeout(function() {
+      //   // Get the best move
+      //   var data = minimax(5, 'enemy', _board);
+      //   console.log(data);
+      //   var move = data[1];
+      //   console.log(move);
+      //   _makeMove(move);
+      // }, 500);
+      
+      var mew = getControlledSquares(_board, 'enemy');
+      console.log(mew);
+    
 
     } else if (enemyTurn) {
       enemyTurn = false;
@@ -518,7 +522,7 @@ $(document).ready(function() {
   */
   function evaluateSingleBoard(configuration) {
     // Piece-wise weights
-    var lionWeight      = 10;
+    var lionWeight      = 100;
     var elephantWeight  = 3;
     var giraffeWeight   = 5;
     var chickWeight     = 1;
@@ -922,6 +926,7 @@ $(document).ready(function() {
             for(var col = 0; col < 3; col++) {
               // If the spot is empty, we can place the piece there
               if(_board[row][col] == -1) {
+                // Check if any of the enemy pieces are also attacking this square (making it safe for placement)
                 validMoves.push({'type': 'placement', piece: _enemyBench[piece], 'from': {row: piece}, 'to': {row: row, col: col}});
               }
             }
@@ -931,6 +936,49 @@ $(document).ready(function() {
     }
     
     return validMoves;
+  }
+
+
+  /**
+   * Returns controlled squares by a player.
+   * @param {object} board The configuration to test.
+   * @param {string} player The player to find controlled spaces for.
+   * @returns {list} A list of objects containing all row/col values for controlled spaces.
+  */
+  function getControlledSquares(board, player) {
+    var controlledSquares = [];
+    for(var row = 0; row < 4; row++) {
+      for(var col = 0; col < 3; col++) {
+        if(board[row][col] != -1) {
+          // If we found an enemy piece
+          if((board[row][col]).indexOf('enemy') > -1) {
+            var piece = board[row][col];
+            // console.log(piece);
+            // Loop over all movements for this piece
+            for(var length = 0; length < _pieces[piece].length; length++) {
+              var oldRowPosition = row;
+              var oldColPosition = col;
+              // console.log('oldRowPosition: ' + oldRowPosition + ' ,oldColPosition: ' + oldColPosition + ' , for piece: ' + piece);
+              var currentRowPosition = _pieces[piece][length].row;
+              var currentColPosition = _pieces[piece][length].col;
+              // New position for each movement
+              var newRowPosition = oldRowPosition + currentRowPosition;
+              var newColPosition = oldColPosition + currentColPosition;
+              // console.log('currentRowPosition: ' + currentRowPosition + ' , currentColPosition: ' + currentColPosition + ' , for piece: ' + piece);
+              // console.log('newRowPosition: ' + newRowPosition + ' , newColPosition: ' + newColPosition + ' , for piece: ' + piece);
+              // console.log('-----------------------------');
+              // If move is in bounds
+              if(newRowPosition >= 0 && newRowPosition < 4 && newColPosition >= 0 && newColPosition < 3) {
+                var newLocation = {'row': newRowPosition, 'col': newColPosition, 'piece': piece};
+                controlledSquares.push(newLocation);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return controlledSquares;
   }
 
   /**
@@ -1344,9 +1392,9 @@ $(document).ready(function() {
     var best;
 
     if(player === 'enemy') {
-      best = Number.NEGATIVE_INFINITY;
+      best = -1000;
     } else {
-      best = Number.POSITIVE_INFINITY;
+      best = 1000;
     } 
   
     var current;
