@@ -208,7 +208,7 @@ $(document).ready(function() {
   // Set the first debug message
   debugPanel('=================TURN ' + turnCount + '=================');
   debugPanel('\n\n')
-  debugPanel('  Player move for turn: ' + turnCount);
+  debugPanel('  Enemy move for turn: ' + turnCount);
 
   /**************************
   *      HELPER METHODS     *
@@ -434,14 +434,14 @@ $(document).ready(function() {
 
       // AI will make move based on custom heuristic
       // boardEvaluation(boards, moves);
-      // setTimeout(function() {
-      //   // Get the best move
-      //   var data = minimax(5, 'enemy', _board);
-      //   console.log(data);
-      //   var move = data[1];
-      //   console.log(move);
-      //   _makeMove(move);
-      // }, 500);
+      setTimeout(function() {
+        // Get the best move
+        var data = minimax(5, 'enemy', _board);
+        console.log(data);
+        var move = data[1];
+        console.log(move);
+        _makeMove(move);
+      }, 500);
       
       var mew = getControlledSquares(_board, 'enemy');
       console.log(mew);
@@ -907,7 +907,7 @@ $(document).ready(function() {
           for(var row = 0; row < 4; row++) {
             for(var col = 0; col < 3; col++) {
               // If the spot is empty, we can place the piece there
-              if(_board[row][col] == -1) {
+              if(board[row][col] == -1) {
                 validMoves.push({'type': 'placement', piece: _playerBench[piece], 'from': {row: piece}, 'to': {row: row, col: col}});
               }
             }
@@ -925,7 +925,8 @@ $(document).ready(function() {
           for(var row = 0; row < 4; row++) {
             for(var col = 0; col < 3; col++) {
               // If the spot is empty, we can place the piece there
-              if(_board[row][col] == -1) {
+              if(board[row][col] == -1) {
+                // var controlledSpaces = getControlledSquares(board, 'enemy');
                 // Check if any of the enemy pieces are also attacking this square (making it safe for placement)
                 validMoves.push({'type': 'placement', piece: _enemyBench[piece], 'from': {row: piece}, 'to': {row: row, col: col}});
               }
