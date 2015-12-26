@@ -383,24 +383,24 @@ $(document).ready(function() {
       setTimeout(function(){
         // Select the piece
         $('.row > .square[data-x=' + fromRowPos + '][data-y=' + fromColPos + ']').click();
-      },1000);
+      }, 1000);
       
       setTimeout(function(){
         // Move the piece!
         $('.row > .square[data-x=' + toRowPos + '][data-y=' + toColPos + ']').click();
-      },2000);
+      }, 1500);
     } 
 
     if(move.type === 'placement') {
       setTimeout(function(){
         // Select the piece
         $('.enemyRow > .square[data-x=' + move['from']['row'] + ']').click();
-      },1000);
+      }, 1000);
 
       setTimeout(function(){
         // Move the piece!
         $('.row > .square[data-x=' + move['to']['row'] + '][data-y=' + move['to']['col'] + ']').click();
-      },2000);
+      }, 1500);
     }
   }
 
@@ -423,17 +423,25 @@ $(document).ready(function() {
       // makeRandomMove();
 
       // Get all possible moves for enemy
-      var moves = getValidMoves(_board, currentTurn);
+      // var moves = getValidMoves(_board, currentTurn);
 
       // Get all possible board combinations
-      var boards = makeAllPossibleMoves(moves);
+      // var boards = makeAllPossibleMoves(moves);
 
       // AI will make a move based on manhattan distance 
       // To playerLion
       // manhattanDistance(boards, moves);
 
       // AI will make move based on custom heuristic
-      boardEvaluation(boards, moves);
+      // boardEvaluation(boards, moves);
+      setTimeout(function() {
+        // Get the best move
+        var data = minimax(5, 'enemy', _board);
+        console.log(data);
+        var move = data[1];
+        console.log(move);
+        _makeMove(move);
+      }, 500);
 
     } else if (enemyTurn) {
       enemyTurn = false;
@@ -483,9 +491,9 @@ $(document).ready(function() {
    * @param {object} move The parameters describing the piece being moved
    * @returns {object} copiedBoard The new game state after the move was made.
   */
-  function makeSingleMove(move) {
+  function makeSingleMove(move, board) {
     // Copy the board
-    var copiedBoard = $.extend(true, {}, _board);
+    var copiedBoard = $.extend(true, {}, board);
     
     // Store movement parameters
     var fromRowPos = move['from']['row'];
@@ -1322,30 +1330,56 @@ $(document).ready(function() {
   *********************/
 
   /**
-   * Possible heuristics:
-   *  - How many tiles away from the lion
-   *    - Deduct one point for each enemy piece in the way
-   *    - Manhattan Distance
-   *  - How many pieces are being threatened after a move
-   *    - Attacking enemy lion would normally be good
+   * Computes the best move for the player using minimax.
+   * @param {number} depth How many moves to look ahead.
+   * @param {string} player The max player.
+   * @param {object} board The board to compute on.
+   * @returns {list} The best score and best move index.
   */
-  function minimax(board) {
-    var scores = [];
-    var moves  = [];
+  function minimax(depth, player, board) {
+    // Get available moves
+    var nextMoves = getValidMoves(board, player);
 
-    // Get all available moves for current player
-    var possibleMoves = getValidMoves(board, currentTurn);
+    // Set maximizing and minimizing value for player
+    var best;
 
-    // Get all configuration states for each move
-    var boards = makeAllPossibleMoves(possibleMoves);
+    if(player === 'enemy') {
+      best = Number.NEGATIVE_INFINITY;
+    } else {
+      best = Number.POSITIVE_INFINITY;
+    } 
+  
+    var current;
+    var bestidx = -1;
 
-    // For each board, call minimax on it
-    $.each(boards, function(board) {
-      scores.push(minimax(board));
-      moves.push()
-    });
+    // Rank board at lowest depth
+    if(depth === 0) {
+      best = evaluateSingleBoard(board);
+      // console.log('BEST IS: ' + best);
+    } else {
+      for(var i = 0; i < nextMoves.length; i++) {
+        var m = nextMoves[i];
+        var newGameState = makeSingleMove(m, board);
+        
+        if(player === 'enemy') {
+          current = minimax(depth -1, 'player', newGameState)[0];
+          if(current > best) {
+            best = current;
+            bestidx = m;
+          }
+        } 
 
-    return; 
+        else {
+          current = minimax(depth -1, 'enemy', newGameState)[0];
+          if(current < best) {
+            best = current;
+            bestidx = m;
+          }
+        }
+      }
+    }
+
+    return [best, bestidx];
   }
 
   // Let the enemy move first
@@ -1528,7 +1562,6 @@ $(document).ready(function() {
       $(this).css('border-style', 'solid');
       // If the square is occupied, we attack!
       if(isOccupied(x, y)) {
-        console.log('Attacking');
         var attackedName = _board[x][y];
         var attackerName = _board[selectedPosition.row][selectedPosition.col];
         attackPosition.row = x, attackPosition.col = y;
