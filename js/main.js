@@ -1350,7 +1350,7 @@ $(document).ready(function() {
     } 
   
     var current;
-    var bestidx = -1;
+    var bestMove = -1;
 
     // Rank board at lowest depth
     if(depth === 0) {
@@ -1362,24 +1362,24 @@ $(document).ready(function() {
         var newGameState = makeSingleMove(m, board);
         
         if(player === 'enemy') {
-          current = minimax(depth -1, 'player', newGameState)[0];
+          current = minimax(depth - 1, 'player', newGameState)[0];
           if(current > best) {
             best = current;
-            bestidx = m;
+            bestMove = m;
           }
         } 
 
         else {
-          current = minimax(depth -1, 'enemy', newGameState)[0];
+          current = minimax(depth - 1, 'enemy', newGameState)[0];
           if(current < best) {
             best = current;
-            bestidx = m;
+            bestMove = m;
           }
         }
       }
     }
 
-    return [best, bestidx];
+    return [best, bestMove];
   }
 
   // Let the enemy move first
