@@ -926,8 +926,6 @@ $(document).ready(function() {
             for(var col = 0; col < 3; col++) {
               // If the spot is empty, we can place the piece there
               if(board[row][col] == -1) {
-                // var controlledSpaces = getControlledSquares(board, 'enemy');
-                // Check if any of the enemy pieces are also attacking this square (making it safe for placement)
                 validMoves.push({'type': 'placement', piece: _enemyBench[piece], 'from': {row: piece}, 'to': {row: row, col: col}});
               }
             }
