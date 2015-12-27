@@ -13,6 +13,8 @@ $(document).ready(function() {
   // Internal state of enemy bench
   var _enemyBench = [];
 
+  var bestMove;
+
   /**************************
   *    POSITION VARIABLES   *
   **************************/
@@ -436,17 +438,18 @@ $(document).ready(function() {
       // boardEvaluation(boards, moves);
       setTimeout(function() {
         // Get the best move
-        var data = minimax(5, 'enemy', _board);
+        // var data = minimax(5, 'enemy', _board);
+        // console.log(data);
+        // var move = data[1];
+        // console.log(move);
+        // _makeMove(move);
+
+        var data = alphabeta(7, 'enemy', Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, _board);
         console.log(data);
         var move = data[1];
-        console.log(move);
         _makeMove(move);
       }, 500);
       
-      var mew = getControlledSquares(_board, 'enemy');
-      console.log(mew);
-    
-
     } else if (enemyTurn) {
       enemyTurn = false;
       enemyMoved = true;
@@ -1376,6 +1379,59 @@ $(document).ready(function() {
   *     AI METHODS     *
   *********************/
 
+
+  /**
+   * Computes the next move using minimax with Alpha-Beta pruning. 
+   * @param {number} depth How many plies to look ahead.
+   * @param {string} player The maximizing player.
+   * @param {number} alpha The current maximum value.
+   * @param {number} beta The current minimum value.
+   * @param {object} board The configuration of the game.
+   * @returns {object} The best score and move.
+  */
+  function alphabeta(depth, player, alpha, beta, board) {
+    var nextMoves = getValidMoves(board, player);
+    var score;
+    var bestMove = -1;
+
+    if(depth === 0) {
+      score = evaluateSingleBoard(board);
+      return [score, bestMove];
+    } else {
+      for(var i = 0; i < nextMoves.length; i++) {
+        var m = nextMoves[i];
+        // Make the move
+        var newGameState = makeSingleMove(m, board);
+
+        // If player is maximizing (enemy)
+        if(player === 'enemy') {
+          score = alphabeta(depth - 1, 'player', alpha, beta, newGameState)[0];
+          if(score > alpha) {
+            alpha = score;
+            bestMove = m;
+          }
+        } 
+
+        // Player is minimizing (player)
+        else {  
+          score = alphabeta(depth - 1, 'enemy', alpha, beta, newGameState)[0];
+          if(score < beta) {
+            beta = score;
+            bestMove = m;
+          }
+        }
+        if(alpha >= beta) {
+          break;
+        }  
+      }
+      if(player === 'enemy') {
+        return [alpha, bestMove]; 
+      } else {
+        return [beta, bestMove];
+      }
+    }
+  }
+
   /**
    * Computes the best move for the player using minimax.
    * @param {number} depth How many moves to look ahead.
@@ -1402,7 +1458,6 @@ $(document).ready(function() {
     // Rank board at lowest depth
     if(depth === 0) {
       best = evaluateSingleBoard(board);
-      // console.log('BEST IS: ' + best);
     } else {
       for(var i = 0; i < nextMoves.length; i++) {
         var m = nextMoves[i];
